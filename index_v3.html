@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDUSTRIAL AI HACKATHON 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo+Black&family=Inter:wght@100;400;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .heavy {
+            font-family: 'Archivo Black', sans-serif;
+        }
+
+        .diagonal-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .oblique-section {
+            transform: skewY(-5deg);
+            margin: 100px 0;
+        }
+
+        .oblique-section > * {
+            transform: skewY(5deg);
+        }
+
+        .split-screen {
+            display: grid;
+            grid-template-columns: 1fr 2px 1fr;
+            gap: 0;
+            min-height: 100vh;
+        }
+
+        .vertical-divider {
+            background: linear-gradient(to bottom, transparent, #ff0, transparent);
+            width: 2px;
+        }
+
+        .floating-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            writing-mode: vertical-lr;
+        }
+
+        .floating-nav a {
+            display: block;
+            margin: 1rem 0;
+            color: #999;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .floating-nav a:hover {
+            color: #ff0;
+            letter-spacing: 2px;
+        }
+
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 2px #ff0;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,0,0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .massive-text {
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.8;
+            font-weight: 900;
+        }
+
+        .broken-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 3fr 2fr;
+            grid-auto-rows: minmax(200px, auto);
+            gap: 2px;
+            background: #ff0;
+            padding: 2px;
+        }
+
+        .broken-grid > div {
+            background: #000;
+            padding: 2rem;
+        }
+
+        .ascii-border {
+            border: 1px solid #ff0;
+            position: relative;
+        }
+
+        .ascii-border::before {
+            content: '+';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            color: #ff0;
+            font-size: 16px;
+        }
+
+        .ascii-border::after {
+            content: '+';
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            color: #ff0;
+            font-size: 16px;
+        }
+
+        .timeline-chaos {
+            position: relative;
+            height: 400px;
+        }
+
+        .timeline-chaos .phase {
+            position: absolute;
+            border: 2px solid #ff0;
+            padding: 1rem;
+            background: #000;
+        }
+
+        .phase-1 { top: 0; left: 5%; width: 200px; transform: rotate(-3deg); }
+        .phase-2 { top: 80px; right: 10%; width: 250px; transform: rotate(2deg); }
+        .phase-3 { bottom: 100px; left: 30%; width: 220px; transform: rotate(-1deg); }
+        .phase-4 { bottom: 0; right: 25%; width: 240px; transform: rotate(4deg); }
+
+        .story-column {
+            column-count: 3;
+            column-gap: 2rem;
+            column-rule: 1px solid #ff0;
+        }
+
+        @media (max-width: 768px) {
+            .story-column {
+                column-count: 1;
+            }
+        }
+
+        .cutout-text {
+            background: #fff;
+            color: #000;
+            padding: 0 10px;
+            display: inline-block;
+            transform: skewX(-10deg);
+        }
+
+        .corner-info {
+            position: fixed;
+            font-size: 10px;
+            color: #666;
+            z-index: 1000;
+        }
+
+        .corner-info.top-left { top: 20px; left: 20px; }
+        .corner-info.top-right { top: 20px; right: 20px; text-align: right; }
+        .corner-info.bottom-left { bottom: 20px; left: 20px; }
+        .corner-info.bottom-right { bottom: 20px; right: 20px; text-align: right; }
+
+        .random-float {
+            position: absolute;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(100px, -50px) rotate(120deg); }
+            66% { transform: translate(-50px, 100px) rotate(240deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        .glitch-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glitch-image::before,
+        .glitch-image::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-image::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff0;
+            z-index: -1;
+        }
+
+        .glitch-image::after {
+            animation: glitch-2 0.5s infinite;
+            color: #0ff;
+            z-index: -1;
+        }
+
+        @keyframes glitch-1 {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(2px); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(2px); }
+            80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px); }
+            100% { clip-path: inset(58% 0 43% 0); transform: translate(2px); }
+        }
+
+        @keyframes glitch-2 {
+            0% { clip-path: inset(25% 0 58% 0); transform: translate(2px); }
+            20% { clip-path: inset(54% 0 7% 0); transform: translate(-2px); }
+            40% { clip-path: inset(58% 0 43% 0); transform: translate(2px); }
+            60% { clip-path: inset(40% 0 61% 0); transform: translate(-2px); }
+            80% { clip-path: inset(92% 0 1% 0); transform: translate(2px); }
+            100% { clip-path: inset(43% 0 1% 0); transform: translate(-2px); }
+        }
+
+        .zigzag-line {
+            height: 50px;
+            background: linear-gradient(135deg, #ff0 25%, transparent 25%) -50px 0,
+                        linear-gradient(225deg, #ff0 25%, transparent 25%) -50px 0,
+                        linear-gradient(315deg, #ff0 25%, transparent 25%),
+                        linear-gradient(45deg, #ff0 25%, transparent 25%);
+            background-size: 100px 100px;
+        }
+
+        .rotated-section {
+            transform: rotate(-2deg);
+            margin: 150px -100px;
+        }
+
+        .circular-text {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            animation: rotate 20s linear infinite;
+        }
+
+        .circular-text span {
+            position: absolute;
+            left: 50%;
+            transform-origin: 0 150px;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Grid Overlay -->
+    <div class="grid-overlay"></div>
+
+    <!-- Corner Information -->
+    <div class="corner-info top-left mono">
+        <div>SYSTEM.INIT</div>
+        <div>LAT: 35.6762°N</div>
+        <div>LONG: 139.6503°E</div>
+    </div>
+    <div class="corner-info top-right mono">
+        <div>2025.HACKATHON</div>
+        <div>INDUSTRIAL.AI</div>
+    </div>
+    <div class="corner-info bottom-left mono">
+        <div>90.MINUTES</div>
+        <div>REALTIME</div>
+    </div>
+    <div class="corner-info bottom-right mono">
+        <div>TEAM.SIZE: 3-4</div>
+        <div>LEVEL: BEGINNER</div>
+    </div>
+
+    <!-- Floating Navigation -->
+    <nav class="floating-nav mono">
+        <a href="#mission">MISSION</a>
+        <a href="#story">STORY</a>
+        <a href="#phases">PHASES</a>
+        <a href="#rules">RULES</a>
+        <a href="#help">HELP</a>
+    </nav>
+
+    <!-- Opening Splash -->
+    <section class="min-h-screen relative flex items-center justify-center">
+        <div class="absolute top-10 left-10">
+            <h1 class="heavy massive-text">
+                <span style="display:block; margin-left: 100px;">INDUSTRIAL</span>
+                <span class="text-outline" style="display:block; margin-left: -50px;">AI</span>
+                <span style="display:block; margin-left: 200px; color: #ff0;">HACKATHON</span>
+            </h1>
+        </div>
+        
+        <div class="absolute bottom-20 right-20 text-right">
+            <p class="mono text-2xl">うちの工場の困りごとを</p>
+            <p class="mono text-4xl text-yellow-400">90分で</p>
+            <p class="mono text-2xl">AIアプリで解決せよ</p>
+        </div>
+
+        <div class="random-float" style="top: 30%; left: 60%;">
+            <div class="ascii-border p-4">
+                <span class="mono text-yellow-400">BEGIN://</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Split Screen Section -->
+    <section id="mission" class="split-screen">
+        <div class="p-20">
+            <h2 class="heavy text-6xl mb-8">CONCEPT</h2>
+            <div class="space-y-6 mono text-sm">
+                <p>REAL PROBLEMS ONLY</p>
+                <p>NO CODE REQUIRED</p>
+                <p>TEAM COMPETITION</p>
+                <p>SPEED MATTERS</p>
+            </div>
+        </div>
+        
+        <div class="vertical-divider"></div>
+        
+        <div class="p-20 bg-yellow-400 text-black">
+            <div class="diagonal-text heavy text-4xl">
+                CHALLENGE ACCEPTED?
+            </div>
+        </div>
+    </section>
+
+    <!-- Zigzag Divider -->
+    <div class="zigzag-line"></div>
+
+    <!-- Oblique Timeline -->
+    <section id="phases" class="oblique-section bg-yellow-400 text-black">
+        <div class="p-20">
+            <h2 class="heavy text-8xl mb-20">TIMELINE</h2>
+            
+            <div class="timeline-chaos">
+                <div class="phase phase-1">
+                    <span class="heavy text-3xl">00:10</span>
+                    <p class="mt-2">KICKOFF</p>
+                    <p class="text-xs mt-1">チーム編成・役割分担</p>
+                </div>
+                
+                <div class="phase phase-2">
+                    <span class="heavy text-3xl">10:35</span>
+                    <p class="mt-2">IDEATION</p>
+                    <p class="text-xs mt-1">課題発見・MVP設計</p>
+                </div>
+                
+                <div class="phase phase-3">
+                    <span class="heavy text-3xl">35:70</span>
+                    <p class="mt-2">DEVELOPMENT</p>
+                    <p class="text-xs mt-1">AI開発・実装</p>
+                </div>
+                
+                <div class="phase phase-4">
+                    <span class="heavy text-3xl">70:90</span>
+                    <p class="mt-2">PITCH</p>
+                    <p class="text-xs mt-1">プレゼン・審査</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Broken Grid Story -->
+    <section id="story" class="rotated-section">
+        <div class="text-center mb-10">
+            <h2 class="heavy massive-text text-outline">YAMADA</h2>
+            <h2 class="heavy massive-text">FACTORY</h2>
+        </div>
+        
+        <div class="broken-grid">
+            <div style="grid-column: span 2;">
+                <h3 class="heavy text-2xl text-yellow-400 mb-4">07:30 朝の始業</h3>
+                <p class="text-sm leading-relaxed">田中主任が夜勤からの手書きメモを確認。「機械3号の調子が...」新人佐藤くんはヘルメット忘れ。ベテラン鈴木さんは工具箱から3分かけて工具探し。</p>
+            </div>
+            
+            <div>
+                <div class="ascii-border p-4">
+                    <p class="mono text-xs text-yellow-400">PROBLEM.001</p>
+                    <p class="text-xs mt-2">安全装備チェック</p>
+                </div>
+            </div>
+            
+            <div style="grid-column: span 2;">
+                <h3 class="heavy text-2xl text-yellow-400 mb-4">09:00 午前作業</h3>
+                <p class="text-sm leading-relaxed">山田工場長「これはキズか影か...」中村さんは手書きチェックシートに不安。新人は何度も先輩を呼び止める。</p>
+            </div>
+            
+            <div style="grid-column: span 3;">
+                <h3 class="heavy text-2xl text-yellow-400 mb-4">12:00 昼休み会話</h3>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="border-l-4 border-yellow-400 pl-4">
+                        <p class="text-xs italic">「安全靴を忘れそうだった」</p>
+                        <p class="text-xs italic">「ヘルメット忘れて怒られた」</p>
+                    </div>
+                    <div class="border-l-4 border-white pl-4">
+                        <p class="text-xs italic">「機械の異音、詳細不明」</p>
+                        <p class="text-xs italic">「引き継ぎメモが不十分」</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="ascii-border p-4">
+                    <p class="mono text-xs text-yellow-400">PROBLEM.002</p>
+                    <p class="text-xs mt-2">品質検査精度</p>
+                </div>
+            </div>
+            
+            <div>
+                <div class="ascii-border p-4">
+                    <p class="mono text-xs text-yellow-400">PROBLEM.003</p>
+                    <p class="text-xs mt-2">情報伝達</p>
+                </div>
+            </div>
+            
+            <div style="grid-column: span 2;">
+                <h3 class="heavy text-2xl text-yellow-400 mb-4">14:00 午後作業</h3>
+                <p class="text-sm leading-relaxed">加藤さん「念のため不良品に...」若手田村さんはキズ見落とし。5Sポスターも効果なし。</p>
+            </div>
+            
+            <div style="grid-column: span 2;">
+                <h3 class="heavy text-2xl text-yellow-400 mb-4">22:00 夜勤</h3>
+                <p class="text-sm leading-relaxed">人数少なく負担大。照明暗く検査困難。深夜2時、機械4号から異音。記録なし、伝達に悩む。</p>
+            </div>
+            
+            <div style="grid-column: span 5;" class="bg-yellow-400 text-black p-8">
+                <p class="heavy text-3xl">FIND THE PROBLEMS</p>
+                <p class="mt-4">このストーリーから、あなたはどんな課題を発見できる？</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules in Chaos -->
+    <section id="rules" class="min-h-screen p-20">
+        <div class="relative">
+            <h2 class="heavy massive-text text-center mb-20">SCORING</h2>
+            
+            <div class="absolute top-0 right-0 transform rotate-12">
+                <div class="bg-yellow-400 text-black p-6">
+                    <p class="heavy text-4xl">25pt</p>
+                    <p class="text-sm">課題設定力</p>
+                </div>
+            </div>
+            
+            <div class="absolute top-40 left-10 transform -rotate-6">
+                <div class="bg-yellow-400 text-black p-6">
+                    <p class="heavy text-4xl">25pt</p>
+                    <p class="text-sm">創造性</p>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-40 right-20 transform rotate-3">
+                <div class="bg-yellow-400 text-black p-6">
+                    <p class="heavy text-4xl">25pt</p>
+                    <p class="text-sm">実用性</p>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-20 left-40 transform -rotate-12">
+                <div class="bg-yellow-400 text-black p-6">
+                    <p class="heavy text-4xl">15pt</p>
+                    <p class="text-sm">プレゼン</p>
+                </div>
+            </div>
+            
+            <div class="absolute top-60 right-40 transform rotate-45">
+                <div class="bg-yellow-400 text-black p-6">
+                    <p class="heavy text-4xl">10pt</p>
+                    <p class="text-sm">技術力</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-80">
+                <p class="heavy text-8xl text-outline">100pt</p>
+                <p class="mono text-yellow-400">TOTAL SCORE</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Help -->
+    <section id="help" class="bg-yellow-400 text-black p-20">
+        <h2 class="heavy text-6xl mb-10">EMERGENCY</h2>
+        
+        <div class="grid grid-cols-3 gap-10">
+            <div>
+                <p class="heavy text-2xl mb-4">動かない</p>
+                <div class="bg-black text-yellow-400 p-4 mono text-sm">
+                    "エラーを直してください"
+                </div>
+            </div>
+            
+            <div>
+                <p class="heavy text-2xl mb-4">判定ミス</p>
+                <div class="bg-black text-yellow-400 p-4 mono text-sm">
+                    "もっと正確に判定を"
+                </div>
+            </div>
+            
+            <div>
+                <p class="heavy text-2xl mb-4">見た目が悪い</p>
+                <div class="bg-black text-yellow-400 p-4 mono text-sm">
+                    "かっこよくして"
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-20">
+            <h3 class="heavy text-4xl mb-8">SAMPLE PROMPTS</h3>
+            <div class="bg-black text-white p-8">
+                <pre class="mono text-xs">
+写真を撮ると、ヘルメットを着けているかどうかを判定してくれるアプリを作ってください。
+スマートフォンで使えるWebアプリにしてください。
+HTMLファイル1つで完結するようにしてください。
+                </pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Chaos -->
+    <footer class="relative h-96 overflow-hidden">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="circular-text">
+                <p class="heavy text-yellow-400">
+                    INDUSTRIAL × AI × HACKATHON × 2025 × 
+                </p>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-10 mono text-xs text-gray-500">
+            <p>TARGET: BEGINNER</p>
+            <p>DURATION: 90MIN</p>
+            <p>FORMAT: TEAM</p>
+        </div>
+        
+        <div class="absolute bottom-10 right-10 mono text-xs text-gray-500 text-right">
+            <p>GOOGLE CLASSROOM</p>
+            <p>GITHUB CODESPACES</p>
+            <p>CHATGPT</p>
+        </div>
+    </footer>
+</body>
+</html>

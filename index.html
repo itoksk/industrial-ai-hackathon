@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDUSTRIAL×AI HACKATHON_2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@200;400;700&family=Noto+Sans+JP:wght@300;400;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #0a0a0a;
+        }
+        
+        .bebas {
+            font-family: 'Bebas Neue', cursive;
+        }
+        
+        .oswald {
+            font-family: 'Oswald', sans-serif;
+        }
+        
+        .hazard-stripe {
+            background: repeating-linear-gradient(
+                45deg,
+                #fbbf24,
+                #fbbf24 10px,
+                #1f2937 10px,
+                #1f2937 20px
+            );
+        }
+        
+        .industrial-grid {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .glitch {
+            position: relative;
+            color: white;
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, .75),
+                        -0.025em -0.05em 0 rgba(0, 255, 0, .75),
+                        0.025em 0.05em 0 rgba(0, 0, 255, .75);
+            animation: glitch 500ms infinite;
+        }
+        
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, .75),
+                            -0.025em -0.05em 0 rgba(0, 255, 0, .75),
+                            0.025em 0.05em 0 rgba(0, 0, 255, .75);
+            }
+            14% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, .75),
+                            -0.025em -0.05em 0 rgba(0, 255, 0, .75),
+                            0.025em 0.05em 0 rgba(0, 0, 255, .75);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, .75),
+                            0.025em 0.025em 0 rgba(0, 255, 0, .75),
+                            -0.05em -0.05em 0 rgba(0, 0, 255, .75);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, .75),
+                            0.025em 0.025em 0 rgba(0, 255, 0, .75),
+                            -0.05em -0.05em 0 rgba(0, 0, 255, .75);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, .75),
+                            0.05em 0 0 rgba(0, 255, 0, .75),
+                            0 -0.05em 0 rgba(0, 0, 255, .75);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, .75),
+                            0.05em 0 0 rgba(0, 255, 0, .75),
+                            0 -0.05em 0 rgba(0, 0, 255, .75);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 rgba(255, 0, 0, .75),
+                            -0.025em -0.025em 0 rgba(0, 255, 0, .75),
+                            -0.025em -0.05em 0 rgba(0, 0, 255, .75);
+            }
+        }
+        
+        .diagonal-section {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .reverse-diagonal {
+            clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+        }
+        
+        .cyber-border {
+            border: 2px solid #fbbf24;
+            position: relative;
+        }
+        
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #fbbf24, transparent, #fbbf24);
+            z-index: -1;
+            animation: cyber-border-animation 3s linear infinite;
+        }
+        
+        @keyframes cyber-border-animation {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px #fbbf24, 0 0 20px #fbbf24, 0 0 30px #fbbf24;
+        }
+        
+        .terminal-cursor {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .factory-bg {
+            background: 
+                linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="10" y="10" width="30" height="30" fill="none" stroke="rgba(251,191,36,0.1)" stroke-width="1"/><circle cx="70" cy="70" r="15" fill="none" stroke="rgba(251,191,36,0.1)" stroke-width="1"/><line x1="0" y1="50" x2="100" y2="50" stroke="rgba(251,191,36,0.05)" stroke-width="0.5"/><line x1="50" y1="0" x2="50" y2="100" stroke="rgba(251,191,36,0.05)" stroke-width="0.5"/></svg>');
+            background-size: 100px 100px;
+        }
+        
+        .skew-text {
+            transform: skewY(-5deg);
+        }
+        
+        .timeline-item {
+            border-left: 4px solid #fbbf24;
+            border-radius: 0;
+            transform: skewX(-2deg);
+        }
+        
+        .timeline-item > * {
+            transform: skewX(2deg);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #fbbf24;
+            border-radius: 0;
+        }
+        
+        .brutalist-box {
+            background: #1a1a1a;
+            border: 4px solid #fbbf24;
+            box-shadow: 8px 8px 0 #000;
+        }
+        
+        .offset-box {
+            position: relative;
+            background: #1a1a1a;
+            border: 2px solid #fff;
+        }
+        
+        .offset-box::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: #fbbf24;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    
+    <!-- HERO with Glitch Effect -->
+    <section class="min-h-screen relative industrial-grid">
+        <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black"></div>
+        <div class="relative z-10 flex flex-col justify-center items-start min-h-screen px-8 md:px-16">
+            <div class="mb-8">
+                <div class="bebas text-9xl text-amber-400 leading-none">INDUSTRIAL</div>
+                <div class="bebas text-9xl text-white leading-none -mt-4">
+                    <span class="glitch">×AI</span>
+                </div>
+                <div class="bebas text-9xl text-amber-400 leading-none -mt-4">HACKATHON</div>
+            </div>
+            <div class="hazard-stripe h-2 w-full max-w-lg mb-8"></div>
+            <div class="oswald text-2xl text-gray-400 tracking-wider">
+                <span class="text-amber-400">90 MINUTES</span> / 
+                <span class="text-amber-400">3-4 MEMBERS</span> / 
+                <span class="text-amber-400">BEGINNER OK</span>
+            </div>
+            <div class="mt-8 text-xl font-light">
+                うちの工場の困りごとを<span class="text-amber-400 font-bold">90分</span>で<br/>
+                <span class="text-amber-400 font-bold text-3xl">AIアプリ</span>で解決せよ
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent"></div>
+    </section>
+
+    <!-- FACTORY STORY - Full Text -->
+    <section class="relative py-20 factory-bg">
+        <div class="max-w-6xl mx-auto px-8">
+            <div class="mb-12">
+                <h2 class="bebas text-6xl text-amber-400 mb-2">YAMADA FACTORY</h2>
+                <div class="text-gray-400 oswald tracking-widest">DISCOVER THE PROBLEMS</div>
+            </div>
+            
+            <div class="space-y-8">
+                <!-- 朝の始業 -->
+                <div class="brutalist-box p-8 transform rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">07:30</div>
+                        <h3 class="text-2xl font-bold">朝の始業</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p>山田製作所の朝は早い。田中主任が工場に到着すると、まずは昨日の夜勤チームからの引き継ぎ書類をチェックする。手書きのメモがたくさん貼られた紙の束を見ながら、「昨日は機械3号の調子が悪かったのか...」とつぶやいた。</p>
+                        <p>新人の佐藤くんは、今日で入社3週間目。まだ作業手順を覚えきれずに、先輩の後ろを付いて回っている。「ヘルメットはちゃんと着けたか？」と田中主任に声をかけられるが、佐藤くんは慌てて頭に手をやって「あ、忘れてました！」と作業台に戻っていく。</p>
+                        <p>鈴木さん（55歳、ベテラン）は工具箱から必要な工具を取り出そうとしているが、工具がごちゃごちゃに入っていて探すのに時間がかかっている。「また誰かが片付けずに放り込んだな...」と小声でぼやきながら、結局3分ほどかけてお目当ての工具を見つけた。</p>
+                    </div>
+                </div>
+
+                <!-- 午前の作業 -->
+                <div class="brutalist-box p-8 transform -rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">09:00</div>
+                        <h3 class="text-2xl font-bold">午前の作業</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p>製品の組み立てライン。山田工場長が製品の検査をしている。金属部品の表面に小さなキズがあるかどうかを目視でチェックしているが、照明の関係で見づらいところもある。「うーん、これはキズなのか、それとも影なのか...」と首をかしげている。</p>
+                        <p>隣の検査台では、中村さんが部品の寸法を測定している。メジャーを当てて、手書きのチェックシートに数値を記入しているが、時々「あれ、今のメモリちゃんと読めたかな？」と不安になって測り直すことがある。</p>
+                        <p>新人の佐藤くんは、やっと一人で作業を任されたが、手順書を見ながらも「あれ、これで合ってるのかな？」と度々先輩を呼び止めて確認している。先輩の高橋さんは作業を止めて、毎回丁寧に説明してくれるが、「同じ質問を何回もされるなあ...」と思っている。</p>
+                    </div>
+                </div>
+
+                <!-- 昼休み -->
+                <div class="brutalist-box p-8 transform rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">12:00</div>
+                        <h3 class="text-2xl font-bold">昼休み - 食堂での会話</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p class="pl-4 border-l-4 border-amber-400">「今朝、危うく安全靴を履き忘れるところだった。家のスニーカーで作業場に入っちゃうところだよ」</p>
+                        <p class="pl-4 border-l-4 border-gray-600">「俺なんか、先週ヘルメット忘れて田中主任に怒られたよ。でも忙しいと、ついつい忘れちゃうんだよね」</p>
+                        <p class="pl-4 border-l-4 border-amber-400">「そうそう、朝の点呼の時はちゃんとしてても、トイレから戻った後とか、うっかりすることがあるよな」</p>
+                        <p class="mt-4 pl-4 border-l-4 border-gray-600">「ところで、昨日の夜勤で機械の調子が悪かったって聞いたけど、詳しい状況分かる？」</p>
+                        <p class="pl-4 border-l-4 border-amber-400">「いや、引き継ぎメモには『異音あり』としか書いてなくて...。どんな音だったのか、いつから始まったのか、よく分からないんだ」</p>
+                        <p class="pl-4 border-l-4 border-gray-600">「そういう情報をもっと詳しく伝えられればいいんだけどね」</p>
+                    </div>
+                </div>
+
+                <!-- 午後の作業 -->
+                <div class="brutalist-box p-8 transform -rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">14:00</div>
+                        <h3 class="text-2xl font-bold">午後の作業</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p>午後の製品検査。今度は別のラインで、鉄板の表面品質をチェックしている。光の加減で、細かいキズや凹みが見つけにくく、検査員の加藤さんは首や腰を色々な角度に曲げながら確認している。</p>
+                        <p>「この製品、キズがあるように見えるけど、確証がもてないなあ...。念のため不良品として分類しておこう」と加藤さん。実は製品には問題がなかったのだが、判断が難しくて安全策を取った形だ。</p>
+                        <p>一方、別の検査台では、逆の問題が発生。検査員の若手田村さんが、薄いキズを見落として良品として分類してしまった。後の工程で発見されて戻ってきたが、「もっとしっかり見ないと...」と反省している。</p>
+                        <p>作業エリアでは、工具や部品が作業台に散らばったままになっている場所がいくつかある。「5S（整理・整頓・清掃・清潔・躾）を徹底しよう」というポスターが貼られているが、忙しい時はどうしても後回しになってしまう。</p>
+                    </div>
+                </div>
+
+                <!-- 夕方の片付け -->
+                <div class="brutalist-box p-8 transform rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">17:30</div>
+                        <h3 class="text-2xl font-bold">夕方の片付け</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p>一日の作業が終わり、片付けの時間。</p>
+                        <p>鈴木さんは工具を工具箱にしまうが、決まった場所がないため適当に入れてしまう。明日の朝にまた探すことになるのは分かっているが、「まあ、なんとかなるだろう」と思っている。</p>
+                        <p>清掃担当の森さんは、作業エリアをほうきで掃除しているが、機械の下に工具が落ちていることに気づかない。明日誰かが探し回ることになりそうだ。</p>
+                        <p>新人の佐藤くんは、今日も多くのことを学んだが、「覚えることが多すぎて、明日までに忘れちゃいそう...」と不安に思っている。メモを取ってはいるが、実際の作業中はメモを見る余裕がない。</p>
+                    </div>
+                </div>
+
+                <!-- 夜勤の引き継ぎ -->
+                <div class="brutalist-box p-8 transform -rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">18:00</div>
+                        <h3 class="text-2xl font-bold">夜勤の引き継ぎ</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p>夜勤チームとの引き継ぎ。田中主任は昼間の出来事を報告するが、口頭での説明がメイン。</p>
+                        <p class="pl-4 border-l-4 border-amber-400">「機械3号の調子が昼間も少し変だった。異音というほどではないけど、普段と違う音がする時がある」</p>
+                        <p class="pl-4 border-l-4 border-gray-600">「製品の検査で、キズの判定が難しいものがいくつかあった。明日また確認してもらえますか？」</p>
+                        <p class="pl-4 border-l-4 border-amber-400">「新人の佐藤くんは今日も一生懸命だったけど、まだ手順で迷うことがある」</p>
+                        <p>夜勤リーダーの松本さんはメモを取りながら聞いているが、「具体的にどんな音なのか」「どの製品のどの部分にキズがあるのか」など、詳細な情報は伝わりきらない。</p>
+                    </div>
+                </div>
+
+                <!-- 夜勤チーム -->
+                <div class="brutalist-box p-8 transform rotate-1">
+                    <div class="flex items-center mb-4">
+                        <div class="text-amber-400 bebas text-4xl mr-4">22:00</div>
+                        <h3 class="text-2xl font-bold">夜勤チーム</h3>
+                    </div>
+                    <div class="text-gray-300 leading-relaxed space-y-3">
+                        <p>夜勤チームの作業が始まった。昼間とは違って人数が少ないため、一人ひとりの負担が大きい。</p>
+                        <p>夜勤の伊藤さんは、機械の異音について昼間から申し送りされているが、「普通に動いているように見える」と首をかしげている。「音の感じ方は人それぞれだからなあ...」</p>
+                        <p>夜間は照明が昼間より暗く、製品の検査がさらに難しくなる。検査員の吉田さんは懐中電灯を使って確認することもあるが、「これで本当に見落としはないだろうか...」と心配になる。</p>
+                        <p>夜中の2時頃、機械4号から今度ははっきりと異音が聞こえた。しかし、どのくらい前から音がしていたのか、音の変化はどうだったのか、詳しい記録はない。応急処置をして朝まで様子を見ることにしたが、昼間のチームにどう伝えれば良いのか悩んでいる。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-amber-400 text-black">
+                <p class="bebas text-3xl mb-2">FIND THE PROBLEMS</p>
+                <p class="font-bold">このストーリーからあなたはどんな課題を発見できる？</p>
+                <p>安全管理、品質管理、効率性、情報伝達、技術継承...工場には解決すべき問題が山積みだ。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CURRICULUM DETAILS -->
+    <section class="py-20 bg-black">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="mb-16">
+                <h2 class="bebas text-7xl text-amber-400">CURRICULUM</h2>
+                <div class="hazard-stripe h-2 w-64 mt-4"></div>
+            </div>
+
+            <!-- 事前準備 -->
+            <div class="mb-16">
+                <h3 class="bebas text-4xl text-white mb-8">PRE-HACKATHON SETUP</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="offset-box p-6">
+                        <h4 class="text-amber-400 font-bold mb-4">講師向け事前確認</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>□ 全生徒のGitHubアカウント動作確認</li>
+                            <li>□ GitHub Codespacesの利用可能確認</li>
+                            <li>□ Wi-Fi環境の安定性確認</li>
+                            <li>□ ChatGPT・NotebookLMアクセス確認</li>
+                            <li>□ 審査員役（他の先生・上級生など）の手配</li>
+                        </ul>
+                    </div>
+                    <div class="offset-box p-6">
+                        <h4 class="text-amber-400 font-bold mb-4">Google Classroom配布資料</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>📚 ハッカソン参戦ガイド（動画付き）</li>
+                            <li>🏭 工業現場のリアルな困りごとデータベース</li>
+                            <li>🚀 勝つためのコーディング戦術</li>
+                            <li>💡 アイデア発想法テンプレート</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline with Details -->
+            <div class="mb-16">
+                <h3 class="bebas text-4xl text-white mb-8">90 MINUTES TIMELINE</h3>
+                
+                <!-- Phase 1: 0-10分 -->
+                <div class="timeline-item bg-gray-900 p-8 mb-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="bebas text-5xl text-amber-400">00-10</div>
+                            <h4 class="text-2xl font-bold mt-2">ハッカソン開幕宣言</h4>
+                        </div>
+                        <div class="text-amber-400 bebas text-2xl">PHASE 1</div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="text-amber-400 font-bold mb-3">講師の開幕宣言（5分）</h5>
+                            <p class="text-sm mb-2">「今日は工業現場AI解決ハッカソン！君たちは開発チームだ！」</p>
+                            <ul class="text-sm space-y-1 text-gray-400">
+                                <li>• ハッカソンとは何か（2分）</li>
+                                <li>• 今日のミッション発表（3分）</li>
+                                <li>• 優勝チームには特別な称号を授与</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="text-amber-400 font-bold mb-3">チーム編成・戦略会議（5分）</h5>
+                            <p class="text-sm mb-2">3-4人でチーム結成（くじ引きでランダム）</p>
+                            <div class="bg-black p-3 mt-3">
+                                <p class="text-amber-400 text-xs font-bold mb-2">役割分担</p>
+                                <ul class="text-xs space-y-1">
+                                    <li>PM: 課題発見・戦略立案</li>
+                                    <li>AI: AI活用・コード生成指揮</li>
+                                    <li>UX: 使いやすさ・見た目担当</li>
+                                    <li>DO: GitHub・デプロイ担当</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: 10-35分 -->
+                <div class="timeline-item bg-gray-900 p-8 mb-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="bebas text-5xl text-amber-400">10-35</div>
+                            <h4 class="text-2xl font-bold mt-2">現状理解・課題発見・アイデアソン</h4>
+                        </div>
+                        <div class="text-amber-400 bebas text-2xl">PHASE 2</div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-amber-400 pl-6">
+                            <h5 class="font-bold text-lg mb-2">📖 工場現状ストーリー理解（8分）</h5>
+                            <p class="text-sm text-gray-400">「山田製作所の一日」を読み上げ、課題を見つけるヒントを探す</p>
+                            <div class="bg-black p-3 mt-3">
+                                <p class="text-amber-400 text-xs font-bold">聞き方のポイント</p>
+                                <ul class="text-xs text-gray-400 mt-2">
+                                    <li>• 困ってそうな場面はどこ？</li>
+                                    <li>• 時間がかかりすぎてない？</li>
+                                    <li>• 危険そうな作業はない？</li>
+                                    <li>• 見落としがちなチェックポイントは？</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="border-l-4 border-amber-400 pl-6">
+                            <h5 class="font-bold text-lg mb-2">🔍 課題発見ディスカッション（7分）</h5>
+                            <div class="bg-red-900/30 border border-red-500 p-3 mb-3">
+                                <p class="text-red-400 font-bold text-sm">ハッカソンの鉄則</p>
+                                <p class="text-xs">批判・否定は絶対禁止！どんなアイデアも歓迎</p>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-amber-400 text-sm font-bold">ステップ1: 個人ワーク（3分）</p>
+                                    <ul class="text-xs text-gray-400 mt-1">
+                                        <li>• 問題点を付箋に書き出し</li>
+                                        <li>• 1人最低5個以上</li>
+                                        <li>• とにかく量を出す</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-amber-400 text-sm font-bold">ステップ2: チーム共有（4分）</p>
+                                    <ul class="text-xs text-gray-400 mt-1">
+                                        <li>• 付箋を全部並べる</li>
+                                        <li>• 「それいいね！」で盛り上げる</li>
+                                        <li>• 似ている問題をグルーピング</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-l-4 border-amber-400 pl-6">
+                            <h5 class="font-bold text-xl mb-2">💡 アイデア創出・MVP設計（10分）</h5>
+                            <div class="bg-amber-900/30 border border-amber-400 p-3 mb-3">
+                                <p class="text-amber-400 font-bold text-base">MVP（最小実用製品）の法則</p>
+                                <p class="text-sm">機能てんこ盛りは失敗の元！課題を解決する最小限の機能で勝負</p>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-amber-400 text-base font-bold">ブレストルール</p>
+                                    <ol class="text-sm text-gray-400 mt-1">
+                                        <li>1. 批判禁止</li>
+                                        <li>2. 自由奔放</li>
+                                        <li>3. 量重視</li>
+                                        <li>4. 便乗歓迎</li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <p class="text-amber-400 text-base font-bold">MVP決定フレームワーク</p>
+                                    <ol class="text-sm text-gray-400 mt-1">
+                                        <li>1. 核心機能（必須）</li>
+                                        <li>2. 必要機能（あると便利）</li>
+                                        <li>3. あったらいい機能（余裕があれば）</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3: 35-70分 -->
+                <div class="timeline-item bg-gray-900 p-8 mb-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="bebas text-5xl text-amber-400">35-70</div>
+                            <h4 class="text-2xl font-bold mt-2">開発スプリント</h4>
+                        </div>
+                        <div class="text-amber-400 bebas text-2xl">PHASE 3</div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-black p-6">
+                            <h5 class="text-amber-400 font-bold mb-4">🚀 フェーズ1: MVP作成（15分）</h5>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm font-bold">ステップ1: 戦略的プロンプト作成（3分）</p>
+                                    <div class="bg-gray-800 p-3 mt-2 font-mono text-xs">
+                                        <p class="text-amber-400">【ハッカソン向け高速開発プロンプト】</p>
+                                        <p>工業現場の[具体的な課題]を解決するWebアプリを作ってください。</p>
+                                        <p>ユーザー：[使う人の詳細]</p>
+                                        <p>機能：[必要な機能を3つまで]</p>
+                                        <p>特徴：[他と差別化するポイント]</p>
+                                        <p>制約：HTMLファイル1つで完結、スマホ対応、90分で完成可能</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold">ステップ2: AI開発実行（7分）</p>
+                                    <ul class="text-xs text-gray-400 mt-1">
+                                        <li>• ChatGPTでコード生成</li>
+                                        <li>• 「3つのパターンで作って」で複数案生成</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold">ステップ3: 高速デプロイ（5分）</p>
+                                    <ul class="text-xs text-gray-400 mt-1">
+                                        <li>• GitHubリポジトリ作成 → Codespaces起動</li>
+                                        <li>• コード投入 → サーバー起動 → 動作確認</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-black p-6">
+                            <h5 class="text-amber-400 font-bold mb-4">⚡ フェーズ2: 競争力強化（15分）</h5>
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="bg-gray-800 p-3">
+                                    <p class="text-amber-400 text-sm font-bold">戦術A: 機能強化（6分）</p>
+                                    <ul class="text-xs text-gray-400 mt-2">
+                                        <li>• 判定精度向上</li>
+                                        <li>• 使いやすさ改善</li>
+                                        <li>• データ保存機能</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-800 p-3">
+                                    <p class="text-amber-400 text-sm font-bold">戦術B: UX差別化（6分）</p>
+                                    <ul class="text-xs text-gray-400 mt-2">
+                                        <li>• 工業現場らしいデザイン</li>
+                                        <li>• 直感的な操作</li>
+                                        <li>• 色彩・レイアウト最適化</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-800 p-3">
+                                    <p class="text-amber-400 text-sm font-bold">戦術C: 独自機能（3分）</p>
+                                    <ul class="text-xs text-gray-400 mt-2">
+                                        <li>• 音声ガイド</li>
+                                        <li>• 多言語対応</li>
+                                        <li>• 統計表示</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-black p-6">
+                            <h5 class="text-amber-400 font-bold mb-4">🎯 フェーズ3: ピッチ準備（5分）</h5>
+                            <div class="border-2 border-amber-400 p-4">
+                                <p class="text-sm font-bold mb-2">デモストーリー作成（3分）</p>
+                                <ol class="text-xs text-gray-400 space-y-1">
+                                    <li>1. 問題提起（20秒）：「現場でこんな困りごとが...」</li>
+                                    <li>2. 解決策披露（60秒）：「我々はこんなアプリを開発しました！」</li>
+                                    <li>3. 差別化アピール（20秒）：「他にはないこの特徴が...」</li>
+                                </ol>
+                                <p class="text-xs text-amber-400 mt-3">リハーサル（2分）でチーム内練習</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4: 70-90分 -->
+                <div class="timeline-item bg-gray-900 p-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="bebas text-5xl text-amber-400">70-90</div>
+                            <h4 class="text-2xl font-bold mt-2">ピッチ＆審査・表彰式</h4>
+                        </div>
+                        <div class="text-amber-400 bebas text-2xl">PHASE 4</div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h5 class="text-amber-400 font-bold mb-3">🎤 チーム別ピッチタイム（15分）</h5>
+                            <p class="text-sm mb-3">各チーム3分のピッチ＋1分質疑応答</p>
+                            <div class="bg-black p-4">
+                                <p class="text-amber-400 text-sm font-bold mb-2">ピッチの構成（必須要素）</p>
+                                <ol class="text-xs space-y-2">
+                                    <li>
+                                        <span class="text-amber-400">1. 問題提起（30秒）</span>
+                                        <p class="text-gray-400 ml-4">「工業現場でこんな困りごとがあります」</p>
+                                    </li>
+                                    <li>
+                                        <span class="text-amber-400">2. ソリューション紹介（90秒）</span>
+                                        <p class="text-gray-400 ml-4">ライブデモで実際にアプリを動かす</p>
+                                    </li>
+                                    <li>
+                                        <span class="text-amber-400">3. 差別化ポイント（30秒）</span>
+                                        <p class="text-gray-400 ml-4">「従来の解決策と比べて、ここがすごい！」</p>
+                                    </li>
+                                    <li>
+                                        <span class="text-amber-400">4. 期待効果（30秒）</span>
+                                        <p class="text-gray-400 ml-4">「これが普及すると現場がこう変わる」</p>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="text-amber-400 font-bold mb-3">🏅 審査・結果発表（5分）</h5>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-amber-400 text-black p-4">
+                                    <p class="font-bold">審査員による評価（3分）</p>
+                                    <ul class="text-sm mt-2">
+                                        <li>• 他の先生・上級生・外部ゲスト</li>
+                                        <li>• リアルタイムで点数入力</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-black border-2 border-amber-400 p-4">
+                                    <p class="font-bold text-amber-400">結果発表・表彰式（2分）</p>
+                                    <p class="text-xs text-gray-400 mt-2">全チームに拍手！</p>
+                                    <p class="text-xs text-amber-400">「今日はみんなが本物の開発者でした！」</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scoring System -->
+            <div class="mb-16">
+                <h3 class="bebas text-4xl text-white mb-8">SCORING SYSTEM</h3>
+                <div class="bg-gray-900 p-8">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b-2 border-amber-400">
+                                <th class="text-left pb-4">項目</th>
+                                <th class="text-center pb-4">配点</th>
+                                <th class="text-left pb-4">評価ポイント</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-gray-700">
+                                <td class="py-3">🎯 課題設定力</td>
+                                <td class="text-center text-amber-400 font-bold">25点</td>
+                                <td class="text-gray-400">現場の本当の困りごとを捉えているか</td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <td class="py-3">💡 創造性・独自性</td>
+                                <td class="text-center text-amber-400 font-bold">25点</td>
+                                <td class="text-gray-400">他チームにない発想、既存解決策との差別化</td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <td class="py-3">⚡ 実用性・完成度</td>
+                                <td class="text-center text-amber-400 font-bold">25点</td>
+                                <td class="text-gray-400">実際に現場で使えるか、動作の安定性</td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <td class="py-3">🎤 プレゼン力</td>
+                                <td class="text-center text-amber-400 font-bold">15点</td>
+                                <td class="text-gray-400">説得力のあるピッチ、デモの分かりやすさ</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">🔧 技術活用度</td>
+                                <td class="text-center text-amber-400 font-bold">10点</td>
+                                <td class="text-gray-400">AIツールの効果的な活用、技術的工夫</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- GitHub Codespaces Setup -->
+            <div class="mb-16">
+                <h3 class="bebas text-4xl text-white mb-8">GITHUB CODESPACES SETUP</h3>
+                <div class="bg-blue-900/20 border-2 border-blue-500 p-8">
+                    <p class="text-blue-400 font-bold mb-4">🚀 環境セットアップ手順</p>
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-black p-4">
+                            <p class="text-amber-400 font-bold mb-2">1. GitHubリポジトリ作成</p>
+                            <ul class="text-xs text-gray-400 space-y-1">
+                                <li>• GitHub.comにログイン</li>
+                                <li>• 右上の「+」→「New repository」</li>
+                                <li>• リポジトリ名入力（例: factory-ai-hackathon）</li>
+                                <li>• 「Public」選択 → 「Create repository」</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black p-4">
+                            <p class="text-amber-400 font-bold mb-2">2. Codespaces起動</p>
+                            <ul class="text-xs text-gray-400 space-y-1">
+                                <li>• 「Code」ボタンをクリック</li>
+                                <li>• 「Codespaces」タブ選択</li>
+                                <li>• 「Create codespace on main」クリック</li>
+                                <li>• VSCode風画面が開くまで待つ（30秒〜1分）</li>
+                            </ul>
+                        </div>
+                        <div class="bg-black p-4">
+                            <p class="text-amber-400 font-bold mb-2">3. ターミナル基本コマンド</p>
+                            <code class="text-xs block">
+                                pwd              # 現在の場所確認<br/>
+                                ls               # ファイル一覧表示<br/>
+                                mkdir プロジェクト名  # フォルダ作成<br/>
+                                cd フォルダ名      # フォルダ移動<br/>
+                                touch ファイル名.html # ファイル作成<br/>
+                                cat ファイル名     # ファイル内容表示
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Prompts -->
+            <div class="mb-16">
+                <h3 class="bebas text-4xl text-white mb-8">EMERGENCY SUPPORT</h3>
+                <div class="bg-red-900/20 border-2 border-red-500 p-8">
+                    <p class="text-red-400 font-bold mb-4">困ったときの魔法の言葉</p>
+                    <div class="grid md:grid-cols-2 gap-6 text-sm">
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-gray-400">うまく動かない →</p>
+                                <code class="text-amber-400 bg-black px-2 py-1">「エラーを直してください」</code>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">判定が間違ってる →</p>
+                                <code class="text-amber-400 bg-black px-2 py-1">「もっと正確に判定できるようにしてください」</code>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">見た目がださい →</p>
+                                <code class="text-amber-400 bg-black px-2 py-1">「もっとかっこいい色にしてください」</code>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-gray-400">文字が小さい →</p>
+                                <code class="text-amber-400 bg-black px-2 py-1">「文字を大きくしてください」</code>
+                            </div>
+                            <div>
+                                <p class="text-gray-400">スマホで見づらい →</p>
+                                <code class="text-amber-400 bg-black px-2 py-1">「スマートフォンで使いやすくしてください」</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Prompts Collection -->
+            <div class="mb-16">
+                <h3 class="bebas text-4xl text-white mb-8">AI PROMPTS STEP BY STEP</h3>
+                
+                <!-- 要件定義の壁打ちプロンプト -->
+                <div class="bg-amber-900/20 border-2 border-amber-400 p-8 mb-8">
+                    <h4 class="bebas text-3xl text-amber-400 mb-6">STEP 1: 要件定義の壁打ち</h4>
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-amber-400 font-bold mb-3 text-lg">🎯 プロンプト1: アイデア探索</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## 最初の一歩（何を作るか決める）</p>
+                                <p>私たちは工業高校生3人のチームです。</p>
+                                <p>工場で働く人たちの「山田製作所の一日」というストーリーを読みました。</p>
+                                <p></p>
+                                <p>以下の問題点を見つけました：</p>
+                                <p>・朝、ヘルメットを忘れる新人がいる</p>
+                                <p>・工具箱がごちゃごちゃで探すのに時間がかかる</p>
+                                <p>・製品のキズを目視で見つけるのが難しい</p>
+                                <p>・夜勤と日勤の引き継ぎがうまくいかない</p>
+                                <p></p>
+                                <p>これらの中で、90分のハッカソンで解決できそうな課題はどれですか？</p>
+                                <p>それぞれについて：</p>
+                                <p>1. 実装の難しさ（簡単・普通・難しい）</p>
+                                <p>2. 必要な機能</p>
+                                <p>3. 他のチームと差別化できるポイント</p>
+                                <p>を教えてください。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-amber-400 font-bold mb-3 text-lg">💡 プロンプト2: アイデアを深める</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## アイデアを具体化する</p>
+                                <p>「ヘルメット着用チェックアプリ」を作ることに決めました。</p>
+                                <p></p>
+                                <p>このアプリについて、もっと詳しく一緒に考えてください：</p>
+                                <p></p>
+                                <p>【使う人】</p>
+                                <p>・主に誰が使う？（新人？管理者？全員？）</p>
+                                <p>・いつ使う？（朝だけ？一日中？）</p>
+                                <p>・どこで使う？（入口？作業場？）</p>
+                                <p></p>
+                                <p>【機能】</p>
+                                <p>・最低限必要な機能は？</p>
+                                <p>・あったら便利な機能は？</p>
+                                <p>・他のチームがやらなそうな独自機能は？</p>
+                                <p></p>
+                                <p>【技術】</p>
+                                <p>・HTMLだけで作る？それともJavaScript使う？</p>
+                                <p>・データは保存する必要ある？</p>
+                                <p>・スマホ対応は必須？</p>
+                                <p></p>
+                                <p>初心者でも90分で作れる範囲で提案してください。</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-amber-400 font-bold mb-3 text-lg">📝 プロンプト3: 機能を整理する</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## MVP（最小限の製品）を決める</p>
+                                <p>ヘルメット着用チェックアプリの機能を整理したいです。</p>
+                                <p></p>
+                                <p>今考えている機能：</p>
+                                <p>1. カメラで写真を撮る</p>
+                                <p>2. ヘルメット着用を判定（今回はモックでOK）</p>
+                                <p>3. OK/NGを大きく表示</p>
+                                <p>4. 判定履歴を保存</p>
+                                <p>5. 管理者向けの統計表示</p>
+                                <p>6. 音声でも結果を伝える</p>
+                                <p>7. 多言語対応（日本語・英語・ポルトガル語）</p>
+                                <p></p>
+                                <p>これらを以下の3つに分類してください：</p>
+                                <p>【絶対必要】これがないとアプリが成立しない</p>
+                                <p>【あると良い】時間があれば追加したい</p>
+                                <p>【将来追加】今回は諦める</p>
+                                <p></p>
+                                <p>また、実装する順番も教えてください。</p>
+                                <p>GitHub Codespaceで開発することを考慮してください。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Codespace環境でのセットアップと実装 -->
+                <div class="bg-blue-900/20 border-2 border-blue-500 p-8 mb-8">
+                    <h4 class="bebas text-3xl text-blue-400 mb-6">STEP 2: Codespace環境セットアップ</h4>
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-blue-400 font-bold mb-3 text-lg">🚀 プロンプト4: 環境構築</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## GitHub Codespaceでプロジェクトを始める</p>
+                                <p>GitHub Codespaceを開きました。</p>
+                                <p>ターミナルが使えるようになっています。</p>
+                                <p></p>
+                                <p>ヘルメット着用チェックアプリを作るために：</p>
+                                <p>1. どんなフォルダ構成にすればいい？</p>
+                                <p>2. 最初に作るファイルは？</p>
+                                <p>3. 必要なターミナルコマンドを順番に教えて</p>
+                                <p></p>
+                                <p>以下の条件で：</p>
+                                <p>・JavaScriptを使う（HTMLとCSSも）</p>
+                                <p>・フォルダはきちんと整理したい</p>
+                                <p>・後で機能追加しやすい構成</p>
+                                <p>・Codespacesのターミナルで実行するコマンドも含めて</p>
+                                <p></p>
+                                <p>初心者なので、各コマンドが何をするのかも説明してください。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-blue-400 font-bold mb-3 text-lg">📁 プロンプト5: ファイル作成コマンド</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## 実際にファイルを作る</p>
+                                <p>Codespacesのターミナルを開いています。</p>
+                                <p>今、/workspaces/factory-ai-hackathon にいます。</p>
+                                <p></p>
+                                <p>以下の構成でプロジェクトを作りたいです：</p>
+                                <p>safety-check-app/</p>
+                                <p>├── index.html</p>
+                                <p>├── src/</p>
+                                <p>│   └── app.js</p>
+                                <p>├── styles/</p>
+                                <p>│   └── style.css</p>
+                                <p>└── README.md</p>
+                                <p></p>
+                                <p>これを作るための：</p>
+                                <p>1. ターミナルコマンドを順番に</p>
+                                <p>2. 各ファイルの初期内容（最小限でOK）</p>
+                                <p>3. ファイルを編集する方法</p>
+                                <p>4. 保存する方法</p>
+                                <p>を教えてください。</p>
+                                <p></p>
+                                <p>VSCode風の画面で作業しています。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 段階的なコーディング -->
+                <div class="bg-green-900/20 border-2 border-green-500 p-8 mb-8">
+                    <h4 class="bebas text-3xl text-green-400 mb-6">STEP 3: 段階的なコーディング</h4>
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-green-400 font-bold mb-3 text-lg">✨ プロンプト6: 最初の一歩（HTML作成）</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## まずはHTMLから始める</p>
+                                <p>safety-check-app/index.html を作りたいです。</p>
+                                <p></p>
+                                <p>【アプリの要件】</p>
+                                <p>・タイトル：工場安全チェッカー</p>
+                                <p>・カメラで写真を撮る機能</p>
+                                <p>・撮った写真を表示</p>
+                                <p>・「ヘルメットOK」「ヘルメットNG」のボタン（モック用）</p>
+                                <p>・結果を大きく表示（✅か❌）</p>
+                                <p></p>
+                                <p>【デザイン要件】</p>
+                                <p>・スマホで見やすい</p>
+                                <p>・ボタンが大きくて押しやすい</p>
+                                <p>・工場っぽい雰囲気（黄色と黒の警告色など）</p>
+                                <p></p>
+                                <p>【お願い】</p>
+                                <p>・index.htmlのコードを全部書いて</p>
+                                <p>・CSSはひとまずHTMLファイル内に書いてOK</p>
+                                <p>・JavaScriptもHTMLファイル内に書いてOK</p>
+                                <p>・コメントで説明を入れて（日本語で）</p>
+                                <p></p>
+                                <p>Codespacesで動かすので、相対パスで書いてください。</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-green-400 font-bold mb-3 text-lg">🎨 プロンプト7: デザイン改善</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## 見た目をかっこよくする</p>
+                                <p>基本的な機能はできました。</p>
+                                <p>でも見た目が普通すぎます。</p>
+                                <p></p>
+                                <p>【改善したい点】</p>
+                                <p>・もっと工業現場っぽいデザインにしたい</p>
+                                <p>・黄色と黒の警告色をうまく使いたい</p>
+                                <p>・ボタンをもっと大きく目立たせたい</p>
+                                <p>・結果表示をアニメーション付きにしたい</p>
+                                <p>・スマホで見た時にかっこいい</p>
+                                <p></p>
+                                <p>【追加してほしい要素】</p>
+                                <p>・ヘッダーに「⚠️ 安全第一 ⚠️」</p>
+                                <p>・背景に斜めストライプ模様</p>
+                                <p>・判定結果に効果音（ピンポン/ブザー）</p>
+                                <p>・使い方の簡単な説明</p>
+                                <p></p>
+                                <p>styles/style.cssを別ファイルにして、</p>
+                                <p>見た目を大幅に改善してください。</p>
+                                <p>他のチームに負けないデザインにしたいです！</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-green-400 font-bold mb-3 text-lg">⚡ プロンプト8: 機能追加</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## もう少し機能を追加</p>
+                                <p>基本機能は完成しました。</p>
+                                <p>残り時間で機能を追加したいです。</p>
+                                <p></p>
+                                <p>【追加したい機能】優先順に：</p>
+                                <p>1. 判定履歴を表示（最新5件）</p>
+                                <p>2. 今日の判定結果の統計（OK: ○件、NG: ○件）</p>
+                                <p>3. 判定時刻も記録</p>
+                                <p>4. NGの時に改善アドバイスを表示</p>
+                                <p>5. データをローカルストレージに保存</p>
+                                <p></p>
+                                <p>【条件】</p>
+                                <p>・src/app.jsを別ファイルにして整理したい</p>
+                                <p>・追加は1つずつ（動作確認しながら）</p>
+                                <p>・エラーが出たらすぐ直したい</p>
+                                <p>・残り30分なので、できる範囲で</p>
+                                <p></p>
+                                <p>まず1番の履歴表示から実装してください。</p>
+                                <p>JavaScriptは初心者なので、詳しいコメント付きで。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 実行とデバッグ -->
+                <div class="bg-purple-900/20 border-2 border-purple-500 p-8 mb-8">
+                    <h4 class="bebas text-3xl text-purple-400 mb-6">STEP 4: 実行とデバッグ</h4>
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-purple-400 font-bold mb-3 text-lg">🌐 プロンプト9: サーバー起動</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## Codespacesでアプリを動かす</p>
+                                <p>ファイルは全部作成しました。</p>
+                                <p>今、safety-check-app/フォルダにいます。</p>
+                                <p></p>
+                                <p>【やりたいこと】</p>
+                                <p>・ブラウザでアプリを表示したい</p>
+                                <p>・スマホでも確認したい</p>
+                                <p>・リアルタイムで変更を確認したい</p>
+                                <p></p>
+                                <p>【質問】</p>
+                                <p>1. どのコマンドでサーバーを起動する？</p>
+                                <p>2. Codespacesのどこをクリックすれば表示される？</p>
+                                <p>3. ポート番号はどこで確認する？</p>
+                                <p>4. 止める時はどうする？</p>
+                                <p>5. エラーが出た時の対処法は？</p>
+                                <p></p>
+                                <p>Python使う方法とNode.js使う方法、</p>
+                                <p>両方教えてください。</p>
+                                <p>初心者でも分かるように説明お願いします。</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-purple-400 font-bold mb-3 text-lg">🔧 プロンプト10: エラー解決</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## エラーが出て困っています</p>
+                                <p>アプリを動かそうとしたらエラーが出ました。</p>
+                                <p></p>
+                                <p>【エラー内容】</p>
+                                <p>Uncaught TypeError: Cannot read property 'addEventListener' of null</p>
+                                <p>at app.js:15</p>
+                                <p></p>
+                                <p>【状況】</p>
+                                <p>・カメラボタンを押しても反応しない</p>
+                                <p>・コンソールに赤いエラーが出る</p>
+                                <p>・他の機能は動いている</p>
+                                <p></p>
+                                <p>【試したこと】</p>
+                                <p>・ブラウザをリロード → 変わらず</p>
+                                <p>・コードを見直し → よく分からない</p>
+                                <p></p>
+                                <p>【環境】</p>
+                                <p>・GitHub Codespaces</p>
+                                <p>・Chrome ブラウザ</p>
+                                <p>・index.html, app.js, style.css の3ファイル構成</p>
+                                <p></p>
+                                <p>エラーの原因と修正方法を教えてください。</p>
+                                <p>同じエラーが出ないようにする方法も知りたいです。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最後の仕上げ -->
+                <div class="bg-red-900/20 border-2 border-red-500 p-8">
+                    <h4 class="bebas text-3xl text-red-400 mb-6">STEP 5: 最後の仕上げ</h4>
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-red-400 font-bold mb-3 text-lg">🏁 プロンプト11: ピッチ用デモ準備</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## プレゼン用に最終調整</p>
+                                <p>あと10分でピッチです！</p>
+                                <p></p>
+                                <p>【デモで見せたい流れ】</p>
+                                <p>1. アプリを開く</p>
+                                <p>2. カメラで写真を撮る（モック）</p>
+                                <p>3. ヘルメットOKの判定を見せる</p>
+                                <p>4. ヘルメットNGの判定も見せる</p>
+                                <p>5. 履歴機能を見せる</p>
+                                <p>6. 統計を見せる</p>
+                                <p></p>
+                                <p>【追加でほしい】</p>
+                                <p>・デモ用のテストデータを入れておきたい</p>
+                                <p>・「デモモード」ボタンを追加</p>
+                                <p>・押すと自動で良い感じのデータが入る</p>
+                                <p>・エラーが出ないようにしたい</p>
+                                <p></p>
+                                <p>【心配な点】</p>
+                                <p>・カメラが動かない時の対策</p>
+                                <p>・スマホで表示が崩れないか</p>
+                                <p>・プレゼン中にエラーが出たら</p>
+                                <p></p>
+                                <p>最後の仕上げをお願いします！</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 p-6">
+                            <p class="text-red-400 font-bold mb-3 text-lg">📝 プロンプト12: README作成</p>
+                            <div class="bg-black p-4 font-mono text-sm leading-relaxed">
+                                <p class="text-green-400">## GitHubで公開するためのREADME</p>
+                                <p>アプリが完成しました！</p>
+                                <p>GitHubに公開するためのREADME.mdを作ってください。</p>
+                                <p></p>
+                                <p>【アプリ情報】</p>
+                                <p>・名前：工場安全チェッカー</p>
+                                <p>・チーム：○○工業高校 チームA</p>
+                                <p>・解決する課題：ヘルメット着用忘れ防止</p>
+                                <p>・主な機能：カメラ撮影、着用判定、履歴保存</p>
+                                <p></p>
+                                <p>【README.mdに含めたい内容】</p>
+                                <p>1. アプリの説明（何を解決するか）</p>
+                                <p>2. デモ画面のスクリーンショット場所</p>
+                                <p>3. 使い方</p>
+                                <p>4. 動かし方（Codespacesでの手順）</p>
+                                <p>5. 使用技術</p>
+                                <p>6. 今後の改善案</p>
+                                <p>7. チームメンバー</p>
+                                <p></p>
+                                <p>マークダウン形式で、</p>
+                                <p>他の人が見てすぐ理解できるように書いてください。</p>
+                                <p>絵文字も使って見やすくしてください。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submission -->
+            <div>
+                <h3 class="bebas text-4xl text-white mb-8">SUBMISSION</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-amber-400 text-black p-6">
+                        <h4 class="font-bold mb-4">必須提出物</h4>
+                        <ol class="text-sm space-y-2">
+                            <li>1. GitHubリポジトリのURL</li>
+                            <li>2. 作ったアプリの写真（スクリーンショット）</li>
+                            <li>3. 簡単ふりかえりフォーム（5分で完了）</li>
+                        </ol>
+                        <p class="text-xs mt-4">※動かなくても途中経過があればOK！</p>
+                    </div>
+                    <div class="bg-gray-900 border-2 border-amber-400 p-6">
+                        <h4 class="font-bold mb-4 text-amber-400">提出のご褒美</h4>
+                        <ul class="text-sm space-y-2 text-gray-400">
+                            <li>• デジタル修了証をGoogle Classroomで発行</li>
+                            <li>• 「GitHub × AI体験者」バッジ</li>
+                            <li>• 作成したアプリ一覧をクラス全体で共有</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t-4 border-amber-400 bg-black">
+        <div class="text-center">
+            <div class="bebas text-5xl text-amber-400 mb-4">INDUSTRIAL×AI HACKATHON</div>
+            <div class="text-gray-400">
+                <p>工業高校生のための実践的AI体験プログラム</p>
+                <p class="text-sm mt-2">対象: AI・プログラミング初心者 / 所要時間: 90分 / 形式: チーム学習</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
