@@ -2,7 +2,7 @@
 **対象**: 工業高校生（AI・プログラミング初心者）  
 **時間**: 90分  
 **形式**: チーム戦（3-4人/チーム）  
-**プラットフォーム**: Google Classroom + GitHub Codespaces
+**プラットフォーム**: Google Classroom + (Google Apps Script または GitHub Codespaces)
 
 > **🏆 ハッカソンのコンセプト**  
 > **「うちの工場の困りごとを90分でAIアプリで解決せよ！」**  
@@ -13,13 +13,120 @@
 ## 📋 事前準備（授業前）
 
 ### 🎯 講師向け事前確認事項
-- [ ] 全生徒のGitHubアカウント動作確認
-- [ ] GitHub Codespacesの利用可能確認
+- [ ] 全生徒のGoogleアカウント確認（Google Apps Script利用時）
+- [ ] 全生徒のGitHubアカウント動作確認（GitHub Codespaces利用時）
+- [ ] GitHub Codespacesの利用可能確認（GitHub選択時）
 - [ ] Wi-Fi環境の安定性確認  
-- [ ] ChatGPT・NotebookLMアクセス確認
+- [ ] ChatGPT・ClaudeなどAIツールのアクセス確認
 - [ ] 審査員役（他の先生・上級生など）の手配
 
-### 🚀 GitHub Codespaces環境セットアップ手順（生徒向け）
+## 🔧 開発環境の選択（どちらか1つを選んでね！）
+
+### 🌐 選択肢A: Google Apps Script（初心者おすすめ！）
+**メリット**: 
+- Googleアカウントだけで始められる
+- ブラウザだけで完結（インストール不要）
+- 無料で使える
+- Webアプリとして簡単に公開できる
+
+**注意点**:
+- HTMLとJavaScriptを別ファイルで管理する必要がある
+- GAS特有の書き方がある（google.script.runなど）
+
+### 💻 選択肢B: GitHub Codespaces（本格派向け）
+**メリット**:
+- プロの開発環境と同じ
+- 普通のHTML/JavaScriptが使える
+- GitHubで管理できる
+
+**注意点**:
+- GitHubアカウントが必要
+- 初回起動に時間がかかる
+
+---
+
+### 🌐 Google Apps Script環境セットアップ手順（選択肢A）
+
+#### 1. Googleドライブにアクセス
+```
+1. https://drive.google.com にアクセス
+2. Googleアカウントでログイン
+```
+
+#### 2. 新しいGoogle Apps Scriptプロジェクトを作成
+```
+1. 「新規」ボタンをクリック
+2. 「その他」→「Google Apps Script」を選択
+3. プロジェクト名を変更（例: 工場AI解決アプリ）
+```
+
+#### 3. ファイル構成を理解する
+```
+Google Apps Scriptの基本構成：
+├── コード.gs       # サーバー側のJavaScript
+├── index.html      # HTMLファイル
+└── style.html      # CSSを含むファイル（オプション）
+```
+
+#### 4. 基本的なWebアプリの作成
+```javascript
+// コード.gs の例
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('index')
+    .setTitle('工場AI解決アプリ')
+    .setWidth(400)
+    .setHeight(600);
+}
+
+function processData(data) {
+  // AIからのデータ処理
+  return "処理結果: " + data;
+}
+```
+
+```html
+<!-- index.html の例 -->
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button { background: #ff0; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>工場AI解決アプリ</h1>
+  <button onclick="callServer()">実行</button>
+  
+  <script>
+    function callServer() {
+      google.script.run
+        .withSuccessHandler(showResult)
+        .processData("テストデータ");
+    }
+    
+    function showResult(result) {
+      alert(result);
+    }
+  </script>
+</body>
+</html>
+```
+
+#### 5. Webアプリとして公開
+```
+1. 「デプロイ」→「新しいデプロイ」
+2. 種類で「ウェブアプリ」を選択
+3. 実行ユーザー: 「自分」
+4. アクセス権: 「全員」
+5. 「デプロイ」ボタンをクリック
+6. 表示されたURLでアプリにアクセス！
+```
+
+---
+
+### 💻 GitHub Codespaces環境セットアップ手順（選択肢B）
 
 #### 1. GitHubアカウントにログイン
 ```bash
@@ -671,11 +778,66 @@ flask run --port 8000
 1. 解決すべき具体的な課題を3つ
 2. それぞれの解決アプローチ
 3. 90分で作れるMVPの機能
-4. 使用技術（HTML単体 or JavaScript or Python）
+4. 使用技術（Google Apps Script or GitHub Codespaces）
 5. 開発の進め方
 ```
 
-**実装フェーズのプロンプト：**
+#### 🌐 Google Apps Script専用プロンプト
+
+**GAS初期セットアップ：**
+```
+【Google Apps Script用プロンプト】
+Google Apps Scriptで工場の在庫管理アプリを作ってください。
+
+要件：
+- Webアプリとして公開できる形式
+- HTMLファイルとGSファイルを分けて作成
+- google.script.runを使った通信
+
+必要なファイル：
+1. コード.gs（サーバー側処理）
+2. index.html（フロントエンド）
+3. style.html（CSS用、オプション）
+
+各ファイルのコードを別々に出力してください。
+```
+
+**GAS在庫管理アプリ：**
+```
+【GAS版在庫管理システム】
+Google Apps Scriptで以下の機能を持つ在庫管理アプリを作成してください：
+
+機能：
+1. 部品リストの表示（テーブル形式）
+2. 在庫数の追加・削除
+3. 10個以下で赤く警告表示
+4. データはスプレッドシートに保存
+
+ファイル構成：
+- コード.gs: doGet(), getData(), updateData()関数
+- index.html: UIとgoogle.script.runを使った通信
+
+デプロイ方法も教えてください。
+```
+
+**GAS安全チェックアプリ：**
+```
+【GAS版安全装備チェック】
+Google Apps Scriptで安全装備チェックアプリを作成してください。
+
+機能：
+1. チェックリスト表示（ヘルメット、安全靴など）
+2. チェック状態の保存
+3. 全てチェックすると「安全確認完了」表示
+4. 日付と時刻の記録
+
+注意点：
+- google.script.runでサーバー側と通信
+- PropertiesServiceでデータ保存
+- レスポンシブデザイン対応
+```
+
+**実装フェーズのプロンプト（GitHub Codespaces版）：**
 ```
 【安全チェック系】
 写真を撮ると、ヘルメットを着けているかどうかを判定してくれるアプリを作ってください。

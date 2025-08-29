@@ -318,10 +318,11 @@
                 <div class="bg-black text-white p-6 mb-6">
                     <h4 class="heavy text-xl mb-4 text-yellow-400">講師向け事前確認事項</h4>
                     <ul class="space-y-2 mono text-base">
-                        <li>□ 全生徒のGitHubアカウント動作確認</li>
-                        <li>□ GitHub Codespacesの利用可能確認</li>
+                        <li>□ 全生徒のGoogleアカウント確認（GAS利用時）</li>
+                        <li>□ 全生徒のGitHubアカウント動作確認（Codespaces利用時）</li>
+                        <li>□ GitHub Codespacesの利用可能確認（GitHub選択時）</li>
                         <li>□ Wi-Fi環境の安定性確認</li>
-                        <li>□ ChatGPT・NotebookLMアクセス確認</li>
+                        <li>□ ChatGPT・Claude等AIツールのアクセス確認</li>
                         <li>□ 審査員役（他の先生・上級生など）の手配</li>
                     </ul>
                 </div>
@@ -346,6 +347,55 @@
                                 <li>• 品質面: 検査ミス</li>
                                 <li>• 管理面: 在庫管理</li>
                                 <li>• 教育面: 技術継承</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 開発環境の選択 -->
+            <div class="mb-12">
+                <h3 class="heavy text-3xl mb-6">開発環境の選択（どちらか選んでね！）</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-900 text-white p-6">
+                        <h4 class="heavy text-2xl mb-4 text-yellow-400">🌐 Google Apps Script</h4>
+                        <p class="text-lg mb-3">初心者おすすめ！</p>
+                        <div class="mb-4">
+                            <p class="font-bold text-yellow-400">メリット：</p>
+                            <ul class="text-base space-y-1 mt-2">
+                                <li>• Googleアカウントだけで始められる</li>
+                                <li>• ブラウザだけで完結</li>
+                                <li>• 無料で使える</li>
+                                <li>• Webアプリとして簡単公開</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="font-bold text-red-400">注意点：</p>
+                            <ul class="text-base space-y-1 mt-2">
+                                <li>• HTMLとJSを別ファイルで管理</li>
+                                <li>• GAS特有の記法あり</li>
+                                <li>• google.script.runを使用</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-blue-900 text-white p-6">
+                        <h4 class="heavy text-2xl mb-4 text-yellow-400">💻 GitHub Codespaces</h4>
+                        <p class="text-lg mb-3">本格派向け！</p>
+                        <div class="mb-4">
+                            <p class="font-bold text-yellow-400">メリット：</p>
+                            <ul class="text-base space-y-1 mt-2">
+                                <li>• プロの開発環境と同じ</li>
+                                <li>• 普通のHTML/JSが使える</li>
+                                <li>• GitHubで管理</li>
+                                <li>• ターミナル操作を学べる</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="font-bold text-red-400">注意点：</p>
+                            <ul class="text-base space-y-1 mt-2">
+                                <li>• GitHubアカウント必要</li>
+                                <li>• 初回起動に時間がかかる</li>
+                                <li>• コマンド操作が必要</li>
                             </ul>
                         </div>
                     </div>
@@ -853,12 +903,76 @@
         <div class="mb-12">
             <h3 class="heavy text-3xl mb-6 text-red-400">🚀 PHASE 3: AIにコーディングさせる実践プロンプト</h3>
             
-            <div class="timeline-block" data-phase="CODE 1">
-                <h4 class="text-yellow-400 text-xl mb-3">基本構造を作る</h4>
-                <div class="bg-gray-900 p-4 mono text-sm">
-                    <p class="text-green-400 mb-2">【最初のプロンプト - これをコピペ！】</p>
-                    <div class="bg-black p-3 border border-red-400">
-                        <p>以下の3つのファイルで在庫管理システムを作ってください。</p>
+            <!-- 環境別タブ -->
+            <div class="mb-6">
+                <div class="bg-black p-4 border-2 border-yellow-400">
+                    <p class="text-yellow-400 mb-2 heavy">🎯 開発環境を選んでプロンプトを使おう！</p>
+                    <p class="text-white">下記から自分の環境に合ったプロンプトをコピペしてAIに投げよう</p>
+                </div>
+            </div>
+
+            <!-- Google Apps Script用プロンプト -->
+            <div class="mb-8">
+                <h4 class="text-green-400 text-2xl mb-4 heavy">🌐 Google Apps Script版</h4>
+                
+                <div class="timeline-block" data-phase="GAS 1">
+                    <h5 class="text-yellow-400 text-xl mb-3">GAS基本構造を作る</h5>
+                    <div class="bg-gray-900 p-4 mono text-sm">
+                        <p class="text-green-400 mb-2">【GAS用プロンプト - これをコピペ！】</p>
+                        <div class="bg-black p-3 border border-green-400">
+                            <p>Google Apps Scriptで在庫管理システムを作ってください。</p>
+                            <p></p>
+                            <p>必要なファイル：</p>
+                            <p>1. コード.gs（サーバー側）</p>
+                            <p>2. index.html（画面側）</p>
+                            <p></p>
+                            <p>機能：</p>
+                            <p>- 部品リストの表示（テーブル形式）</p>
+                            <p>- 在庫数の追加・削除ボタン</p>
+                            <p>- 10個以下で赤く警告表示</p>
+                            <p>- データはPropertiesServiceで保存</p>
+                            <p></p>
+                            <p>デザイン：</p>
+                            <p>- 背景黒、文字白、アクセント黄色</p>
+                            <p>- 工業的でかっこいい見た目</p>
+                            <p>- スマホ対応</p>
+                            <p></p>
+                            <p>google.script.runを使った通信も含めて、</p>
+                            <p>各ファイルのコードを別々に出力してください。</p>
+                            <p>デプロイ方法も教えてください。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-block" data-phase="GAS 2">
+                    <h5 class="text-yellow-400 text-xl mb-3">GASでスプレッドシート連携</h5>
+                    <div class="bg-gray-900 p-4 mono text-sm">
+                        <p class="text-green-400 mb-2">【スプレッドシート連携プロンプト】</p>
+                        <div class="bg-black p-3 border border-green-400">
+                            <p>上記のGASアプリを改良して、</p>
+                            <p>Googleスプレッドシートと連携させてください。</p>
+                            <p></p>
+                            <p>1. 新規スプレッドシートを作成する関数</p>
+                            <p>2. データの読み込み（getDataFromSheet）</p>
+                            <p>3. データの書き込み（updateSheet）</p>
+                            <p>4. リアルタイム同期</p>
+                            <p></p>
+                            <p>スプレッドシートIDの設定方法も教えてください。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Codespaces用プロンプト -->
+            <div class="mb-8">
+                <h4 class="text-blue-400 text-2xl mb-4 heavy">💻 GitHub Codespaces版</h4>
+                
+                <div class="timeline-block" data-phase="CODE 1">
+                    <h5 class="text-yellow-400 text-xl mb-3">基本構造を作る</h5>
+                    <div class="bg-gray-900 p-4 mono text-sm">
+                        <p class="text-green-400 mb-2">【最初のプロンプト - これをコピペ！】</p>
+                        <div class="bg-black p-3 border border-blue-400">
+                            <p>以下の3つのファイルで在庫管理システムを作ってください。</p>
                         <p></p>
                         <p>index.html：</p>
                         <p>- タイトル「山田製作所 在庫管理システム」</p>
@@ -878,12 +992,12 @@
                         <p>- 10個以下で赤く警告表示</p>
                         <p></p>
                         <p>3つのファイルを別々に出力してください。</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="timeline-block" data-phase="CODE 2">
-                <h4 class="text-yellow-400 text-xl mb-3">機能を追加する</h4>
+                <div class="timeline-block" data-phase="CODE 2">
+                    <h5 class="text-yellow-400 text-xl mb-3">機能を追加する</h5>
                 <div class="bg-gray-900 p-4 mono text-sm">
                     <p class="text-green-400 mb-2">【機能追加プロンプト】</p>
                     <div class="bg-black p-3 border border-red-400">
@@ -899,8 +1013,8 @@
                 </div>
             </div>
 
-            <div class="timeline-block" data-phase="CODE 3">
-                <h4 class="text-yellow-400 text-xl mb-3">見た目を改善</h4>
+                <div class="timeline-block" data-phase="CODE 3">
+                    <h5 class="text-yellow-400 text-xl mb-3">見た目を改善</h5>
                 <div class="bg-gray-900 p-4 mono text-sm">
                     <p class="text-green-400 mb-2">【デザイン改善プロンプト】</p>
                     <div class="bg-black p-3 border border-red-400">
@@ -917,8 +1031,8 @@
                 </div>
             </div>
 
-            <div class="timeline-block" data-phase="CODE 4">
-                <h4 class="text-yellow-400 text-xl mb-3">エラー修正</h4>
+                <div class="timeline-block" data-phase="CODE 4">
+                    <h5 class="text-yellow-400 text-xl mb-3">エラー修正</h5>
                 <div class="bg-gray-900 p-4 mono text-sm">
                     <p class="text-green-400 mb-2">【デバッグプロンプト】</p>
                     <div class="bg-black p-3 border border-red-400">
@@ -928,7 +1042,8 @@
                         <p>[エラーメッセージをここにコピペ]</p>
                         <p></p>
                         <p>原因と修正方法を教えてください。</p>
-                        <p>修正後のコードもください。</p>
+                            <p>修正後のコードもください。</p>
+                        </div>
                     </div>
                 </div>
             </div>
