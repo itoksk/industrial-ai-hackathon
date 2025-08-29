@@ -17,7 +17,7 @@
 - [ ] 全生徒のGitHubアカウント動作確認（GitHub Codespaces利用時）
 - [ ] GitHub Codespacesの利用可能確認（GitHub選択時）
 - [ ] Wi-Fi環境の安定性確認  
-- [ ] ChatGPT・ClaudeなどAIツールのアクセス確認
+- [ ] AIツールのアクセス確認（ChatGPT・Claude・Gemini・NotebookLM）
 - [ ] 審査員役（他の先生・上級生など）の手配
 
 ## 🔧 開発環境の選択（どちらか1つを選んでね！）
@@ -205,8 +205,12 @@ python -m http.server 8000  # Python選択時
 
 1. **🔰 ハッカソン参戦ガイド**（動画付き）
    - ハッカソンとは？競技的なアプリ開発イベント
-   - GitHub Codespaces 基本操作方法
-   - ChatGPT活用テクニック
+   - 開発環境の選び方（GAS vs Codespaces）
+   - AIツール活用テクニック
+     - ChatGPT: コード生成の王道
+     - Claude: 複雑な実装の相談相手
+     - Gemini: Google連携が得意
+     - NotebookLM: アイデア整理・要件定義
    - 「勝つためのポイント」解説
 
 2. **🏭 工業現場のリアルな困りごとデータベース**  

@@ -261,6 +261,7 @@
         <a href="#timeline">TIMELINE</a>
         <a href="#scoring">SCORING</a>
         <a href="#support">SUPPORT</a>
+        <a href="#quicklinks" class="text-yellow-400">LINKS</a>
     </nav>
 
     <!-- Hero Section -->
@@ -322,7 +323,7 @@
                         <li>□ 全生徒のGitHubアカウント動作確認（Codespaces利用時）</li>
                         <li>□ GitHub Codespacesの利用可能確認（GitHub選択時）</li>
                         <li>□ Wi-Fi環境の安定性確認</li>
-                        <li>□ ChatGPT・Claude等AIツールのアクセス確認</li>
+                        <li>□ AIツールのアクセス確認（ChatGPT・Claude・Gemini・NotebookLM）</li>
                         <li>□ 審査員役（他の先生・上級生など）の手配</li>
                     </ul>
                 </div>
@@ -334,8 +335,9 @@
                             <h5 class="text-yellow-400 mb-2">ハッカソン参戦ガイド</h5>
                             <ul class="text-base space-y-1">
                                 <li>• ハッカソンとは？</li>
-                                <li>• GitHub Codespaces基本操作</li>
-                                <li>• ChatGPT活用テクニック</li>
+                                <li>• 開発環境の選び方</li>
+                                <li>• AIツール活用テクニック</li>
+                                <li>• 各AIの得意分野</li>
                                 <li>• 勝つためのポイント解説</li>
                             </ul>
                         </div>
@@ -1252,6 +1254,96 @@
                         <li>• 「GitHub × AI体験者」バッジ</li>
                         <li>• 作成アプリ一覧の共有</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Links Section -->
+    <section id="quicklinks" class="bg-black border-t-8 border-yellow-400 py-20">
+        <div class="container mx-auto px-8">
+            <h2 class="heavy text-6xl mb-12 text-yellow-400 text-center">QUICK ACCESS LINKS</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 開発環境 -->
+                <div class="border-4 border-yellow-400 p-6">
+                    <h3 class="heavy text-2xl mb-6 text-yellow-400">🔧 開発環境</h3>
+                    <div class="space-y-4">
+                        <a href="https://drive.google.com" target="_blank" class="block bg-green-900 text-white p-4 hover:bg-green-700 transition">
+                            <div class="heavy text-lg">Google Drive</div>
+                            <div class="text-sm mt-1">→ Google Apps Script作成</div>
+                        </a>
+                        <a href="https://github.com" target="_blank" class="block bg-blue-900 text-white p-4 hover:bg-blue-700 transition">
+                            <div class="heavy text-lg">GitHub</div>
+                            <div class="text-sm mt-1">→ Codespaces起動</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- AIツール -->
+                <div class="border-4 border-yellow-400 p-6">
+                    <h3 class="heavy text-2xl mb-6 text-yellow-400">🤖 AIツール</h3>
+                    <div class="space-y-4">
+                        <a href="https://chat.openai.com" target="_blank" class="block bg-gray-800 text-white p-3 hover:bg-gray-600 transition">
+                            <div class="heavy">ChatGPT</div>
+                            <div class="text-xs">コード生成の王道</div>
+                        </a>
+                        <a href="https://claude.ai" target="_blank" class="block bg-purple-900 text-white p-3 hover:bg-purple-700 transition">
+                            <div class="heavy">Claude</div>
+                            <div class="text-xs">複雑な実装の相談相手</div>
+                        </a>
+                        <a href="https://gemini.google.com" target="_blank" class="block bg-blue-800 text-white p-3 hover:bg-blue-600 transition">
+                            <div class="heavy">Gemini</div>
+                            <div class="text-xs">Google連携が得意</div>
+                        </a>
+                        <a href="https://notebooklm.google.com" target="_blank" class="block bg-orange-900 text-white p-3 hover:bg-orange-700 transition">
+                            <div class="heavy">NotebookLM</div>
+                            <div class="text-xs">アイデア整理・要件定義</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 参考資料 -->
+                <div class="border-4 border-yellow-400 p-6">
+                    <h3 class="heavy text-2xl mb-6 text-yellow-400">📚 参考資料</h3>
+                    <div class="space-y-4">
+                        <a href="https://developers.google.com/apps-script" target="_blank" class="block bg-gray-800 text-white p-3 hover:bg-gray-600 transition">
+                            <div class="heavy">GAS公式ドキュメント</div>
+                        </a>
+                        <a href="https://docs.github.com/ja/codespaces" target="_blank" class="block bg-gray-800 text-white p-3 hover:bg-gray-600 transition">
+                            <div class="heavy">Codespaces公式ガイド</div>
+                        </a>
+                        <a href="https://github.com/itoksk/industrial-ai-hackathon" target="_blank" class="block bg-yellow-400 text-black p-3 hover:bg-yellow-300 transition">
+                            <div class="heavy">🏆 このハッカソンのGitHub</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- クイックスタートガイド -->
+            <div class="mt-12 bg-gray-900 p-8 border-4 border-red-400">
+                <h3 class="heavy text-3xl mb-6 text-red-400 text-center">⚡ クイックスタート</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="heavy text-xl mb-4 text-green-400">🌐 Google Apps Script で始める</h4>
+                        <ol class="mono text-sm space-y-2">
+                            <li>1. Google Driveを開く</li>
+                            <li>2. 新規 → その他 → Google Apps Script</li>
+                            <li>3. AIにコードを生成してもらう</li>
+                            <li>4. デプロイ → ウェブアプリ</li>
+                            <li>5. URLで動作確認！</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h4 class="heavy text-xl mb-4 text-blue-400">💻 GitHub Codespaces で始める</h4>
+                        <ol class="mono text-sm space-y-2">
+                            <li>1. GitHubにログイン</li>
+                            <li>2. 新しいリポジトリ作成</li>
+                            <li>3. Code → Codespaces起動</li>
+                            <li>4. AIにコードを生成してもらう</li>
+                            <li>5. python -m http.server 8000</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
