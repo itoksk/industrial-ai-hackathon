@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ハンズオン演習ワークシート - 課題発見とAIプレゼンテーション</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0A0A0A;
+            --bg-tertiary: #1A1A1A;
+            --fg-primary: #FFFFFF;
+            --fg-secondary: #CCCCCC;
+            --fg-muted: #888888;
+            --warning-primary: #FFFF00;
+            --warning-secondary: #FFD700;
+            --warning-dim: #998800;
+            --danger-primary: #FF0000;
+            --info-primary: #00FFFF;
+            --success-primary: #00FF00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--fg-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 3px solid var(--warning-primary);
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .header .subtitle {
+            font-family: 'Space Mono', monospace;
+            color: var(--warning-primary);
+            font-size: 1.2rem;
+        }
+
+        .exercise {
+            background: var(--bg-secondary);
+            border: 2px solid var(--warning-primary);
+            margin: 3rem 0;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .exercise::before {
+            content: attr(data-step);
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            background: var(--bg-secondary);
+            color: var(--warning-primary);
+            padding: 0 1rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .exercise-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--warning-primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .exercise-description {
+            color: var(--fg-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .worksheet-area {
+            background: var(--bg-primary);
+            border: 1px dashed var(--warning-dim);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            min-height: 200px;
+            position: relative;
+        }
+
+        .worksheet-area::before {
+            content: '記入欄';
+            position: absolute;
+            top: -10px;
+            left: 1rem;
+            background: var(--bg-primary);
+            color: var(--warning-dim);
+            padding: 0 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .hint-box {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--info-primary);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .hint-box::before {
+            content: '💡 ヒント: ';
+            color: var(--info-primary);
+            font-weight: 700;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--warning-primary);
+            font-size: 1.2rem;
+        }
+
+        .time-indicator {
+            display: inline-block;
+            background: var(--danger-primary);
+            color: var(--fg-primary);
+            padding: 0.25rem 1rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .tool-reference {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--info-primary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tool-reference h4 {
+            color: var(--info-primary);
+            margin-bottom: 1rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .prompt-template {
+            background: var(--bg-primary);
+            border: 1px solid var(--warning-dim);
+            padding: 1rem;
+            font-family: 'Space Mono', monospace;
+            white-space: pre-wrap;
+            margin: 1rem 0;
+        }
+
+        .step-by-step {
+            counter-reset: step-counter;
+            margin: 1rem 0;
+        }
+
+        .step-by-step li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+            list-style: none;
+        }
+
+        .step-by-step li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--warning-primary);
+            color: var(--bg-primary);
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .final-output {
+            background: var(--bg-secondary);
+            border: 3px solid var(--success-primary);
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .final-output h3 {
+            color: var(--success-primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .worksheet-area {
+                border: 2px solid black;
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ハンズオン演習ワークシート</h1>
+            <p class="subtitle">LESSON 02: 課題発見 × AIプレゼンテーション</p>
+        </div>
+
+        <div class="exercise" data-step="EXERCISE 01">
+            <div class="time-indicator">所要時間: 15分</div>
+            <h2 class="exercise-title">ハッカソンの振り返りと問題の洗い出し</h2>
+            <p class="exercise-description">
+                前回のハッカソンで取り組んだテーマを振り返り、「問題」と「課題」を整理しましょう。
+            </p>
+
+            <h3>1. あなたのチームが取り組んだテーマ</h3>
+            <div class="worksheet-area"></div>
+
+            <h3>2. 見つけた「問題」を3つ書き出してください</h3>
+            <div class="hint-box">
+                問題 = 現場で起きている困りごと、症状、現象
+            </div>
+            <div class="worksheet-area"></div>
+
+            <h3>3. それぞれの問題に対して「課題」を設定してください</h3>
+            <div class="hint-box">
+                課題 = 問題を解決するために取り組むべき具体的なアクション
+            </div>
+            <div class="worksheet-area"></div>
+
+            <ul class="checklist">
+                <li>問題は具体的な現象として書けましたか？</li>
+                <li>課題は実行可能なアクションになっていますか？</li>
+                <li>問題と課題の違いが明確ですか？</li>
+            </ul>
+        </div>
+
+        <div class="exercise" data-step="EXERCISE 02">
+            <div class="time-indicator">所要時間: 20分</div>
+            <h2 class="exercise-title">なぜなぜ分析の実践</h2>
+            <p class="exercise-description">
+                Exercise 01で挙げた問題の中から1つを選び、なぜなぜ分析を行いましょう。
+            </p>
+
+            <h3>選んだ問題</h3>
+            <div class="worksheet-area"></div>
+
+            <h3>なぜなぜ分析（5回のなぜ）</h3>
+            <ol class="step-by-step">
+                <li>
+                    <strong>なぜ1:</strong> なぜその問題が起きているのか？
+                    <div class="worksheet-area"></div>
+                </li>
+                <li>
+                    <strong>なぜ2:</strong> なぜ「なぜ1」の状況になっているのか？
+                    <div class="worksheet-area"></div>
+                </li>
+                <li>
+                    <strong>なぜ3:</strong> なぜ「なぜ2」の状況になっているのか？
+                    <div class="worksheet-area"></div>
+                </li>
+                <li>
+                    <strong>なぜ4:</strong> なぜ「なぜ3」の状況になっているのか？
+                    <div class="worksheet-area"></div>
+                </li>
+                <li>
+                    <strong>なぜ5:</strong> なぜ「なぜ4」の状況になっているのか？
+                    <div class="worksheet-area"></div>
+                </li>
+            </ol>
+
+            <h3>根本原因の特定</h3>
+            <div class="worksheet-area"></div>
+
+            <h3>根本原因に対する解決策</h3>
+            <div class="worksheet-area"></div>
+        </div>
+
+        <div class="exercise" data-step="EXERCISE 03">
+            <div class="time-indicator">所要時間: 25分</div>
+            <h2 class="exercise-title">NotebookLMで情報整理</h2>
+            <p class="exercise-description">
+                これまでの分析結果をNotebookLMにアップロードし、AIの力で情報を整理・強化しましょう。
+            </p>
+
+            <div class="tool-reference">
+                <h4>🔗 NotebookLM アクセス方法</h4>
+                <p>1. <a href="https://notebooklm.google.com" target="_blank" style="color: var(--info-primary);">notebooklm.google.com</a> にアクセス</p>
+                <p>2. Googleアカウントでログイン</p>
+                <p>3. 「新しいノートブック」を作成</p>
+            </div>
+
+            <h3>アップロードする資料（チェックリスト）</h3>
+            <ul class="checklist">
+                <li>ハッカソンのシナリオ文書</li>
+                <li>フィードバック資料（feedback.html）</li>
+                <li>自分たちの分析結果（Exercise 01, 02の内容）</li>
+                <li>関連する参考資料（あれば）</li>
+            </ul>
+
+            <h3>NotebookLMに質問する内容</h3>
+            <div class="prompt-template">質問例:
+1. 「この工場の最も深刻な問題は何ですか？」
+2. 「なぜなぜ分析の結果について、追加の視点はありますか？」
+3. 「提案する解決策の実現可能性はどうですか？」
+4. 「類似の事例や解決方法を教えてください」</div>
+
+            <h3>NotebookLMからの回答メモ</h3>
+            <div class="worksheet-area"></div>
+        </div>
+
+        <div class="exercise" data-step="EXERCISE 04">
+            <div class="time-indicator">所要時間: 30分</div>
+            <h2 class="exercise-title">Geminiでプレゼン構成作成</h2>
+            <p class="exercise-description">
+                Google Geminiを使って、5分間のプレゼンテーション構成を作成します。
+            </p>
+
+            <div class="tool-reference">
+                <h4>🔗 Gemini アクセス方法</h4>
+                <p>1. <a href="https://gemini.google.com" target="_blank" style="color: var(--info-primary);">gemini.google.com</a> にアクセス</p>
+                <p>2. Googleアカウントでログイン</p>
+            </div>
+
+            <h3>Geminiへのプロンプト</h3>
+            <div class="prompt-template">あなたは工業高校の生徒です。
+以下の情報を基に、5分間のプレゼンテーション構成を作成してください。
+
+【テーマ】
+[Exercise 02で特定した根本原因と解決策]
+
+【要件】
+- 時間: 5分（スライド10枚以内）
+- 対象: 工場の管理者と現場作業員
+- スタイル: industrial-cyberpunk（黄色警告色、黒背景、緊急感）
+
+【構成に含める要素】
+1. 問題提起（現状の深刻さ）
+2. なぜなぜ分析の結果
+3. 根本原因の説明
+4. 解決策の提案
+5. 期待される効果
+6. 実施スケジュール
+
+【Vibeコーディング】
+"工業的でサイバーパンクな雰囲気、黄色の警告色、緊急感と技術的な信頼性を両立"</div>
+
+            <h3>Geminiが提案した構成</h3>
+            <div class="worksheet-area"></div>
+
+            <h3>各スライドの内容（タイトルと要点）</h3>
+            <ol class="step-by-step">
+                <li>スライド1: <div class="worksheet-area" style="min-height: 50px;"></div></li>
+                <li>スライド2: <div class="worksheet-area" style="min-height: 50px;"></div></li>
+                <li>スライド3: <div class="worksheet-area" style="min-height: 50px;"></div></li>
+                <li>スライド4: <div class="worksheet-area" style="min-height: 50px;"></div></li>
+                <li>スライド5: <div class="worksheet-area" style="min-height: 50px;"></div></li>
+            </ol>
+        </div>
+
+        <div class="exercise" data-step="EXERCISE 05">
+            <div class="time-indicator">所要時間: 20分</div>
+            <h2 class="exercise-title">キャンバス機能で仕上げ</h2>
+            <p class="exercise-description">
+                Geminiのキャンバス機能を使って、プレゼン資料を完成させましょう。
+            </p>
+
+            <h3>キャンバス機能の活用ポイント</h3>
+            <ul class="checklist">
+                <li>スライドのデザインを統一できましたか？</li>
+                <li>図表やグラフを適切に配置しましたか？</li>
+                <li>テキストは簡潔で読みやすいですか？</li>
+                <li>industrial-cyberpunkスタイルが反映されていますか？</li>
+                <li>5分で話せる分量になっていますか？</li>
+            </ul>
+
+            <h3>ブラッシュアップのためのプロンプト</h3>
+            <div class="prompt-template">以下の点を改善してください：
+1. もっとインパクトのある見出しに
+2. 数値データを追加
+3. 視覚的な要素（アイコン、矢印）を増やす
+4. 緊急性を強調する表現に変更
+5. アクションアイテムを明確に</div>
+
+            <h3>最終チェック項目</h3>
+            <ul class="checklist">
+                <li>問題から課題への流れが論理的か</li>
+                <li>なぜなぜ分析が説得力を持っているか</li>
+                <li>解決策が実現可能か</li>
+                <li>期待効果が明確か</li>
+                <li>次のアクションが具体的か</li>
+            </ul>
+        </div>
+
+        <div class="final-output">
+            <h3>🎯 最終成果物</h3>
+            <p style="font-size: 1.2rem; margin: 1rem 0;">
+                完成したプレゼンテーションのタイトル
+            </p>
+            <div class="worksheet-area" style="background: var(--bg-primary); min-height: 100px;"></div>
+            
+            <p style="font-size: 1.2rem; margin: 2rem 0 1rem;">
+                この演習で学んだ最も重要なこと
+            </p>
+            <div class="worksheet-area" style="background: var(--bg-primary); min-height: 100px;"></div>
+        </div>
+
+        <div style="text-align: center; padding: 3rem 0; border-top: 3px solid var(--warning-primary); margin-top: 4rem;">
+            <p style="font-family: 'Space Mono', monospace; color: var(--warning-primary); font-size: 1.5rem;">
+                MISSION COMPLETE
+            </p>
+            <p style="color: var(--fg-secondary); margin-top: 1rem;">
+                課題発見からAIプレゼンテーションまでの一連の流れを習得しました
+            </p>
+        </div>
+    </div>
+</body>
+</html>

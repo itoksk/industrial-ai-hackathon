@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2: 課題発見とAIプレゼンテーション</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0A0A0A;
+            --bg-tertiary: #1A1A1A;
+            --fg-primary: #FFFFFF;
+            --fg-secondary: #CCCCCC;
+            --fg-muted: #888888;
+            --warning-primary: #FFFF00;
+            --warning-secondary: #FFD700;
+            --warning-dim: #998800;
+            --danger-primary: #FF0000;
+            --danger-secondary: #FF3333;
+            --info-primary: #00FFFF;
+            --success-primary: #00FF00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #000 0%, #0A0A0A 100%);
+            color: var(--fg-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 0, 0.03) 2px,
+                rgba(255, 255, 0, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        nav {
+            background: var(--bg-primary);
+            border-bottom: 2px solid var(--warning-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--warning-primary);
+            text-shadow: 0 0 20px var(--warning-primary);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--fg-secondary);
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: var(--warning-primary);
+            text-shadow: 0 0 10px var(--warning-primary);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--warning-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero-label {
+            background: var(--warning-primary);
+            color: var(--bg-primary);
+            padding: 0.5rem 2rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            transform: skewX(-10deg);
+            margin-bottom: 2rem;
+            display: inline-block;
+            box-shadow: 0 0 30px var(--warning-primary);
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 0.9;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .glitch {
+            position: relative;
+            text-shadow: 
+                0.05em 0 0 var(--danger-primary),
+                -0.05em 0 0 var(--info-primary);
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0.05em 0 0 var(--danger-primary), -0.05em 0 0 var(--info-primary); }
+            25% { text-shadow: -0.05em 0 0 var(--danger-primary), 0.05em 0 0 var(--info-primary); }
+            50% { text-shadow: 0.05em 0 0 var(--info-primary), -0.05em 0 0 var(--danger-primary); }
+            75% { text-shadow: -0.05em 0 0 var(--info-primary), 0.05em 0 0 var(--danger-primary); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--warning-primary);
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 2rem;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            max-width: 800px;
+            color: var(--fg-secondary);
+            line-height: 1.6;
+        }
+
+        .section {
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .section-divider {
+            height: 10px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--warning-primary),
+                var(--warning-primary) 10px,
+                var(--bg-primary) 10px,
+                var(--bg-primary) 20px
+            );
+            margin: 4rem 0;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 8rem;
+            color: var(--warning-dim);
+            opacity: 0.3;
+            position: absolute;
+            top: -3rem;
+            left: -2rem;
+            z-index: -1;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--warning-primary);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--warning-primary);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--warning-primary) 0,
+                var(--warning-primary) 10px,
+                var(--bg-primary) 10px,
+                var(--bg-primary) 20px
+            );
+        }
+
+        .card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--warning-primary);
+        }
+
+        .card-number {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--warning-primary);
+            color: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--warning-primary);
+        }
+
+        .card-content {
+            color: var(--fg-secondary);
+            line-height: 1.6;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 2px;
+            background: var(--warning-primary);
+            margin: 2rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: var(--warning-primary);
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .comparison-table tr:hover td {
+            background: var(--bg-secondary);
+            color: var(--warning-primary);
+        }
+
+        .method-card {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--warning-primary);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .method-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--bg-tertiary);
+            color: var(--warning-primary);
+            padding: 0 1rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+        }
+
+        .method-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warning-primary);
+            margin-bottom: 1rem;
+        }
+
+        .method-description {
+            color: var(--fg-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .method-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .method-steps li {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1rem;
+            counter-increment: step-counter;
+        }
+
+        .method-steps li::before {
+            content: counter(step-counter, decimal-leading-zero);
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--warning-primary);
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .tool-section {
+            background: var(--bg-secondary);
+            border: 2px solid var(--info-primary);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .tool-section::before {
+            content: 'AI TOOLS';
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            background: var(--bg-secondary);
+            color: var(--info-primary);
+            padding: 0 1rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--info-primary);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .tool-name {
+            font-size: 2rem;
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--info-primary);
+            margin-bottom: 1rem;
+        }
+
+        .tool-features {
+            list-style: none;
+        }
+
+        .tool-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--fg-secondary);
+        }
+
+        .tool-features li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: var(--info-primary);
+        }
+
+        .warning-box {
+            background: var(--bg-tertiary);
+            border: 3px solid var(--danger-primary);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .warning-box::before {
+            content: '⚠ WARNING';
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            background: var(--bg-tertiary);
+            color: var(--danger-primary);
+            padding: 0 1rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+        }
+
+        .highlight {
+            color: var(--warning-primary);
+            font-weight: 700;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--warning-dim);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Space Mono', monospace;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: '> ';
+            color: var(--warning-primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-number {
+                font-size: 4rem;
+            }
+            
+            .card-grid,
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="nav-title">LESSON 02</div>
+            <div class="nav-menu">
+                <a href="#problem-vs-issue">問題と課題</a>
+                <a href="#discovery-methods">発見手法</a>
+                <a href="#ai-tools">AIツール</a>
+                <a href="#presentation">プレゼン</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <div class="hero-label">INDUSTRIAL PROBLEM SOLVING</div>
+            <h1 class="hero-title">
+                <span class="glitch">課題発見</span><br>
+                &times;<br>
+                AIプレゼンテーション
+            </h1>
+            <p class="hero-subtitle">フィードバックから学ぶ、真の問題解決力</p>
+            <p class="hero-description">
+                ハッカソンの経験を振り返り、<span class="highlight">問題と課題の違い</span>を理解し、
+                <span class="highlight">品質管理の手法</span>で課題を発見し、
+                <span class="highlight">最新のAIツール</span>でプレゼンテーションを作成する
+            </p>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="problem-vs-issue" class="section">
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">問題と課題の違い</h2>
+            </div>
+
+            <div class="warning-box">
+                <p>
+                    ハッカソンのフィードバックで指摘された
+                    <span class="highlight">「技術ありきで課題を決めていなかったか」</span>
+                    という観点。これこそが、問題と課題の違いを理解することの重要性を示しています。
+                </p>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>問題（Problem）</th>
+                        <th>課題（Issue/Challenge）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>定義</strong></td>
+                        <td>現状と理想のギャップ<br>「困っている状態」</td>
+                        <td>問題を解決するために取り組むべきこと<br>「やるべきこと」</td>
+                    </tr>
+                    <tr>
+                        <td><strong>例：工場の場合</strong></td>
+                        <td>「不良品が月100個出ている」<br>「作業員が疲れている」</td>
+                        <td>「検査工程の自動化」<br>「作業環境の改善」</td>
+                    </tr>
+                    <tr>
+                        <td><strong>視点</strong></td>
+                        <td>現象・症状を見る<br>（What is happening?）</td>
+                        <td>原因と対策を考える<br>（What should we do?）</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QC的表現</strong></td>
+                        <td>「現状の悪さ」を表す</td>
+                        <td>「改善の方向性」を示す</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-number">STEP 1</div>
+                    <h3 class="card-title">問題の発見</h3>
+                    <div class="card-content">
+                        <p>まず現場で起きている「困りごと」を見つける</p>
+                        <ul style="margin-top: 1rem; list-style: none;">
+                            <li>✓ データを収集する</li>
+                            <li>✓ 現場の声を聞く</li>
+                            <li>✓ 数値で把握する</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-number">STEP 2</div>
+                    <h3 class="card-title">原因の分析</h3>
+                    <div class="card-content">
+                        <p>なぜその問題が起きているのか深堀りする</p>
+                        <ul style="margin-top: 1rem; list-style: none;">
+                            <li>✓ なぜなぜ分析</li>
+                            <li>✓ 特性要因図</li>
+                            <li>✓ パレート図</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-number">STEP 3</div>
+                    <h3 class="card-title">課題の設定</h3>
+                    <div class="card-content">
+                        <p>解決すべき具体的なアクションを決める</p>
+                        <ul style="margin-top: 1rem; list-style: none;">
+                            <li>✓ 優先順位をつける</li>
+                            <li>✓ 実現可能性を検討</li>
+                            <li>✓ 目標を数値化</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="discovery-methods" class="section">
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">課題発見の手法（QC検定準拠）</h2>
+            </div>
+
+            <div class="method-card" data-number="METHOD 01">
+                <h3 class="method-title">なぜなぜ分析（5 Whys）</h3>
+                <p class="method-description">
+                    問題の根本原因を探るため、「なぜ？」を5回繰り返す手法。
+                    トヨタ生産方式で有名な、シンプルだが強力な分析ツール。
+                </p>
+                <ol class="method-steps">
+                    <li>問題を明確に定義する</li>
+                    <li>「なぜその問題が起きたか？」を問う</li>
+                    <li>答えに対してさらに「なぜ？」を問う</li>
+                    <li>5回程度繰り返し、根本原因に到達</li>
+                    <li>根本原因に対する対策を立案</li>
+                </ol>
+                <div class="code-block">
+                    例：不良品が多い
+                    なぜ1→検査が不十分
+                    なぜ2→検査基準が曖昧
+                    なぜ3→マニュアルが古い
+                    なぜ4→更新体制がない
+                    なぜ5→責任者が不明確
+                </div>
+            </div>
+
+            <div class="method-card" data-number="METHOD 02">
+                <h3 class="method-title">特性要因図（フィッシュボーン図）</h3>
+                <p class="method-description">
+                    問題の要因を体系的に整理する図。魚の骨のような形で、
+                    4M（Man, Machine, Material, Method）などの観点から要因を分析。
+                </p>
+                <ol class="method-steps">
+                    <li>解決したい問題を魚の頭に書く</li>
+                    <li>大骨として主要因（4M）を配置</li>
+                    <li>各主要因に対して小骨（詳細要因）を追加</li>
+                    <li>ブレインストーミングで要因を洗い出し</li>
+                    <li>重要な要因を特定して対策検討</li>
+                </ol>
+            </div>
+
+            <div class="method-card" data-number="METHOD 03">
+                <h3 class="method-title">パレート図（80-20の法則）</h3>
+                <p class="method-description">
+                    問題の80%は20%の要因から生じるという法則に基づき、
+                    重要な要因から優先的に対処するための分析手法。
+                </p>
+                <ol class="method-steps">
+                    <li>データを収集し、要因別に分類</li>
+                    <li>頻度や影響度の大きい順に並べ替え</li>
+                    <li>棒グラフと累積曲線を作成</li>
+                    <li>累積80%までの要因を重点項目に</li>
+                    <li>重点項目から優先的に改善</li>
+                </ol>
+            </div>
+
+            <div class="method-card" data-number="METHOD 04">
+                <h3 class="method-title">ブレインストーミング</h3>
+                <p class="method-description">
+                    チームで自由にアイデアを出し合う創造的問題解決法。
+                    批判禁止、量重視、自由奔放、便乗歓迎の4原則。
+                </p>
+                <ol class="method-steps">
+                    <li>テーマを明確に設定</li>
+                    <li>批判・評価は一切しない</li>
+                    <li>質より量を重視してアイデア出し</li>
+                    <li>他人のアイデアに便乗OK</li>
+                    <li>後でアイデアを整理・評価</li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="ai-tools" class="section">
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">AIツールで爆速プレゼン作成</h2>
+            </div>
+
+            <div class="tool-section">
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h3 class="tool-name">Google Gemini</h3>
+                        <p style="color: var(--fg-muted); margin-bottom: 1rem;">マルチモーダルAI</p>
+                        <ul class="tool-features">
+                            <li>画像・動画・音声を理解</li>
+                            <li>長文の要約・分析が得意</li>
+                            <li>リアルタイム情報検索</li>
+                            <li>Googleサービスと連携</li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-card">
+                        <h3 class="tool-name">NotebookLM</h3>
+                        <p style="color: var(--fg-muted); margin-bottom: 1rem;">AI研究アシスタント</p>
+                        <ul class="tool-features">
+                            <li>複数資料を一括分析</li>
+                            <li>自動要約・Q&A生成</li>
+                            <li>音声ポッドキャスト作成</li>
+                            <li>ソース付き回答</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="presentation" class="section">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">プレゼン資料作成ベストプラクティス</h2>
+            </div>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-number">VIBE</div>
+                    <h3 class="card-title">Vibeコーディング</h3>
+                    <div class="card-content">
+                        <p>プレゼンの「雰囲気」を最初に決める</p>
+                        <div class="code-block" style="margin-top: 1rem;">
+                            "工業的でサイバーパンクな雰囲気で、
+                            黄色の警告色を使った
+                            緊急感のあるデザイン"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-number">CANVAS</div>
+                    <h3 class="card-title">Geminiキャンバス機能</h3>
+                    <div class="card-content">
+                        <p>AIと対話しながらリアルタイム編集</p>
+                        <ul style="margin-top: 1rem; list-style: none;">
+                            <li>✓ 構成の提案を即座に反映</li>
+                            <li>✓ デザインの微調整</li>
+                            <li>✓ コンテンツの推敲</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-number">PROMPT</div>
+                    <h3 class="card-title">効果的なプロンプト</h3>
+                    <div class="card-content">
+                        <div class="code-block" style="margin-top: 1rem;">
+                            役割：工業高校の生徒
+                            目的：課題解決の提案
+                            制約：5分間、10枚以内
+                            スタイル：industrial-cyberpunk
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">プレゼン作成の流れ</h3>
+                <ol style="list-style: none; counter-reset: flow-counter;">
+                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
+                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 1:</span> 
+                        課題発見手法で真の課題を特定
+                    </li>
+                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
+                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 2:</span> 
+                        NotebookLMに関連資料をアップロード
+                    </li>
+                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
+                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 3:</span> 
+                        Geminiでストーリー構成を作成
+                    </li>
+                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
+                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 4:</span> 
+                        Vibeコーディングでデザイン統一
+                    </li>
+                    <li style="counter-increment: flow-counter;">
+                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 5:</span> 
+                        キャンバス機能で仕上げ
+                    </li>
+                </ol>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
