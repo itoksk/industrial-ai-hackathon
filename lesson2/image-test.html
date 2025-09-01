@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像表示テスト</title>
+</head>
+<body>
+    <h1>Google Drive画像表示テスト</h1>
+    
+    <h2>方法1: uc?export=view形式</h2>
+    <img src="https://drive.google.com/uc?export=view&id=1PSlY45RIIyyFqMU7JgbX07t1Tle7MOzT" alt="なぜなぜ分析" width="600">
+    
+    <h2>方法2: uc?id=形式</h2>
+    <img src="https://drive.google.com/uc?id=1PSlY45RIIyyFqMU7JgbX07t1Tle7MOzT" alt="なぜなぜ分析" width="600">
+    
+    <h2>方法3: thumbnail形式</h2>
+    <img src="https://drive.google.com/thumbnail?id=1PSlY45RIIyyFqMU7JgbX07t1Tle7MOzT&sz=w1000" alt="なぜなぜ分析" width="600">
+    
+    <h2>方法4: lh3.googleusercontent.com形式（もし利用可能なら）</h2>
+    <p>この形式は直接リンクが必要です</p>
+    
+    <hr>
+    
+    <h2>すべての画像テスト</h2>
+    <ol>
+        <li>
+            <p>なぜなぜ分析（ID: 1PSlY45RIIyyFqMU7JgbX07t1Tle7MOzT）</p>
+            <img src="https://drive.google.com/uc?export=view&id=1PSlY45RIIyyFqMU7JgbX07t1Tle7MOzT" alt="なぜなぜ分析" style="max-width: 100%; height: auto;">
+        </li>
+        <li>
+            <p>特性要因図（ID: 1fHd6r9hB9jw3DjoijdP9ItwtOtBLQlgt）</p>
+            <img src="https://drive.google.com/uc?export=view&id=1fHd6r9hB9jw3DjoijdP9ItwtOtBLQlgt" alt="特性要因図" style="max-width: 100%; height: auto;">
+        </li>
+        <li>
+            <p>パレート図（ID: 1_DH_Hlf6W1aVgamqApw3neJ5NrO1F97t）</p>
+            <img src="https://drive.google.com/uc?export=view&id=1_DH_Hlf6W1aVgamqApw3neJ5NrO1F97t" alt="パレート図" style="max-width: 100%; height: auto;">
+        </li>
+        <li>
+            <p>ブレインストーミング（ID: 1mt4CZyZr2xiPanyioKh692gVeAFctXtj）</p>
+            <img src="https://drive.google.com/uc?export=view&id=1mt4CZyZr2xiPanyioKh692gVeAFctXtj" alt="ブレインストーミング" style="max-width: 100%; height: auto;">
+        </li>
+    </ol>
+    
+    <hr>
+    
+    <h2>代替案：Base64エンコード</h2>
+    <p>もし上記の方法がすべて機能しない場合は、画像をBase64エンコードして直接HTMLに埋め込む方法もあります。</p>
+    
+    <h2>確認事項</h2>
+    <ul>
+        <li>Google Driveの共有設定が「リンクを知っている全員」になっているか確認してください</li>
+        <li>画像ファイルのサイズが大きすぎないか確認してください（10MB以下推奨）</li>
+        <li>ブラウザのコンソールでエラーメッセージを確認してください</li>
+    </ul>
+</body>
+</html>

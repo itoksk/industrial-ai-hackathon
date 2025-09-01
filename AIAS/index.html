@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIAS - AIアセスメントスケール 学習ガイド</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink-color: #0A0E27;
+            --paper-color: #FEFEF8;
+            --electric-blue: #00F0FF;
+            --coral-pink: #FF6B6B;
+            --violet: #7C3AED;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --text-secondary: #4A5568;
+            --gray-light: rgba(10, 14, 39, 0.1);
+            --gray-medium: rgba(10, 14, 39, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            background-color: var(--paper-color);
+            color: var(--ink-color);
+            line-height: 1.8;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(10, 14, 39, 0.01) 2px,
+                rgba(10, 14, 39, 0.01) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(254, 254, 248, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--ink-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--ink-color);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--electric-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            margin-top: 80px;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero-label {
+            background-color: var(--ink-color);
+            color: var(--paper-color);
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            transform: rotate(-1deg);
+            margin-bottom: 2rem;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: var(--electric-blue);
+            font-size: 1.5rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .hero-description {
+            max-width: 800px;
+            margin: 2rem auto;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* セクション */
+        .section {
+            margin: 80px 0;
+        }
+
+        .section-header {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 8rem;
+            font-weight: 700;
+            opacity: 0.1;
+            position: absolute;
+            top: -3rem;
+            left: -2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .section-label {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* レベルカード */
+        .level-cards {
+            display: grid;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .level-card {
+            background: white;
+            border: 2px solid var(--ink-color);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 100%;
+            height: 100%;
+            background: var(--ink-color);
+            z-index: -1;
+        }
+
+        .level-card:hover {
+            background: var(--ink-color);
+            color: var(--paper-color);
+            transform: translate(-4px, -4px);
+        }
+
+        .level-card:hover::before {
+            top: 8px;
+            left: 8px;
+        }
+
+        .level-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--electric-blue);
+            color: var(--ink-color);
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* AIASレベル一覧セクションのレベル番号色 */
+        #levels .level-card:nth-of-type(1) .level-number { 
+            background: #DC143C; 
+            color: white;
+        }
+        #levels .level-card:nth-of-type(2) .level-number { 
+            background: #1E90FF; 
+            color: white;
+        }
+        #levels .level-card:nth-of-type(3) .level-number { 
+            background: #32CD32; 
+            color: white;
+        }
+        #levels .level-card:nth-of-type(4) .level-number { 
+            background: #FFB700; 
+            color: var(--ink-color);
+        }
+        #levels .level-card:nth-of-type(5) .level-number { 
+            background: #FF8C00; 
+            color: white;
+        }
+        #levels .level-card:nth-of-type(6) .level-number { 
+            background: #9370DB; 
+            color: white;
+        }
+
+        .level-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .level-name-en {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .level-card:hover .level-name-en {
+            color: rgba(254, 254, 248, 0.7);
+        }
+
+        .level-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .level-examples {
+            border-top: 1px dotted var(--gray-medium);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .level-card:hover .level-examples {
+            border-top-color: rgba(254, 254, 248, 0.3);
+        }
+
+        .level-examples-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* レベル別の色 */
+        .level-0-color { color: #DC143C !important; } /* 濃い赤 */
+        .level-1-color { color: #1E90FF !important; } /* 濃い青 */
+        .level-2-color { color: #32CD32 !important; } /* 濃い緑 */
+        .level-3-color { color: #FFB700 !important; } /* 濃い黄 */
+        .level-4-color { color: #FF8C00 !important; } /* 濃いオレンジ */
+        .level-5-color { color: #9370DB !important; } /* 濃い紫 */
+
+        .level-card:hover .level-examples-title {
+            color: var(--electric-blue);
+        }
+
+        .level-examples ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .level-examples li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* レベル別の箇条書き記号色 */
+        .level-card:nth-of-type(1) .level-examples li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #DC143C; /* レベル0 赤 */
+        }
+        .level-card:nth-of-type(2) .level-examples li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #1E90FF; /* レベル1 青 */
+        }
+        .level-card:nth-of-type(3) .level-examples li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #32CD32; /* レベル2 緑 */
+        }
+        .level-card:nth-of-type(4) .level-examples li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #FFB700; /* レベル3 黄 */
+        }
+        .level-card:nth-of-type(5) .level-examples li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #FF8C00; /* レベル4 オレンジ */
+        }
+        .level-card:nth-of-type(6) .level-examples li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #9370DB; /* レベル5 紫 */
+        }
+        
+        /* 学びでの適用例セクションの箇条書き記号色 */
+        #examples .level-card:nth-of-type(1) .level-examples li::before { color: #9370DB; } /* 課題探究 - 紫 */
+        #examples .level-card:nth-of-type(2) .level-examples li::before { color: #32CD32; } /* レポート - 緑 */
+        #examples .level-card:nth-of-type(3) .level-examples li::before { color: #DC143C; } /* 数学 - 赤 */
+        #examples .level-card:nth-of-type(4) .level-examples li::before { color: #1E90FF; } /* 理科 - 青 */
+        #examples .level-card:nth-of-type(5) .level-examples li::before { color: #FFB700; } /* 国語 - 黄 */
+        #examples .level-card:nth-of-type(6) .level-examples li::before { color: #FF8C00; } /* 社会 - オレンジ */
+
+        /* 重要な注意事項 */
+        .important-box {
+            background: linear-gradient(135deg, var(--coral-pink) 0%, var(--violet) 100%);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .important-box::before {
+            content: '⚠️';
+            font-size: 3rem;
+            position: absolute;
+            top: -1.5rem;
+            left: 2rem;
+            background: var(--paper-color);
+            padding: 0 1rem;
+        }
+
+        .important-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* 原則カード */
+        .principle-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .principle-card {
+            background: white;
+            border-left: 4px solid var(--violet);
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(10, 14, 39, 0.1);
+        }
+
+        .principle-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--violet);
+        }
+
+        /* フッター */
+        .footer {
+            margin-top: 100px;
+            padding: 2rem 0;
+            border-top: 2px solid var(--ink-color);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .footer-reference {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* 提出物注意事項 */
+        .submission-note {
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            border: 1px solid var(--gray-light);
+        }
+        
+        /* レベル別の枠線色 */
+        .level-card:nth-of-type(1) .submission-note {
+            background: linear-gradient(to right, #DC143C 0%, #DC143C 4px, white 4px);
+        }
+        .level-card:nth-of-type(2) .submission-note {
+            background: linear-gradient(to right, #1E90FF 0%, #1E90FF 4px, white 4px);
+        }
+        .level-card:nth-of-type(3) .submission-note {
+            background: linear-gradient(to right, #32CD32 0%, #32CD32 4px, white 4px);
+        }
+        .level-card:nth-of-type(4) .submission-note {
+            background: linear-gradient(to right, #FFB700 0%, #FFB700 4px, white 4px);
+        }
+        .level-card:nth-of-type(5) .submission-note {
+            background: linear-gradient(to right, #FF8C00 0%, #FF8C00 4px, white 4px);
+        }
+        .level-card:nth-of-type(6) .submission-note {
+            background: linear-gradient(to right, #9370DB 0%, #9370DB 4px, white 4px);
+        }
+        
+        /* 学びでの適用例セクションのカード番号色 */
+        #examples .level-card:nth-of-type(1) .level-number { background: #9370DB; } /* 課題探究 - 紫 */
+        #examples .level-card:nth-of-type(2) .level-number { background: #32CD32; } /* レポート - 緑 */
+        #examples .level-card:nth-of-type(3) .level-number { background: #DC143C; } /* 数学 - 赤 */
+        #examples .level-card:nth-of-type(4) .level-number { background: #1E90FF; } /* 理科 - 青 */
+        #examples .level-card:nth-of-type(5) .level-number { background: #FFB700; } /* 国語 - 黄 */
+        #examples .level-card:nth-of-type(6) .level-number { background: #FF8C00; } /* 社会 - オレンジ */
+
+        .submission-note-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .level-card:hover .submission-note {
+            border-color: rgba(254, 254, 248, 0.3);
+        }
+        
+        /* ホバー時の枠線色 */
+        .level-card:nth-of-type(1):hover .submission-note {
+            background: linear-gradient(to right, #DC143C 0%, #DC143C 4px, var(--ink-color) 4px) !important;
+        }
+        .level-card:nth-of-type(2):hover .submission-note {
+            background: linear-gradient(to right, #1E90FF 0%, #1E90FF 4px, var(--ink-color) 4px) !important;
+        }
+        .level-card:nth-of-type(3):hover .submission-note {
+            background: linear-gradient(to right, #32CD32 0%, #32CD32 4px, var(--ink-color) 4px) !important;
+        }
+        .level-card:nth-of-type(4):hover .submission-note {
+            background: linear-gradient(to right, #FFB700 0%, #FFB700 4px, var(--ink-color) 4px) !important;
+        }
+        .level-card:nth-of-type(5):hover .submission-note {
+            background: linear-gradient(to right, #FF8C00 0%, #FF8C00 4px, var(--ink-color) 4px) !important;
+        }
+        .level-card:nth-of-type(6):hover .submission-note {
+            background: linear-gradient(to right, #9370DB 0%, #9370DB 4px, var(--ink-color) 4px) !important;
+        }
+
+        /* ホバー時の提出物注意点タイトル色 - 反転時は白に */
+        #levels .level-card:hover .submission-note-title {
+            color: #FEFEF8 !important;
+        }
+
+        /* 早見表テーブル */
+        .quick-reference-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(10, 14, 39, 0.1);
+        }
+
+        .quick-reference-table thead {
+            background: var(--ink-color);
+            color: var(--paper-color);
+        }
+
+        .quick-reference-table th {
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            border: none;
+        }
+
+        .quick-reference-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        /* 早見表の各レベルのホバー色 - より濃い色で視認性向上 */
+        .quick-reference-table tbody tr:nth-child(1):hover {
+            background: rgba(220, 20, 60, 0.15); /* レベル0 赤 */
+            transform: translateX(4px);
+        }
+        .quick-reference-table tbody tr:nth-child(2):hover {
+            background: rgba(30, 144, 255, 0.15); /* レベル1 青 */
+            transform: translateX(4px);
+        }
+        .quick-reference-table tbody tr:nth-child(3):hover {
+            background: rgba(50, 205, 50, 0.15); /* レベル2 緑 */
+            transform: translateX(4px);
+        }
+        .quick-reference-table tbody tr:nth-child(4):hover {
+            background: rgba(255, 183, 0, 0.2); /* レベル3 黄 - より濃く */
+            transform: translateX(4px);
+        }
+        .quick-reference-table tbody tr:nth-child(5):hover {
+            background: rgba(255, 140, 0, 0.15); /* レベル4 オレンジ */
+            transform: translateX(4px);
+        }
+        .quick-reference-table tbody tr:nth-child(6):hover {
+            background: rgba(147, 112, 219, 0.15); /* レベル5 紫 */
+            transform: translateX(4px);
+        }
+
+        .quick-reference-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+            font-size: 1.5rem;
+            border: 2px solid;
+        }
+
+        .level-0 { background: var(--gray-light); border-color: var(--ink-color); color: var(--ink-color); }
+        .level-1 { background: #E0F2FE; border-color: #0EA5E9; color: #0EA5E9; }
+        .level-2 { background: #DCFCE7; border-color: var(--green); color: var(--green); }
+        .level-3 { background: #FEF3C7; border-color: var(--yellow); color: var(--yellow); }
+        .level-4 { background: #FCE7F3; border-color: var(--coral-pink); color: var(--coral-pink); }
+        .level-5 { background: #EDE9FE; border-color: var(--violet); color: var(--violet); }
+
+        .allowed-list, .prohibited-list {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .allowed-list li, .prohibited-list li {
+            margin: 0.25rem 0;
+            list-style: none;
+            position: relative;
+        }
+
+        .allowed-list li::before {
+            content: '✓';
+            position: absolute;
+            left: -1.5rem;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .prohibited-list li::before {
+            content: '✗';
+            position: absolute;
+            left: -1.5rem;
+            color: var(--coral-pink);
+            font-weight: 700;
+        }
+
+        /* クイックチェック */
+        .quick-check {
+            background: linear-gradient(135deg, var(--electric-blue) 0%, var(--violet) 100%);
+            color: white;
+            padding: 2rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .quick-check-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .check-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .check-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .check-item-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .check-icon {
+            font-size: 1.5rem;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .section-number {
+                font-size: 4rem;
+                top: -2rem;
+                left: -1rem;
+            }
+
+            .level-card {
+                padding: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .quick-reference-table {
+                font-size: 0.9rem;
+            }
+
+            .quick-reference-table th,
+            .quick-reference-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .level-badge {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-title">AIAS 学習ガイド</div>
+            <div class="nav-menu">
+                <a href="#levels">レベル一覧</a>
+                <a href="#quick-ref">早見表</a>
+                <a href="#principles">利用原則</a>
+                <a href="#examples">具体例</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- ヒーローセクション -->
+        <div class="hero">
+            <div class="hero-label">AI ASSESSMENT SCALE</div>
+            <h1 class="hero-title">
+                AIアセスメント<br>
+                <span class="hero-subtitle">スケール</span>
+            </h1>
+            <p class="hero-description">
+                AIツールを学習に活用するための6段階の枠組み。<br>
+                各レベルで許可されるAI利用方法を明確に定義し、<br>
+                倫理的で効果的な学習を支援します。<br>
+                <span style="font-size: 0.9em; margin-top: 1rem; display: block;">
+                    🔴レベル0 🔵レベル1 🟢レベル2 🟡レベル3 🟠レベル4 🟣レベル5
+                </span>
+                <span style="font-size: 0.85em; margin-top: 0.5rem; display: block; color: var(--text-secondary);">
+                    ※ AIを禁止するのではなく、学習目的に応じた適切な活用を促進します
+                </span>
+            </p>
+        </div>
+
+        <!-- AIASレベル一覧 -->
+        <section class="section" id="levels">
+            <div class="section-header">
+                <div class="section-number" style="background: linear-gradient(135deg, #DC143C, #1E90FF, #32CD32, #FFB700, #FF8C00, #9370DB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">01</div>
+                <h2 class="section-title">AIASレベル一覧</h2>
+                <div class="section-label">6 Levels of AI Integration</div>
+            </div>
+
+            <div class="level-cards">
+                <!-- レベル0 -->
+                <div class="level-card">
+                    <div class="level-number">0</div>
+                    <h3 class="level-name">🔴 AI利用なし</h3>
+                    <div class="level-name-en">No AI</div>
+                    <p class="level-description">
+                        AI支援を一切受けずに課題を完了します。自分の知識、理解、スキルのみで取り組む段階です。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-0-color">具体例：</div>
+                        <ul>
+                            <li>監視下での筆記試験</li>
+                            <li>実験室での実技試験</li>
+                            <li>口頭でのプレゼンテーション</li>
+                        </ul>
+                    </div>
+                    <div class="submission-note">
+                        <div class="submission-note-title level-0-color">🔴 提出物の注意点</div>
+                        <p>完全に自力で作成した成果物のみを提出</p>
+                    </div>
+                </div>
+
+                <!-- レベル1 -->
+                <div class="level-card">
+                    <div class="level-number">1</div>
+                    <h3 class="level-name">🔵 AI支援による情報収集</h3>
+                    <div class="level-name-en">AI-Assisted Information Gathering</div>
+                    <p class="level-description">
+                        AIを情報源として利用。検索エンジンの延長として、資料収集や調査に活用する段階です。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-1-color">具体例：</div>
+                        <ul>
+                            <li>研究テーマに関するキーワードのリストアップ</li>
+                            <li>関連文献の検索</li>
+                            <li>基礎知識の確認</li>
+                        </ul>
+                    </div>
+                    <div class="submission-note">
+                        <div class="submission-note-title level-1-color">🔵 提出物の注意点</div>
+                        <p>AIを情報収集に使用したことを明記し、参考文献リストに含める</p>
+                    </div>
+                </div>
+
+                <!-- レベル2 -->
+                <div class="level-card">
+                    <div class="level-number">2</div>
+                    <h3 class="level-name">🟢 AI支援によるアイデア生成</h3>
+                    <div class="level-name-en">AI-Assisted Idea Generation</div>
+                    <p class="level-description">
+                        AIをブレインストーミング、構成作成、アイデア出しに利用。ただし、AI生成コンテンツを最終提出物に含めることは不可。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-2-color">具体例：</div>
+                        <ul>
+                            <li>エッセイのアウトライン案を複数生成</li>
+                            <li>プロジェクトの構成案を検討</li>
+                            <li>解決策のアイデア出し</li>
+                        </ul>
+                    </div>
+                    <div class="submission-note">
+                        <div class="submission-note-title level-2-color">🟢 提出物の注意点</div>
+                        <p>AIとのブレストメモを付録として添付し、最終成果物は自分の言葉で作成</p>
+                    </div>
+                </div>
+
+                <!-- レベル3 -->
+                <div class="level-card">
+                    <div class="level-number">3</div>
+                    <h3 class="level-name">🟡 AI支援による編集</h3>
+                    <div class="level-name-en">AI-Assisted Editing</div>
+                    <p class="level-description">
+                        学生が作成した文章の明確さや質を向上させるためにAIを利用。新たなコンテンツの生成は不可。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-3-color">具体例：</div>
+                        <ul>
+                            <li>自作レポートの文法チェック</li>
+                            <li>不自然な表現の修正</li>
+                            <li>文章の流れの改善</li>
+                        </ul>
+                    </div>
+                    <div class="submission-note">
+                        <div class="submission-note-title level-3-color">🟡 提出物の注意点</div>
+                        <p><strong>重要：</strong> AI編集前のオリジナル原稿とAI編集後の最終稿の<strong>両方を提出</strong></p>
+                    </div>
+                </div>
+
+                <!-- レベル4 -->
+                <div class="level-card">
+                    <div class="level-number">4</div>
+                    <h3 class="level-name">🟠 AIタスク完了・人間評価</h3>
+                    <div class="level-name-en">AI Task Completion, Human Evaluation</div>
+                    <p class="level-description">
+                        AIが課題の特定要素を完了。学生の主な役割は、AI生成コンテンツの正確性、バイアス、質などを批判的に評価。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-4-color">具体例：</div>
+                        <ul>
+                            <li>AIにデータセットやコンテンツを生成させ、分析・評価</li>
+                            <li>AI生成コンテンツと人間作成コンテンツの比較分析</li>
+                            <li>AIの出力物の偏見や不正確さを批判的評価</li>
+                            <li>AI生成コンテンツを大きなプロジェクトに統合</li>
+                        </ul>
+                    </div>
+                    <div class="submission-note">
+                        <div class="submission-note-title level-4-color">🟠 提出物の注意点</div>
+                        <p><strong>以下の3点を必ず提出：</strong></p>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>AIが生成したコンテンツ（適切に引用表記）</li>
+                            <li>自身のオリジナル作品（比較用）</li>
+                            <li>批判的評価レポート（関連性、正確性、適切性の分析）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- レベル5 -->
+                <div class="level-card">
+                    <div class="level-number">5</div>
+                    <h3 class="level-name">🟣 完全なAI利用</h3>
+                    <div class="level-name-en">Full AI Use</div>
+                    <p class="level-description">
+                        AIが「共同操縦士」として評価プロセス全体で利用される。創造性や革新性を高めるための協調的なアプローチ。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-5-color">具体例：</div>
+                        <ul>
+                            <li>AIと対話しながら複雑なプログラムを共同開発</li>
+                            <li>AI画像生成ツールを用いたアート作成</li>
+                            <li>AIと協働した革新的なソリューション開発</li>
+                        </ul>
+                    </div>
+                    <div class="submission-note">
+                        <div class="submission-note-title level-5-color">🟣 提出物の注意点</div>
+                        <p>AIとの協働プロセスを説明し、創造性と革新性をアピール</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 重要な注意事項 -->
+        <div class="important-box">
+            <h2 class="important-title">重要：課題に取り組む前に必ず確認！</h2>
+            <p>
+                各課題には「AIASレベル」が指定されています。<br>
+                指定されたレベルを超えるAI利用は、学術的不正行為となる可能性があります。<br>
+                不明な点は必ず教員に確認してください。
+            </p>
+            <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.3);">
+                <strong>💡 大切な考え方：</strong><br>
+                AIASは、AIの利用を禁止・抑制するものではありません。<br>
+                学習目的に応じて、適切にAIを活用することを促進するための枠組みです。<br>
+                AIは強力な学習パートナー。レベルに応じて賢く活用しましょう！
+            </p>
+        </div>
+
+        <!-- 早見表セクション -->
+        <section class="section" id="quick-ref">
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">AIASレベル早見表</h2>
+                <div class="section-label">Quick Reference Table</div>
+            </div>
+
+            <table class="quick-reference-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">レベル</th>
+                        <th style="width: 160px;">名称</th>
+                        <th>許可される活動</th>
+                        <th>禁止される活動</th>
+                        <th style="width: 250px;">提出物</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- レベル0 -->
+                    <tr>
+                        <td>
+                            <div class="level-badge level-0">0</div>
+                        </td>
+                        <td>
+                            <div class="level-name">🔴 AI利用なし</div>
+                            <div class="level-name-en">No AI</div>
+                        </td>
+                        <td>
+                            <ul class="allowed-list">
+                                <li>自分の知識のみで解答</li>
+                                <li>教科書・ノートの参照（許可時）</li>
+                                <li>人間の教師・友人への質問</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="prohibited-list">
+                                <li>AIツールの一切の使用</li>
+                                <li>AI生成コンテンツの参照</li>
+                                <li>AIによる検索・調査</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>完全に自力で作成した成果物のみ</strong>
+                        </td>
+                    </tr>
+
+                    <!-- レベル1 -->
+                    <tr>
+                        <td>
+                            <div class="level-badge level-1">1</div>
+                        </td>
+                        <td>
+                            <div class="level-name">🔵 情報収集</div>
+                            <div class="level-name-en">Information Gathering</div>
+                        </td>
+                        <td>
+                            <ul class="allowed-list">
+                                <li>キーワード検索</li>
+                                <li>参考文献の探索</li>
+                                <li>基礎知識の確認</li>
+                                <li>用語の定義確認</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="prohibited-list">
+                                <li>AIによる文章生成</li>
+                                <li>AIによる問題解答</li>
+                                <li>AIのアイデアをそのまま使用</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>成果物 + AI利用の明記</strong><br>
+                            <span style="font-size: 0.9em;">参考文献リストにAIツールを含める</span>
+                        </td>
+                    </tr>
+
+                    <!-- レベル2 -->
+                    <tr>
+                        <td>
+                            <div class="level-badge level-2">2</div>
+                        </td>
+                        <td>
+                            <div class="level-name">🟢 アイデア生成</div>
+                            <div class="level-name-en">Idea Generation</div>
+                        </td>
+                        <td>
+                            <ul class="allowed-list">
+                                <li>ブレインストーミング</li>
+                                <li>構成案の検討</li>
+                                <li>アウトライン作成支援</li>
+                                <li>視点の多様化</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="prohibited-list">
+                                <li>AI生成文章の使用</li>
+                                <li>AIの提案をそのまま採用</li>
+                                <li>最終成果物へのAIコンテンツ混入</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>成果物 + AIブレストメモ</strong><br>
+                            <span style="font-size: 0.9em;">付録としてアイデア出しの記録を添付</span>
+                        </td>
+                    </tr>
+
+                    <!-- レベル3 -->
+                    <tr>
+                        <td>
+                            <div class="level-badge level-3">3</div>
+                        </td>
+                        <td>
+                            <div class="level-name">🟡 編集支援</div>
+                            <div class="level-name-en">Editing Assistance</div>
+                        </td>
+                        <td>
+                            <ul class="allowed-list">
+                                <li>文法チェック</li>
+                                <li>表現の改善提案</li>
+                                <li>文章の流れ確認</li>
+                                <li>誤字脱字の修正</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="prohibited-list">
+                                <li>新規コンテンツの生成</li>
+                                <li>論旨の変更</li>
+                                <li>大幅な書き換え</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>オリジナル原稿 + AI編集後</strong><br>
+                            <span style="font-size: 0.9em; color: var(--coral-pink);">※両方の提出が必須</span>
+                        </td>
+                    </tr>
+
+                    <!-- レベル4 -->
+                    <tr>
+                        <td>
+                            <div class="level-badge level-4">4</div>
+                        </td>
+                        <td>
+                            <div class="level-name">🟠 AI生成・人間評価</div>
+                            <div class="level-name-en">AI Task, Human Eval</div>
+                        </td>
+                        <td>
+                            <ul class="allowed-list">
+                                <li>AIによる初稿生成</li>
+                                <li>批判的評価の実施</li>
+                                <li>バイアスの分析</li>
+                                <li>改善提案の作成</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="prohibited-list">
+                                <li>無批判な受け入れ</li>
+                                <li>評価なしの提出</li>
+                                <li>出典の隠蔽</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>3点セット提出：</strong><br>
+                            <span style="font-size: 0.9em;">①AI生成物（引用付き）<br>②オリジナル作品<br>③批判的評価レポート</span>
+                        </td>
+                    </tr>
+
+                    <!-- レベル5 -->
+                    <tr>
+                        <td>
+                            <div class="level-badge level-5">5</div>
+                        </td>
+                        <td>
+                            <div class="level-name">🟣 完全協働</div>
+                            <div class="level-name-en">Full AI Use</div>
+                        </td>
+                        <td>
+                            <ul class="allowed-list">
+                                <li>AIとの共同開発</li>
+                                <li>創造的な協働作業</li>
+                                <li>革新的解決策の探求</li>
+                                <li>AI機能のフル活用</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul class="prohibited-list">
+                                <li>（基本的に制限なし）</li>
+                                <li>※倫理的配慮は必須</li>
+                                <li>※著作権への注意</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>成果物 + 協働プロセス</strong><br>
+                            <span style="font-size: 0.9em;">創造性と革新性の説明を含む</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- クイックチェック -->
+            <div class="quick-check">
+                <h2 class="quick-check-title">🚀 課題開始前のクイックチェック</h2>
+                <div class="check-grid">
+                    <div class="check-item">
+                        <div class="check-item-title">
+                            <span class="check-icon">📋</span>
+                            <span>レベル確認</span>
+                        </div>
+                        <p>課題に指定されたAIASレベルを確認しましたか？</p>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-item-title">
+                            <span class="check-icon">✅</span>
+                            <span>許可事項</span>
+                        </div>
+                        <p>そのレベルで許可される活動を理解しましたか？</p>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-item-title">
+                            <span class="check-icon">⚠️</span>
+                            <span>禁止事項</span>
+                        </div>
+                        <p>禁止される活動を把握しましたか？</p>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-item-title">
+                            <span class="check-icon">❓</span>
+                            <span>質問確認</span>
+                        </div>
+                        <p>不明な点は教員に確認しましたか？</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 利用原則 -->
+        <section class="section" id="principles">
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">AI利用の基本原則</h2>
+                <div class="section-label">Fundamental Principles</div>
+            </div>
+
+            <div class="principle-cards">
+                <div class="principle-card">
+                    <h3 class="principle-title">🎯 目的の明確化</h3>
+                    <p>AIは学習を支援するツールです。あなたの理解と成長が最終目標であることを忘れないでください。</p>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">✅ 誠実性の維持</h3>
+                    <p>AI利用について透明性を保ち、自分の貢献とAIの貢献を明確に区別しましょう。</p>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">🔍 批判的思考</h3>
+                    <p>AIの出力を鵜呑みにせず、常に批判的に評価し、事実確認を行いましょう。</p>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">📚 学習優先</h3>
+                    <p>AIに依存しすぎず、自分のスキルと知識を継続的に向上させることを優先しましょう。</p>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">🤝 公平性の確保</h3>
+                    <p>AIアクセスの差が不公平にならないよう、配慮と協力を心がけましょう。</p>
+                </div>
+
+                <div class="principle-card">
+                    <h3 class="principle-title">🔒 プライバシー保護</h3>
+                    <p>個人情報や機密情報をAIツールに入力しないよう注意しましょう。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学びでの適用例 -->
+        <section class="section" id="examples">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">学びでの適用例</h2>
+                <div class="section-label">Learning Applications</div>
+            </div>
+
+            <div class="level-cards">
+                <div class="level-card">
+                    <div class="level-number">5</div>
+                    <h3 class="level-name">🟣 課題探究活動</h3>
+                    <div class="level-name-en">Project-Based Learning - Level 5</div>
+                    <p class="level-description">
+                        工場の問題解決プロジェクトなど、探究活動では<strong>レベル5（完全なAI利用）</strong>が適用されます。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-5-color">許可される活動：</div>
+                        <ul>
+                            <li>AIと対話しながらアプリやプログラム開発</li>
+                            <li>AIによる問題分析と解決策の提案</li>
+                            <li>デザインやプレゼン資料のAI活用</li>
+                            <li>AIと協働した創造的な作品制作</li>
+                            <li>革新的なアイデアの共同開発</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-number">2</div>
+                    <h3 class="level-name">🟢 レポート課題の例</h3>
+                    <div class="level-name-en">AI-Assisted Idea Generation - Level 2</div>
+                    <p class="level-description">
+                        振り返りレポートでは、<strong>レベル2（AI支援によるアイデア生成）</strong>が適用される場合があります。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-2-color">許可される活動：</div>
+                        <ul>
+                            <li>レポートの構成をAIと相談</li>
+                            <li>アイデアのブレインストーミング</li>
+                            <li>参考資料の検索</li>
+                        </ul>
+                    </div>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-2-color">禁止される活動：</div>
+                        <ul>
+                            <li>AIが生成した文章をそのまま使用</li>
+                            <li>AIによる完全な執筆</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-number">0</div>
+                    <h3 class="level-name">🔴 数学：二次関数テスト</h3>
+                    <div class="level-name-en">Mathematics Test - Level 0</div>
+                    <p class="level-description">
+                        定期テストの二次関数問題では、<strong>レベル0（AI利用なし）</strong>が適用されます。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-0-color">出題内容：</div>
+                        <ul>
+                            <li>二次関数のグラフを描く</li>
+                            <li>頂点と軸を求める</li>
+                            <li>最大値・最小値を計算</li>
+                        </ul>
+                    </div>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-0-color">禁止事項：</div>
+                        <ul>
+                            <li>計算機アプリの使用</li>
+                            <li>AI数学ソルバーの使用</li>
+                            <li>オンライン計算ツール</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-number">1</div>
+                    <h3 class="level-name">🔵 理科：実験レポート</h3>
+                    <div class="level-name-en">Science Lab Report - Level 1</div>
+                    <p class="level-description">
+                        物理実験のレポート作成では、<strong>レベル1（情報収集）</strong>が適用されます。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-1-color">許可される活動：</div>
+                        <ul>
+                            <li>実験手法の参考情報検索</li>
+                            <li>科学用語の定義確認</li>
+                            <li>単位換算の確認</li>
+                        </ul>
+                    </div>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-1-color">重要：</div>
+                        <ul>
+                            <li>実験データは自分で測定</li>
+                            <li>考察は自分の言葉で記述</li>
+                            <li>AIによる分析禁止</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-number">3</div>
+                    <h3 class="level-name">🟡 国語：小論文作成</h3>
+                    <div class="level-name-en">Japanese Essay Writing - Level 3</div>
+                    <p class="level-description">
+                        「環境問題」についての小論文では、<strong>レベル3（編集支援）</strong>が適用されます。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-3-color">作成プロセス：</div>
+                        <ul>
+                            <li>まず自分で800字執筆</li>
+                            <li>AIで文法・表現をチェック</li>
+                            <li>提案を参考に自分で修正</li>
+                        </ul>
+                    </div>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-3-color">提出物：</div>
+                        <ul>
+                            <li>初稿（AI編集前）</li>
+                            <li>最終稿（編集後）</li>
+                            <li>修正箇所の説明</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-number">4</div>
+                    <h3 class="level-name">🟠 社会：地域課題調査</h3>
+                    <div class="level-name-en">Social Studies Research - Level 4</div>
+                    <p class="level-description">
+                        地域の高齢化問題調査では、<strong>レベル4（AI生成・人間評価）</strong>が適用されます。
+                    </p>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-4-color">調査方法：</div>
+                        <ul>
+                            <li>AIに統計データを分析させる</li>
+                            <li>AIの分析結果を批判的検証</li>
+                            <li>独自の現地調査を追加</li>
+                            <li>両者を比較して結論導出</li>
+                        </ul>
+                    </div>
+                    <div class="level-examples">
+                        <div class="level-examples-title level-4-color">必須提出物：</div>
+                        <ul>
+                            <li>AI分析レポート（引用明記）</li>
+                            <li>独自調査データ</li>
+                            <li>批判的評価書</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer class="footer">
+            <p>AIアセスメントスケール（AIAS）学習ガイド</p>
+            <p style="margin: 1rem 0; font-size: 1rem;">
+                作成：スクールエージェント株式会社
+            </p>
+            <p class="footer-reference">
+                参考文献：Perkins, M., Furze, L., Roe, J., & MacVaugh, J. (2024).<br>
+                The Artificial Intelligence Assessment Scale (AIAS): A Framework for Ethical Integration of Generative AI in Educational Assessment.<br>
+                Journal of University Teaching & Learning Practice, April 2024.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

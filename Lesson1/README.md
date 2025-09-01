@@ -1,10 +1,16 @@
-# 🏭 工業現場AI解決ハッカソン - INDUSTRIAL AI HACKATHON 2025
+# 🏭 工業現場AI解決ハッカソン - Lesson 1
+## INDUSTRIAL AI HACKATHON 2025
 
 ## 📋 概要
 
 **「うちの工場の困りごとを90分でAIアプリで解決せよ！」**
 
 工業高校生向けの実践的AI体験プログラム。プログラミング初心者でも、AIツールを活用して実際に動くWebアプリケーションを開発できるハッカソン形式の教育カリキュラムです。
+
+### 📚 Lesson 1の学習目標
+- AIツールを活用した実践的な開発体験
+- 工場の課題を発見し、テクノロジーで解決する思考力の養成
+- チームでのプロジェクト開発とプレゼンテーションスキルの習得
 
 ### 🎯 対象
 - **メイン対象**: 工業高校生（AI・プログラミング初心者）
@@ -15,20 +21,21 @@
 ### 🏆 コンセプト
 決められた課題を解くのではなく、チームが独自に見つけた工場の課題を自由に解決する本格的なハッカソン体験を提供します。
 
-## 🗂️ プロジェクト構成
+## 🗂️ Lesson 1のディレクトリ構成
 
 ```
-hackathon/
+Lesson1/
 ├── index.html                                    # ハッカソンのランディングページ
+├── feedback.html                                 # 講評・振り返りページ
 ├── README.md                                     # このファイル
 ├── 【初心者向け】工業現場AI解決ハッカソン カリキュラム.md    # 詳細な授業計画
 ├── ハッカソン用工場現状シナリオ.md                      # 山田製作所のストーリー
 └── industrial-cyberpunk-template/                # デザインテンプレート
-    ├── README.md
-    ├── components.json
-    ├── design-system.yaml
-    ├── prompts.md
-    └── student-prompts.md
+    ├── README.md                                 # テンプレートの使い方
+    ├── components.json                           # UIコンポーネント定義
+    ├── design-system.yaml                        # デザインシステム設定
+    ├── prompts.md                                # AI用プロンプト集
+    └── student-prompts.md                        # 生徒向けプロンプト例
 ```
 
 ## 🚀 クイックスタート（講師向け）
@@ -251,6 +258,9 @@ https://script.google.com/a/macros/st.sanyo.ed.jp/s/AKfycbwTn9mW48aL6jhMCR1ASjzv
 
 ## 📅 更新履歴
 
+- **2025年9月1日**: Lesson 1ディレクトリ構成の更新
+  - README.mdの構成を整理
+  - 学習目標の明確化
 - **2025年8月29日**: 講評ページ追加
   - 講評・振り返り参考ページのURL追加
   - feedback.html（講評ページのローカル版）追加

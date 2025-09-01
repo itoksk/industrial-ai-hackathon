@@ -6,22 +6,17 @@
     <title>Lesson 2: 課題発見とAIプレゼンテーション</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&family=Space+Mono:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #000000;
-            --bg-secondary: #0A0A0A;
-            --bg-tertiary: #1A1A1A;
-            --fg-primary: #FFFFFF;
-            --fg-secondary: #CCCCCC;
-            --fg-muted: #888888;
-            --warning-primary: #FFFF00;
-            --warning-secondary: #FFD700;
-            --warning-dim: #998800;
-            --danger-primary: #FF0000;
-            --danger-secondary: #FF3333;
-            --info-primary: #00FFFF;
-            --success-primary: #00FF00;
+            --ink-color: #0A0E27;
+            --paper-color: #FEFEF8;
+            --electric-blue: #00F0FF;
+            --coral-pink: #FF6B6B;
+            --violet: #7C3AED;
+            --text-secondary: #4A5568;
+            --gray-light: rgba(10, 14, 39, 0.1);
+            --gray-medium: rgba(10, 14, 39, 0.3);
         }
 
         * {
@@ -31,12 +26,11 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #000 0%, #0A0A0A 100%);
-            color: var(--fg-primary);
-            min-height: 100vh;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            background-color: var(--paper-color);
+            color: var(--ink-color);
+            line-height: 1.8;
             position: relative;
-            overflow-x: hidden;
         }
 
         body::before {
@@ -47,61 +41,42 @@
             width: 100%;
             height: 100%;
             background: repeating-linear-gradient(
-                0deg,
+                90deg,
                 transparent,
                 transparent 2px,
-                rgba(255, 255, 0, 0.03) 2px,
-                rgba(255, 255, 0, 0.03) 4px
+                rgba(10, 14, 39, 0.01) 2px,
+                rgba(10, 14, 39, 0.01) 4px
             );
             pointer-events: none;
             z-index: 1;
         }
 
-        body::after {
-            content: '';
+        .literary-nav {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        nav {
-            background: var(--bg-primary);
-            border-bottom: 2px solid var(--warning-primary);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            right: 0;
+            background: rgba(254, 254, 248, 0.95);
             backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
         }
 
         .nav-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1rem 2rem;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .nav-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            color: var(--warning-primary);
-            text-shadow: 0 0 20px var(--warning-primary);
-            letter-spacing: 0.1em;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--ink-color);
         }
 
         .nav-menu {
@@ -110,26 +85,20 @@
         }
 
         .nav-menu a {
-            color: var(--fg-secondary);
             text-decoration: none;
-            font-family: 'Space Mono', monospace;
-            transition: all 0.3s ease;
+            color: var(--ink-color);
             position: relative;
-        }
-
-        .nav-menu a:hover {
-            color: var(--warning-primary);
-            text-shadow: 0 0 10px var(--warning-primary);
+            transition: all 0.3s ease;
         }
 
         .nav-menu a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: -4px;
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--warning-primary);
+            background-color: var(--electric-blue);
             transition: width 0.3s ease;
         }
 
@@ -137,255 +106,292 @@
             width: 100%;
         }
 
-        .hero {
-            min-height: 100vh;
+        main {
+            position: relative;
+            z-index: 2;
+            padding-top: 80px;
+        }
+
+        .hero-section {
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .hero-label {
-            background: var(--warning-primary);
-            color: var(--bg-primary);
-            padding: 0.5rem 2rem;
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            transform: skewX(-10deg);
+            background-color: var(--ink-color);
+            color: var(--paper-color);
+            padding: 0.5rem 1.5rem;
+            transform: rotate(-1deg);
             margin-bottom: 2rem;
-            display: inline-block;
-            box-shadow: 0 0 30px var(--warning-primary);
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 500;
+            letter-spacing: 0.1em;
         }
 
         .hero-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3rem, 10vw, 8rem);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
             line-height: 0.9;
             margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .glitch {
-            position: relative;
-            text-shadow: 
-                0.05em 0 0 var(--danger-primary),
-                -0.05em 0 0 var(--info-primary);
-            animation: glitch 2s infinite;
-        }
-
-        @keyframes glitch {
-            0%, 100% { text-shadow: 0.05em 0 0 var(--danger-primary), -0.05em 0 0 var(--info-primary); }
-            25% { text-shadow: -0.05em 0 0 var(--danger-primary), 0.05em 0 0 var(--info-primary); }
-            50% { text-shadow: 0.05em 0 0 var(--info-primary), -0.05em 0 0 var(--danger-primary); }
-            75% { text-shadow: -0.05em 0 0 var(--info-primary), 0.05em 0 0 var(--danger-primary); }
+            font-family: 'Zen Kaku Gothic New', sans-serif;
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--warning-primary);
-            font-family: 'Space Mono', monospace;
-            margin-bottom: 2rem;
+            color: var(--electric-blue);
+            font-size: 0.7em;
+            display: block;
+            margin-top: 0.5rem;
         }
 
         .hero-description {
             font-size: 1.25rem;
             max-width: 800px;
-            color: var(--fg-secondary);
-            line-height: 1.6;
+            margin: 2rem auto;
+            opacity: 0.8;
         }
 
-        .section {
-            padding: 4rem 0;
-            position: relative;
-        }
-
-        .section-divider {
-            height: 10px;
-            background: repeating-linear-gradient(
-                45deg,
-                var(--warning-primary),
-                var(--warning-primary) 10px,
-                var(--bg-primary) 10px,
-                var(--bg-primary) 20px
-            );
-            margin: 4rem 0;
+        .content-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
         .section-header {
-            margin-bottom: 3rem;
             position: relative;
+            margin-bottom: 3rem;
         }
 
         .section-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 8rem;
-            color: var(--warning-dim);
-            opacity: 0.3;
             position: absolute;
-            top: -3rem;
+            top: -1rem;
             left: -2rem;
+            font-size: 5rem;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+            color: var(--electric-blue);
+            opacity: 0.2;
             z-index: -1;
         }
 
         .section-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            text-transform: uppercase;
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
-            display: inline-block;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid var(--warning-primary);
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .card {
-            background: var(--bg-secondary);
-            border: 2px solid var(--warning-primary);
-            padding: 2rem;
             position: relative;
-            transition: all 0.3s ease;
         }
 
-        .card::before {
+        .section-title::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: -10px;
             left: 0;
-            right: 0;
-            height: 10px;
+            width: 60px;
+            height: 3px;
             background: repeating-linear-gradient(
-                90deg,
-                var(--warning-primary) 0,
-                var(--warning-primary) 10px,
-                var(--bg-primary) 10px,
-                var(--bg-primary) 20px
+                to right,
+                var(--ink-color) 0px,
+                var(--ink-color) 10px,
+                transparent 10px,
+                transparent 20px
             );
         }
 
-        .card:hover {
+        .step-card {
+            background-color: var(--paper-color);
+            border: 2px solid var(--ink-color);
+            position: relative;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background-color: var(--ink-color);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            background-color: var(--ink-color);
+            color: var(--paper-color);
             transform: translate(-4px, -4px);
-            box-shadow: 4px 4px 0 var(--warning-primary);
+        }
+
+        .step-card:hover::before {
+            top: 8px;
+            left: 8px;
+        }
+
+        .step-card:hover .card-number {
+            background-color: var(--paper-color);
+            color: var(--ink-color);
         }
 
         .card-number {
             position: absolute;
-            top: -15px;
-            right: 20px;
-            background: var(--warning-primary);
-            color: var(--bg-primary);
-            padding: 0.5rem 1rem;
-            font-family: 'Space Mono', monospace;
+            top: -1px;
+            right: -1px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--electric-blue);
+            color: var(--ink-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', monospace;
             font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-content {
+            padding: 2rem;
+            padding-top: 3rem;
         }
 
         .card-title {
             font-size: 1.5rem;
-            font-weight: 900;
+            font-weight: 700;
             margin-bottom: 1rem;
-            color: var(--warning-primary);
+            color: var(--electric-blue);
         }
 
-        .card-content {
-            color: var(--fg-secondary);
-            line-height: 1.6;
+        .step-card:hover .card-title {
+            color: var(--electric-blue);
+        }
+
+        .step-box {
+            background: rgba(0, 240, 255, 0.05);
+            border-left: 4px solid var(--electric-blue);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-instruction {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .step-detail {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
         }
 
         .comparison-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 2px;
-            background: var(--warning-primary);
+            border-collapse: collapse;
             margin: 2rem 0;
-        }
-
-        .comparison-table th,
-        .comparison-table td {
-            background: var(--bg-tertiary);
-            padding: 1rem;
-            text-align: left;
+            background: var(--paper-color);
+            box-shadow: 0 2px 10px rgba(10, 14, 39, 0.1);
         }
 
         .comparison-table th {
-            background: var(--warning-primary);
-            color: var(--bg-primary);
-            font-family: 'Space Mono', monospace;
+            background: var(--ink-color);
+            color: var(--paper-color);
+            padding: 1.25rem 1rem;
+            text-align: left;
             font-weight: 700;
-            text-transform: uppercase;
         }
 
-        .comparison-table tr:hover td {
-            background: var(--bg-secondary);
-            color: var(--warning-primary);
+        .comparison-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(0, 240, 255, 0.05);
         }
 
         .method-card {
-            background: var(--bg-tertiary);
-            border-left: 4px solid var(--warning-primary);
+            background: var(--paper-color);
+            border: 1px solid var(--gray-medium);
             padding: 2rem;
             margin: 2rem 0;
             position: relative;
         }
 
         .method-card::before {
-            content: attr(data-number);
+            content: attr(data-method);
             position: absolute;
-            top: -10px;
-            left: 20px;
-            background: var(--bg-tertiary);
-            color: var(--warning-primary);
+            top: -15px;
+            left: 2rem;
+            background: var(--paper-color);
+            color: var(--electric-blue);
             padding: 0 1rem;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Space Grotesk', monospace;
             font-weight: 700;
+            letter-spacing: 0.05em;
         }
 
         .method-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--warning-primary);
             margin-bottom: 1rem;
+            color: var(--ink-color);
         }
 
-        .method-description {
-            color: var(--fg-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+        .method-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            display: block;
+            border: 1px solid var(--gray-light);
+            border-radius: 4px;
         }
 
-        .method-steps {
-            list-style: none;
+        .step-list {
             counter-reset: step-counter;
+            margin: 1.5rem 0;
         }
 
-        .method-steps li {
+        .step-list li {
+            counter-increment: step-counter;
             position: relative;
             padding-left: 3rem;
             margin-bottom: 1rem;
-            counter-increment: step-counter;
+            list-style: none;
         }
 
-        .method-steps li::before {
+        .step-list li::before {
             content: counter(step-counter, decimal-leading-zero);
             position: absolute;
             left: 0;
             top: 0;
-            color: var(--warning-primary);
-            font-family: 'Space Mono', monospace;
+            color: var(--electric-blue);
+            font-family: 'Space Grotesk', monospace;
             font-weight: 700;
             font-size: 1.2rem;
         }
 
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+            border: 2px solid var(--electric-blue);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            color: var(--violet);
+            margin-bottom: 1rem;
+        }
+
         .tool-section {
-            background: var(--bg-secondary);
-            border: 2px solid var(--info-primary);
+            background: rgba(124, 58, 237, 0.05);
+            border: 2px solid var(--violet);
             padding: 3rem;
             margin: 3rem 0;
             position: relative;
@@ -396,107 +402,45 @@
             position: absolute;
             top: -15px;
             left: 2rem;
-            background: var(--bg-secondary);
-            color: var(--info-primary);
+            background: var(--paper-color);
+            color: var(--violet);
             padding: 0 1rem;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Space Grotesk', monospace;
             font-weight: 700;
             letter-spacing: 0.1em;
         }
 
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+        .prompt-section {
+            background: var(--ink-color);
+            color: var(--paper-color);
+            padding: 3rem;
+            margin: 4rem 0;
+            border-radius: 8px;
         }
 
-        .tool-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--info-primary);
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .tool-card:hover {
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-            transform: translateY(-5px);
-        }
-
-        .tool-name {
+        .prompt-title {
             font-size: 2rem;
-            font-family: 'Bebas Neue', sans-serif;
-            color: var(--info-primary);
-            margin-bottom: 1rem;
-        }
-
-        .tool-features {
-            list-style: none;
-        }
-
-        .tool-features li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            color: var(--fg-secondary);
-        }
-
-        .tool-features li::before {
-            content: '▶';
-            position: absolute;
-            left: 0;
-            color: var(--info-primary);
-        }
-
-        .warning-box {
-            background: var(--bg-tertiary);
-            border: 3px solid var(--danger-primary);
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .warning-box::before {
-            content: '⚠ WARNING';
-            position: absolute;
-            top: -15px;
-            left: 2rem;
-            background: var(--bg-tertiary);
-            color: var(--danger-primary);
-            padding: 0 1rem;
-            font-family: 'Space Mono', monospace;
             font-weight: 700;
-            animation: blink 1s infinite;
+            margin-bottom: 2rem;
+            color: var(--electric-blue);
         }
 
-        @keyframes blink {
-            0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0; }
-        }
-
-        .highlight {
-            color: var(--warning-primary);
-            font-weight: 700;
-        }
-
-        .code-block {
-            background: var(--bg-primary);
-            border: 1px solid var(--warning-dim);
+        .prompt-box {
+            background: rgba(254, 254, 248, 0.1);
+            border: 1px solid var(--electric-blue);
             padding: 1.5rem;
-            margin: 1rem 0;
-            font-family: 'Space Mono', monospace;
-            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Space Grotesk', monospace;
+            white-space: pre-wrap;
+            border-radius: 4px;
         }
 
-        .code-block::before {
-            content: '> ';
-            color: var(--warning-primary);
+        .prompt-category {
+            color: var(--coral-pink);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
         }
 
         @media (max-width: 768px) {
@@ -504,64 +448,73 @@
                 display: none;
             }
             
-            .hero-title {
-                font-size: 3rem;
-            }
-            
             .section-number {
-                font-size: 4rem;
+                font-size: 3rem;
+                left: -1rem;
             }
             
-            .card-grid,
-            .tool-grid {
-                grid-template-columns: 1fr;
+            .method-image {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <nav>
+    <nav class="literary-nav">
         <div class="nav-content">
-            <div class="nav-title">LESSON 02</div>
+            <div class="nav-title">LESSON 02: 課題発見×AI</div>
             <div class="nav-menu">
+                <a href="#intro">はじめに</a>
                 <a href="#problem-vs-issue">問題と課題</a>
-                <a href="#discovery-methods">発見手法</a>
+                <a href="#methods">発見手法</a>
                 <a href="#ai-tools">AIツール</a>
-                <a href="#presentation">プレゼン</a>
+                <a href="#prompts">プロンプト集</a>
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        <section class="hero">
-            <div class="hero-label">INDUSTRIAL PROBLEM SOLVING</div>
+    <main>
+        <section class="hero-section">
+            <div class="hero-label">PROBLEM SOLVING WITH AI</div>
             <h1 class="hero-title">
-                <span class="glitch">課題発見</span><br>
-                &times;<br>
+                課題発見と<br>
                 AIプレゼンテーション
+                <span class="hero-subtitle">ハッカソンの経験を次のレベルへ</span>
             </h1>
-            <p class="hero-subtitle">フィードバックから学ぶ、真の問題解決力</p>
             <p class="hero-description">
-                ハッカソンの経験を振り返り、<span class="highlight">問題と課題の違い</span>を理解し、
-                <span class="highlight">品質管理の手法</span>で課題を発見し、
-                <span class="highlight">最新のAIツール</span>でプレゼンテーションを作成する
+                フィードバックから学び、品質管理の手法で本質的な課題を発見し、
+                最新のAIツールで説得力のあるプレゼンテーションを作成する方法を
+                <strong>ステップバイステップ</strong>で学びます。
             </p>
         </section>
 
-        <div class="section-divider"></div>
-
-        <section id="problem-vs-issue" class="section">
+        <section id="intro" class="content-section">
             <div class="section-header">
-                <div class="section-number">01</div>
-                <h2 class="section-title">問題と課題の違い</h2>
+                <div class="section-number">00</div>
+                <h2 class="section-title">今日の授業の進め方</h2>
             </div>
 
-            <div class="warning-box">
-                <p>
-                    ハッカソンのフィードバックで指摘された
-                    <span class="highlight">「技術ありきで課題を決めていなかったか」</span>
-                    という観点。これこそが、問題と課題の違いを理解することの重要性を示しています。
-                </p>
+            <div class="highlight-box">
+                <h3>📚 この授業は「一緒に読みながら」進めます</h3>
+                <p>各セクションを順番に読み、実際に手を動かしながら学習していきます。</p>
+                <ul style="margin-top: 1rem; list-style: none;">
+                    <li>✅ 各ステップごとに立ち止まって理解を確認</li>
+                    <li>✅ 実例を見ながら概念を学習</li>
+                    <li>✅ ワークシートで実践的に応用</li>
+                    <li>✅ AIツールは参考として紹介（今回は手で考える）</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="problem-vs-issue" class="content-section">
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">問題と課題の違いを理解する</h2>
+            </div>
+
+            <div class="step-box">
+                <div class="step-instruction">📖 まず、この表を一緒に見てみましょう</div>
+                <p class="step-detail">問題と課題の違いを具体例で理解します。</p>
             </div>
 
             <table class="comparison-table">
@@ -596,235 +549,462 @@
                 </tbody>
             </table>
 
-            <div class="card-grid">
-                <div class="card">
-                    <div class="card-number">STEP 1</div>
-                    <h3 class="card-title">問題の発見</h3>
-                    <div class="card-content">
-                        <p>まず現場で起きている「困りごと」を見つける</p>
-                        <ul style="margin-top: 1rem; list-style: none;">
-                            <li>✓ データを収集する</li>
-                            <li>✓ 現場の声を聞く</li>
-                            <li>✓ 数値で把握する</li>
-                        </ul>
+            <div class="step-box">
+                <div class="step-instruction">💭 ここで考えてみよう</div>
+                <p class="step-detail">
+                    あなたのハッカソンで扱ったテーマを思い出してください。<br>
+                    それは「問題」でしたか？それとも「課題」でしたか？
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="card-number">01</div>
+                <div class="card-content">
+                    <h3 class="card-title">STEP 1: 問題を見つける</h3>
+                    <p>まず現場で起きている「困りごと」を具体的に見つけます。</p>
+                    <div class="step-box">
+                        <div class="step-instruction">✍️ やってみよう</div>
+                        <ol class="step-list">
+                            <li>データを収集する（数値で把握）</li>
+                            <li>現場の声を聞く（定性的な情報）</li>
+                            <li>観察して記録する（事実を集める）</li>
+                        </ol>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
-                    <div class="card-number">STEP 2</div>
-                    <h3 class="card-title">原因の分析</h3>
-                    <div class="card-content">
-                        <p>なぜその問題が起きているのか深堀りする</p>
-                        <ul style="margin-top: 1rem; list-style: none;">
-                            <li>✓ なぜなぜ分析</li>
-                            <li>✓ 特性要因図</li>
-                            <li>✓ パレート図</li>
-                        </ul>
+            <div class="step-card">
+                <div class="card-number">02</div>
+                <div class="card-content">
+                    <h3 class="card-title">STEP 2: 原因を分析する</h3>
+                    <p>なぜその問題が起きているのか、根本原因を探ります。</p>
+                    <div class="step-box">
+                        <div class="step-instruction">✍️ やってみよう</div>
+                        <ol class="step-list">
+                            <li>なぜなぜ分析で深堀り</li>
+                            <li>特性要因図で要因整理</li>
+                            <li>パレート図で重要度判定</li>
+                        </ol>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
-                    <div class="card-number">STEP 3</div>
-                    <h3 class="card-title">課題の設定</h3>
-                    <div class="card-content">
-                        <p>解決すべき具体的なアクションを決める</p>
-                        <ul style="margin-top: 1rem; list-style: none;">
-                            <li>✓ 優先順位をつける</li>
-                            <li>✓ 実現可能性を検討</li>
-                            <li>✓ 目標を数値化</li>
-                        </ul>
+            <div class="step-card">
+                <div class="card-number">03</div>
+                <div class="card-content">
+                    <h3 class="card-title">STEP 3: 課題を設定する</h3>
+                    <p>解決すべき具体的なアクションを決めます。</p>
+                    <div class="step-box">
+                        <div class="step-instruction">✍️ やってみよう</div>
+                        <ol class="step-list">
+                            <li>優先順位をつける（影響度×実現可能性）</li>
+                            <li>目標を数値化する（SMART原則）</li>
+                            <li>実行計画を立てる（誰が・いつまでに）</li>
+                        </ol>
                     </div>
                 </div>
             </div>
         </section>
 
-        <div class="section-divider"></div>
-
-        <section id="discovery-methods" class="section">
+        <section id="methods" class="content-section">
             <div class="section-header">
                 <div class="section-number">02</div>
-                <h2 class="section-title">課題発見の手法（QC検定準拠）</h2>
+                <h2 class="section-title">課題発見の手法（QC検定4級・3級レベル）</h2>
             </div>
 
-            <div class="method-card" data-number="METHOD 01">
+            <div class="step-box">
+                <div class="step-instruction">📖 品質管理の基本手法を学びましょう</div>
+                <p class="step-detail">工業高校生として知っておくべき、実践的な分析手法です。</p>
+            </div>
+
+            <div class="method-card" data-method="METHOD 01">
                 <h3 class="method-title">なぜなぜ分析（5 Whys）</h3>
-                <p class="method-description">
-                    問題の根本原因を探るため、「なぜ？」を5回繰り返す手法。
-                    トヨタ生産方式で有名な、シンプルだが強力な分析ツール。
-                </p>
-                <ol class="method-steps">
-                    <li>問題を明確に定義する</li>
-                    <li>「なぜその問題が起きたか？」を問う</li>
-                    <li>答えに対してさらに「なぜ？」を問う</li>
-                    <li>5回程度繰り返し、根本原因に到達</li>
-                    <li>根本原因に対する対策を立案</li>
-                </ol>
-                <div class="code-block">
-                    例：不良品が多い
-                    なぜ1→検査が不十分
-                    なぜ2→検査基準が曖昧
-                    なぜ3→マニュアルが古い
-                    なぜ4→更新体制がない
-                    なぜ5→責任者が不明確
+                <p>問題の根本原因を探るため、「なぜ？」を5回繰り返す手法。トヨタ生産方式で有名です。</p>
+                
+                <img src="https://drive.google.com/thumbnail?id=1PSlY45RIIyyFqMU7JgbX07t1Tle7MOzT&sz=w1000" 
+                     alt="なぜなぜ分析の図解" 
+                     class="method-image">
+                
+                <div class="step-box">
+                    <div class="step-instruction">🎯 実践の流れ</div>
+                    <ol class="step-list">
+                        <li>問題を明確に定義する</li>
+                        <li>「なぜその問題が起きたか？」を問う</li>
+                        <li>答えに対してさらに「なぜ？」を問う</li>
+                        <li>5回程度繰り返し、根本原因に到達</li>
+                        <li>根本原因に対する対策を立案</li>
+                    </ol>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>💡 実例で理解しよう</h4>
+                    <pre style="font-family: 'Space Grotesk', monospace;">
+問題：不良品が多い
+なぜ1→検査が不十分だから
+なぜ2→検査基準が曖昧だから
+なぜ3→マニュアルが古いから
+なぜ4→更新体制がないから
+なぜ5→責任者が不明確だから
+
+根本原因：品質管理体制の不備
+課題：品質管理責任者の任命とマニュアル更新体制の構築</pre>
                 </div>
             </div>
 
-            <div class="method-card" data-number="METHOD 02">
+            <div class="method-card" data-method="METHOD 02">
                 <h3 class="method-title">特性要因図（フィッシュボーン図）</h3>
-                <p class="method-description">
-                    問題の要因を体系的に整理する図。魚の骨のような形で、
-                    4M（Man, Machine, Material, Method）などの観点から要因を分析。
-                </p>
-                <ol class="method-steps">
-                    <li>解決したい問題を魚の頭に書く</li>
-                    <li>大骨として主要因（4M）を配置</li>
-                    <li>各主要因に対して小骨（詳細要因）を追加</li>
-                    <li>ブレインストーミングで要因を洗い出し</li>
-                    <li>重要な要因を特定して対策検討</li>
-                </ol>
+                <p>問題の要因を体系的に整理する図。魚の骨のような形で、4M（Man, Machine, Material, Method）の観点から分析します。</p>
+                
+                <img src="https://drive.google.com/thumbnail?id=1fHd6r9hB9jw3DjoijdP9ItwtOtBLQlgt&sz=w1000" 
+                     alt="特性要因図の例" 
+                     class="method-image">
+                
+                <div class="step-box">
+                    <div class="step-instruction">🎯 作成手順</div>
+                    <ol class="step-list">
+                        <li>解決したい問題を魚の頭（右端）に書く</li>
+                        <li>大骨として主要因（4M）を配置</li>
+                        <li>各主要因に対して小骨（詳細要因）を追加</li>
+                        <li>ブレインストーミングで要因を洗い出し</li>
+                        <li>重要な要因を特定して対策検討</li>
+                    </ol>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>💡 4Mの観点</h4>
+                    <ul style="list-style: none;">
+                        <li><strong>Man（人）</strong>：スキル、経験、教育、モチベーション</li>
+                        <li><strong>Machine（設備）</strong>：機械、道具、コンピュータ</li>
+                        <li><strong>Material（材料）</strong>：原材料、部品、情報</li>
+                        <li><strong>Method（方法）</strong>：手順、プロセス、ルール</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="method-card" data-number="METHOD 03">
+            <div class="method-card" data-method="METHOD 03">
                 <h3 class="method-title">パレート図（80-20の法則）</h3>
-                <p class="method-description">
-                    問題の80%は20%の要因から生じるという法則に基づき、
-                    重要な要因から優先的に対処するための分析手法。
-                </p>
-                <ol class="method-steps">
-                    <li>データを収集し、要因別に分類</li>
-                    <li>頻度や影響度の大きい順に並べ替え</li>
-                    <li>棒グラフと累積曲線を作成</li>
-                    <li>累積80%までの要因を重点項目に</li>
-                    <li>重点項目から優先的に改善</li>
-                </ol>
+                <p>問題の80%は20%の要因から生じるという法則。重要な要因から優先的に対処します。</p>
+                
+                <img src="https://drive.google.com/thumbnail?id=1_DH_Hlf6W1aVgamqApw3neJ5NrO1F97t&sz=w1000" 
+                     alt="パレート図の例" 
+                     class="method-image">
+                
+                <div class="step-box">
+                    <div class="step-instruction">🎯 作成と活用</div>
+                    <ol class="step-list">
+                        <li>データを収集し、要因別に分類</li>
+                        <li>頻度や影響度の大きい順に並べ替え</li>
+                        <li>棒グラフと累積曲線を作成</li>
+                        <li>累積80%までの要因を重点項目に</li>
+                        <li>重点項目から優先的に改善</li>
+                    </ol>
+                </div>
             </div>
 
-            <div class="method-card" data-number="METHOD 04">
+            <div class="method-card" data-method="METHOD 04">
                 <h3 class="method-title">ブレインストーミング</h3>
-                <p class="method-description">
-                    チームで自由にアイデアを出し合う創造的問題解決法。
-                    批判禁止、量重視、自由奔放、便乗歓迎の4原則。
-                </p>
-                <ol class="method-steps">
-                    <li>テーマを明確に設定</li>
-                    <li>批判・評価は一切しない</li>
-                    <li>質より量を重視してアイデア出し</li>
-                    <li>他人のアイデアに便乗OK</li>
-                    <li>後でアイデアを整理・評価</li>
-                </ol>
+                <p>チームで自由にアイデアを出し合う創造的問題解決法です。</p>
+                
+                <img src="https://drive.google.com/thumbnail?id=1mt4CZyZr2xiPanyioKh692gVeAFctXtj&sz=w1000" 
+                     alt="ブレインストーミングの様子" 
+                     class="method-image">
+                
+                <div class="step-box">
+                    <div class="step-instruction">🎯 4つの原則</div>
+                    <ol class="step-list">
+                        <li><strong>批判禁止</strong>：どんなアイデアも否定しない</li>
+                        <li><strong>量重視</strong>：質より量を重視する</li>
+                        <li><strong>自由奔放</strong>：突飛なアイデアも歓迎</li>
+                        <li><strong>便乗歓迎</strong>：他人のアイデアに乗っかる</li>
+                    </ol>
+                </div>
             </div>
         </section>
 
-        <div class="section-divider"></div>
-
-        <section id="ai-tools" class="section">
+        <section id="ai-tools" class="content-section">
             <div class="section-header">
                 <div class="section-number">03</div>
                 <h2 class="section-title">AIツールで爆速プレゼン作成</h2>
             </div>
 
+            <div class="step-box">
+                <div class="step-instruction">📖 最新のAIツールを知ろう</div>
+                <p class="step-detail">
+                    <strong>注意：今回の授業では、まず自分で考えることを重視します。</strong><br>
+                    AIツールは補助的に使い、最終的な仕上げに活用しましょう。
+                </p>
+            </div>
+
             <div class="tool-section">
-                <div class="tool-grid">
-                    <div class="tool-card">
-                        <h3 class="tool-name">Google Gemini</h3>
-                        <p style="color: var(--fg-muted); margin-bottom: 1rem;">マルチモーダルAI</p>
-                        <ul class="tool-features">
-                            <li>画像・動画・音声を理解</li>
-                            <li>長文の要約・分析が得意</li>
-                            <li>リアルタイム情報検索</li>
-                            <li>Googleサービスと連携</li>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <h3 style="font-size: 1.8rem; color: var(--violet); margin-bottom: 1rem;">Google Gemini</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">マルチモーダルAI</p>
+                        <ul style="list-style: none;">
+                            <li>✨ 画像・動画・音声を理解</li>
+                            <li>✨ 長文の要約・分析が得意</li>
+                            <li>✨ リアルタイム情報検索</li>
+                            <li>✨ Googleサービスと連携</li>
                         </ul>
                     </div>
-
-                    <div class="tool-card">
-                        <h3 class="tool-name">NotebookLM</h3>
-                        <p style="color: var(--fg-muted); margin-bottom: 1rem;">AI研究アシスタント</p>
-                        <ul class="tool-features">
-                            <li>複数資料を一括分析</li>
-                            <li>自動要約・Q&A生成</li>
-                            <li>音声ポッドキャスト作成</li>
-                            <li>ソース付き回答</li>
+                    
+                    <div>
+                        <h3 style="font-size: 1.8rem; color: var(--violet); margin-bottom: 1rem;">NotebookLM</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">AI研究アシスタント</p>
+                        <ul style="list-style: none;">
+                            <li>✨ 複数資料を一括分析</li>
+                            <li>✨ 自動要約・Q&A生成</li>
+                            <li>✨ 音声ポッドキャスト作成</li>
+                            <li>✨ ソース付き回答</li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <div class="section-divider"></div>
-
-        <section id="presentation" class="section">
-            <div class="section-header">
-                <div class="section-number">04</div>
-                <h2 class="section-title">プレゼン資料作成ベストプラクティス</h2>
-            </div>
-
-            <div class="card-grid">
-                <div class="card">
-                    <div class="card-number">VIBE</div>
-                    <h3 class="card-title">Vibeコーディング</h3>
-                    <div class="card-content">
-                        <p>プレゼンの「雰囲気」を最初に決める</p>
-                        <div class="code-block" style="margin-top: 1rem;">
-                            "工業的でサイバーパンクな雰囲気で、
-                            黄色の警告色を使った
-                            緊急感のあるデザイン"
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-number">CANVAS</div>
-                    <h3 class="card-title">Geminiキャンバス機能</h3>
-                    <div class="card-content">
-                        <p>AIと対話しながらリアルタイム編集</p>
-                        <ul style="margin-top: 1rem; list-style: none;">
-                            <li>✓ 構成の提案を即座に反映</li>
-                            <li>✓ デザインの微調整</li>
-                            <li>✓ コンテンツの推敲</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-number">PROMPT</div>
-                    <h3 class="card-title">効果的なプロンプト</h3>
-                    <div class="card-content">
-                        <div class="code-block" style="margin-top: 1rem;">
-                            役割：工業高校の生徒
-                            目的：課題解決の提案
-                            制約：5分間、10枚以内
-                            スタイル：industrial-cyberpunk
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="warning-box">
-                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">プレゼン作成の流れ</h3>
-                <ol style="list-style: none; counter-reset: flow-counter;">
-                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
-                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 1:</span> 
-                        課題発見手法で真の課題を特定
-                    </li>
-                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
-                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 2:</span> 
-                        NotebookLMに関連資料をアップロード
-                    </li>
-                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
-                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 3:</span> 
-                        Geminiでストーリー構成を作成
-                    </li>
-                    <li style="counter-increment: flow-counter; margin-bottom: 1rem;">
-                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 4:</span> 
-                        Vibeコーディングでデザイン統一
-                    </li>
-                    <li style="counter-increment: flow-counter;">
-                        <span style="color: var(--danger-primary); font-weight: 700;">STEP 5:</span> 
-                        キャンバス機能で仕上げ
-                    </li>
+            <div class="highlight-box">
+                <h3>🚀 プレゼン作成の新しい流れ</h3>
+                <ol class="step-list">
+                    <li><strong>Vibeコーディング</strong>：デザインの「雰囲気」を言葉で指定</li>
+                    <li><strong>キャンバス機能</strong>：AIと対話しながらリアルタイム編集</li>
+                    <li><strong>Gemのカスタム指示</strong>：自分専用のAIアシスタントを作成</li>
                 </ol>
             </div>
         </section>
-    </div>
+
+        <section id="prompts" class="content-section">
+            <div class="prompt-section">
+                <h2 class="prompt-title">🤖 Gemini活用プロンプト集</h2>
+                <p style="margin-bottom: 2rem;">
+                    以下のプロンプトは<strong>参考例</strong>です。まず自分で考えてから、必要に応じて活用してください。
+                </p>
+
+                <div class="prompt-category">📊 課題分析用プロンプト</div>
+                
+                <div class="prompt-box">【なぜなぜ分析の補助】
+あなたは品質管理の専門家です。以下の問題について、なぜなぜ分析を手伝ってください。
+
+問題：[ここに問題を記入]
+
+私が考えた「なぜ1」：[あなたの回答]
+
+この回答に対して、さらに深堀りするための質問や、
+見落としている可能性のある観点を3つ提案してください。</div>
+
+                <div class="prompt-box">【特性要因図の要因出し】
+以下の問題について、特性要因図を作成したいです。
+4M（Man, Machine, Material, Method）の観点から、
+考えられる要因を各カテゴリー5つずつ提案してください。
+
+問題：[ここに問題を記入]
+業界：工業・製造業
+対象：[具体的な製品や工程]</div>
+
+                <div class="prompt-category">🎨 プレゼンテーション作成用プロンプト</div>
+
+                <div class="prompt-box">【Vibeコーディング】
+以下の要件でプレゼンテーションのデザイン指示を作成してください：
+
+テーマ：[課題解決の内容]
+対象者：工場の管理者と現場作業員
+時間：5分（10枚以内）
+雰囲気：真剣だが親しみやすい、データに基づく信頼感
+
+上記を満たす「Vibeコード」を生成してください。
+色、フォント、レイアウト、アニメーションの観点で具体的に。</div>
+
+                <div class="prompt-box">【ストーリー構成】
+以下の課題解決提案を、5分間のプレゼンテーション構成に変換してください：
+
+課題：[特定した課題]
+原因：[なぜなぜ分析の結果]
+解決策：[提案する解決策]
+
+起承転結の流れで、各スライドのタイトルと
+話すべきポイント（各30秒程度）を提案してください。</div>
+
+                <div class="prompt-category">💎 Gemカスタム指示用プロンプト（これをGemに設定）</div>
+
+                <div class="prompt-box">【工業高校生向け対話型プレゼンアシスタント】
+あなたは工業高校生のプレゼンテーション作成を支援する対話型AIアシスタントです。
+
+# 基本的な振る舞い
+プレゼンテーション作成の依頼を受けたら、まず要件を対話形式で確認してから作成します。
+
+# 対話フロー
+## STEP 1: 初回の挨拶と確認
+「こんにちは！プレゼンテーション作成をお手伝いします。まず、いくつか確認させてください。」
+
+## STEP 2: 要件の確認（以下を順番に質問）
+1. 📋 **テーマの確認**
+   「どんな課題・問題について発表しますか？（例：不良品削減、作業効率改善など）」
+
+2. 👥 **対象者の確認**
+   「誰に向けて発表しますか？（例：工場管理者、現場作業員、クラスメート等）」
+
+3. ⏱️ **時間の確認**
+   「発表時間は何分ですか？（推奨：5分/スライド10枚程度）」
+
+4. 📊 **データの確認**
+   「使いたい数値データはありますか？あれば教えてください。」
+
+5. 🎯 **ゴールの確認**
+   「このプレゼンで一番伝えたいことは何ですか？」
+
+## STEP 3: 要件のまとめと確認
+「確認させてください：
+・テーマ：[入力内容]
+・対象者：[入力内容]
+・時間：[入力内容]
+・データ：[入力内容]
+・メッセージ：[入力内容]
+
+これで間違いないですか？修正があれば教えてください。
+問題なければ「OK」と言ってください。」
+
+## STEP 4: HTMLコード生成
+ユーザーが「OK」と言ったら、以下のスタイルでHTMLを生成：
+
+# デザインシステム（Literary Editorial Style）
+## カラーパレット
+```css
+--ink-color: #0A0E27;        /* 濃紺インク色 */
+--paper-color: #FEFEF8;      /* オフホワイト紙色 */
+--electric-blue: #00F0FF;    /* 電気的な水色（アクセント） */
+--coral-pink: #FF6B6B;       /* コーラルピンク（強調） */
+--violet: #7C3AED;           /* 紫（特別な要素） */
+--text-secondary: #4A5568;   /* サブテキスト用グレー */
+```
+
+## タイポグラフィ
+- メインフォント：'Zen Kaku Gothic New', sans-serif（日本語）
+- アクセント：'Space Grotesk', monospace（数字・英語）
+- 見出し（オプション）：'Bebas Neue', sans-serif
+
+## レイアウト要素
+1. **ヒーローセクション**
+   - 回転したラベル（transform: rotate(-1deg)）
+   - 巨大タイトル（font-size: clamp(3rem, 8vw, 6rem)）
+   - サブタイトル（電気青色）
+
+2. **カード要素**
+   - 白背景＋黒枠線（2px solid）
+   - 黒い影カード（::before疑似要素で実装）
+   - ホバー時：白黒反転＋左上移動
+   - 番号：右上に四角形（背景：電気青）
+
+3. **セクション構造**
+   - 薄い巨大番号（01, 02, 03...）を背景に
+   - セクションタイトル下に点線
+   - カード間隔：2rem
+
+## 特殊効果
+- 紙のテクスチャ（細かい縦線パターン）
+- ホバー時の影の拡大
+- トランジション：all 0.3s ease
+
+# HTML出力テンプレート
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>[タイトル]</title>
+    [上記のスタイルをstyleタグ内に記述]
+</head>
+<body>
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-label">[ラベル]</div>
+        <h1 class="hero-title">[メインタイトル]</h1>
+        <p class="hero-subtitle">[サブタイトル]</p>
+    </section>
+
+    <!-- 番号付きセクション -->
+    <section class="content-section">
+        <div class="section-number">01</div>
+        <h2 class="section-title">[セクションタイトル]</h2>
+        
+        <!-- カード型コンテンツ -->
+        <div class="card">
+            <div class="card-number">1</div>
+            <div class="card-content">
+                [コンテンツ]
+            </div>
+        </div>
+    </section>
+    
+    [以降、必要なセクションを追加]
+</body>
+</html>
+```
+
+# 生成時の注意事項
+- 5分で説明可能な分量（10スライド程度）
+- 専門用語には必ず説明を付ける
+- 数値データを積極的に使用
+- 改善効果を定量的に示す
+- 紙の質感と印刷物の温かみを演出
+- 読みやすさを最優先
+
+# エラー時の対応
+要件が不明確な場合は、必ず追加質問をしてから作成する。
+「その点についてもう少し詳しく教えてください」と聞き返す。</div>
+
+                <div class="prompt-category">📝 実践演習用プロンプト</div>
+
+                <div class="prompt-box">【フィードバックから学ぶ】
+ハッカソンのフィードバックを分析して、改善点を抽出してください：
+
+[フィードバック内容をペースト]
+
+以下の観点で分析：
+1. 問題と課題の切り分けができていたか
+2. 根本原因の分析は十分だったか
+3. 解決策は実現可能だったか
+4. 次回改善すべき点は何か</div>
+
+                <div class="highlight-box" style="margin-top: 3rem;">
+                    <h3>⚠️ 重要な注意事項</h3>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li>🚫 AIの回答を鵜呑みにしない</li>
+                        <li>🚫 個人情報や機密情報を入力しない</li>
+                        <li>✅ 必ず自分で考えてから使う</li>
+                        <li>✅ AIの提案を批判的に検討する</li>
+                        <li>✅ 最終的な判断は自分で行う</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">まとめ：実践への道</h2>
+            </div>
+
+            <div class="step-card">
+                <div class="card-number">★</div>
+                <div class="card-content">
+                    <h3 class="card-title">今日学んだことを活かすために</h3>
+                    <ol class="step-list">
+                        <li>まず問題と課題を明確に区別する</li>
+                        <li>QC手法で根本原因を探る</li>
+                        <li>AIツールは「補助」として活用</li>
+                        <li>最終的な判断は必ず自分で</li>
+                        <li>実践を通じて継続的に改善</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🎯 次のステップ</h3>
+                <p>この授業で学んだ手法を使って、実際の課題解決に挑戦してみましょう。</p>
+                <p style="margin-top: 1rem;">
+                    <strong>課題：</strong>身の回りの問題を1つ選び、今日学んだ手法で分析し、
+                    AIツールを活用してプレゼンテーションを作成してください。
+                </p>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
