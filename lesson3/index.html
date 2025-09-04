@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 3: フィッシュボーン分析で問題の根本原因を探る | 工業現場AI解決ハッカソン</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Design System Variables */
+        :root {
+            --ink: #0A0E27;
+            --paper: #FEFEF8;
+            --electric: #00F0FF;
+            --coral: #FF6B6B;
+            --violet: #7C3AED;
+            --text-primary: #0A0E27;
+            --text-secondary: #4A5568;
+            --font-primary: 'Zen Kaku Gothic New', sans-serif;
+            --font-accent: 'Space Grotesk', monospace;
+            --font-display: 'Bebas Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background: var(--paper);
+            line-height: 1.8;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Paper Texture Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(10, 14, 39, 0.01) 2px,
+                rgba(10, 14, 39, 0.01) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(254, 254, 248, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(10, 14, 39, 0.05);
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: var(--font-accent);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-lesson {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--electric);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero-label {
+            background: var(--electric);
+            color: var(--ink);
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            transform: rotate(-1deg);
+            font-family: var(--font-accent);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-accent);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--coral);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        /* Section Styling */
+        section {
+            margin: 80px 0;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: var(--font-accent);
+            font-size: 8rem;
+            font-weight: 900;
+            opacity: 0.08;
+            position: absolute;
+            top: -3rem;
+            left: -2rem;
+            z-index: -1;
+        }
+
+        .section-label {
+            font-family: var(--font-accent);
+            font-size: 0.875rem;
+            letter-spacing: 3px;
+            color: var(--electric);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        /* Card Styling */
+        .card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 2rem;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: var(--ink);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translate(-4px, -4px);
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .card:hover::before {
+            top: 8px;
+            left: 8px;
+            right: -8px;
+            bottom: -8px;
+        }
+
+        .card:hover .card-number {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .card:hover h3 {
+            color: var(--electric);
+        }
+
+        /* Exercise cards without hover animation */
+        .exercise-card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: var(--ink);
+            z-index: -1;
+        }
+
+        .exercise-card:hover {
+            transform: none;
+            background: white;
+            color: var(--ink);
+        }
+
+        .exercise-card:hover::before {
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+        }
+
+        .exercise-card:hover .card-number {
+            background: var(--electric);
+            color: var(--ink);
+        }
+
+        .exercise-card:hover h3 {
+            color: var(--ink);
+        }
+
+        .card-number {
+            width: 40px;
+            height: 40px;
+            background: var(--electric);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* List Styling */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            border-bottom: 1px dotted rgba(10, 14, 39, 0.1);
+        }
+
+        li:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--electric);
+            font-weight: bold;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 2rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+            font-family: var(--font-accent);
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Time Box */
+        .time-box {
+            background: var(--coral);
+            color: white;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .time-box::before {
+            content: '⏰';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 2rem;
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .phase-card {
+            padding: 2rem;
+            position: relative;
+            border-bottom: 2px dotted var(--ink);
+        }
+
+        .phase-number {
+            font-family: var(--font-accent);
+            font-size: 6rem;
+            font-weight: 900;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            right: 1rem;
+        }
+
+        .phase-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--ink);
+            display: inline-block;
+        }
+
+        .button:hover {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .button-secondary {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .button-secondary:hover {
+            background: var(--electric);
+            border-color: var(--electric);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        th {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid rgba(10, 14, 39, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* Keep table text readable on hover */
+        .card:hover table th {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .card:hover table td {
+            border-bottom: 1px solid rgba(254, 254, 248, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 1rem 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-number {
+                font-size: 4rem;
+            }
+        }
+
+        /* Special Effects */
+        .highlight {
+            background: linear-gradient(120deg, var(--electric) 0%, var(--electric) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            transition: background-size 0.3s ease;
+        }
+
+        .highlight:hover {
+            background-size: 100% 100%;
+        }
+
+        /* Fishbone Diagram Preview */
+        .fishbone-preview {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .fishbone-preview svg {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="nav-title">工業現場AI解決ハッカソン</div>
+            <div class="nav-lesson">LESSON 03</div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-label">PROBLEM ANALYSIS</div>
+            <h1>フィッシュボーン分析で<br>根本原因を見つけよう</h1>
+            <p class="hero-subtitle">複雑な問題を構造化して、真の原因を特定する手法を学ぶ</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">45</div>
+                    <div class="stat-label">分間の実習</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4M</div>
+                    <div class="stat-label">の要因分析</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">の改善可能性</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 今日の学習目標 -->
+        <section>
+            <div class="section-number">01</div>
+            <div class="section-label">Today's Goals</div>
+            <h2>今日の学習目標</h2>
+            
+            <div style="background: linear-gradient(135deg, #00F0FF 0%, #7C3AED 100%); color: white; padding: 1.5rem; margin-bottom: 2rem; border-radius: 4px;">
+                <h3 style="margin: 0 0 0.5rem 0; color: white;">🤖 AIASレベル: 2-3</h3>
+                <p style="margin: 0; font-size: 0.95rem;">
+                    <strong>レベル2（AI for Brainstorming）〜 レベル3（AI for Editing）</strong><br>
+                    AIを活用して要因の洗い出しや深堀り分析を効率化します。
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-number">1</div>
+                <h3>フィッシュボーン分析とは？</h3>
+                <p>品質管理の父・石川馨博士が開発した「特性要因図」とも呼ばれる分析手法です。魚の骨のような図を使って、問題の結果と原因の関係を視覚的に整理します。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-number">2</div>
+                <h3>なぜフィッシュボーン分析が必要？</h3>
+                <ul>
+                    <li>問題の全体像を俯瞰できる</li>
+                    <li>チームで原因を共有しやすい</li>
+                    <li>見落としがちな要因を発見できる</li>
+                    <li>改善の優先順位を決めやすい</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-number">3</div>
+                <h3>今日できるようになること</h3>
+                <ul>
+                    <li>フィッシュボーン図を描けるようになる</li>
+                    <li>6M分析で要因を整理できる</li>
+                    <li>根本原因を特定できる</li>
+                    <li>改善案を論理的に提案できる</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- フィッシュボーン分析の基本 -->
+        <section>
+            <div class="section-number">02</div>
+            <div class="section-label">Basic Concept</div>
+            <h2>フィッシュボーン分析の基本構造</h2>
+            
+            <div class="fishbone-preview">
+                <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Main spine -->
+                    <line x1="100" y1="200" x2="700" y2="200" stroke="#0A0E27" stroke-width="3"/>
+                    <polygon points="700,200 720,190 720,210" fill="#0A0E27"/>
+                    
+                    <!-- Problem box -->
+                    <rect x="720" y="170" width="60" height="60" fill="#FF6B6B" stroke="#0A0E27" stroke-width="2"/>
+                    <text x="750" y="205" text-anchor="middle" font-family="Space Grotesk" font-size="14" fill="white">問題</text>
+                    
+                    <!-- Major bones -->
+                    <line x1="200" y1="100" x2="300" y2="200" stroke="#0A0E27" stroke-width="2"/>
+                    <line x1="350" y1="100" x2="450" y2="200" stroke="#0A0E27" stroke-width="2"/>
+                    <line x1="500" y1="100" x2="600" y2="200" stroke="#0A0E27" stroke-width="2"/>
+                    <line x1="200" y1="300" x2="300" y2="200" stroke="#0A0E27" stroke-width="2"/>
+                    <line x1="350" y1="300" x2="450" y2="200" stroke="#0A0E27" stroke-width="2"/>
+                    <line x1="500" y1="300" x2="600" y2="200" stroke="#0A0E27" stroke-width="2"/>
+                    
+                    <!-- Labels -->
+                    <text x="180" y="90" font-family="Zen Kaku Gothic New" font-size="14" fill="#0A0E27">Man（人）</text>
+                    <text x="330" y="90" font-family="Zen Kaku Gothic New" font-size="14" fill="#0A0E27">Machine（設備）</text>
+                    <text x="480" y="90" font-family="Zen Kaku Gothic New" font-size="14" fill="#0A0E27">Material（材料）</text>
+                    <text x="180" y="320" font-family="Zen Kaku Gothic New" font-size="14" fill="#0A0E27">Method（方法）</text>
+                    <text x="330" y="320" font-family="Zen Kaku Gothic New" font-size="14" fill="#0A0E27">Measurement（測定）</text>
+                    <text x="460" y="320" font-family="Zen Kaku Gothic New" font-size="14" fill="#0A0E27">Environment（環境）</text>
+                </svg>
+            </div>
+
+            <h3>品質管理の4Mフレームワーク</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>要因</th>
+                        <th>英語</th>
+                        <th>意味・分析ポイント</th>
+                        <th>製造現場での具体例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>人材</strong></td>
+                        <td>Man</td>
+                        <td>製造現場の作業者のスキル、習熟度、勤務状況など</td>
+                        <td>作業ミス、教育不足、人員配置の問題、疲労による注意力低下</td>
+                    </tr>
+                    <tr>
+                        <td><strong>機械・設備</strong></td>
+                        <td>Machine</td>
+                        <td>製造現場の機械や設備機器、工具の状態</td>
+                        <td>設備故障、精度不良、メンテナンス不足、老朽化</td>
+                    </tr>
+                    <tr>
+                        <td><strong>材料</strong></td>
+                        <td>Material</td>
+                        <td>製品製造に必要な原材料や部品の品質</td>
+                        <td>材料不良、在庫切れ、規格外品、仕入先の品質問題</td>
+                    </tr>
+                    <tr>
+                        <td><strong>方法</strong></td>
+                        <td>Method</td>
+                        <td>作業方法、手順書、標準作業の実施体制</td>
+                        <td>作業手順不明確、非効率な工程、マニュアル未整備</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="card" style="margin-top: 2rem;">
+                <h4>発展：5Mと5M+1E</h4>
+                <p>4Mに「<strong>測定（Measurement）</strong>」を加えた5Mという概念もあります。これは検査データのバラつきによる品質低下を防ぐため、計測機器や検査方法の標準化を重視します。</p>
+                <p>さらに「<strong>環境（Environment）</strong>」を加えた5M+1Eという考え方もあり、温度・湿度管理、照明、5S（整理・整頓・清掃・清潔・躾）などの作業環境を要因に含めます。</p>
+            </div>
+        </section>
+
+        <!-- フィッシュボーン図の作成手順 -->
+        <section>
+            <div class="section-number">03</div>
+            <div class="section-label">How to Create</div>
+            <h2>フィッシュボーン図の詳しい作成手順</h2>
+
+            <div class="card">
+                <div class="card-number">1</div>
+                <h3>STEP 1: 特性（結果）と背骨を書く</h3>
+                <p>まず、解決したい問題を「特性」として右端に書きます。これは具体的で測定可能な問題でなければなりません。</p>
+                <p><strong>ポイント：</strong>問題は簡潔に、でも具体的に書きましょう。</p>
+                <p><strong>良い例：</strong>「電子回路基板の不良率が3%→8%に上昇」</p>
+                <p><strong>悪い例：</strong>「品質が悪い」（曖昧すぎる）</p>
+                <p>次に、左から右へ太い矢印（背骨）を描きます。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-number">2</div>
+                <h3>STEP 2: 要因（大骨）を書く</h3>
+                <p>背骨から斜めに伸びる大きな骨（大骨）を描き、4Mの各要因を記入します。</p>
+                <ul>
+                    <li>上側：人材（Man）、機械・設備（Machine）</li>
+                    <li>下側：材料（Material）、方法（Method）</li>
+                </ul>
+                <p><strong>配置のコツ：</strong>関連性の高い要因は近くに配置すると見やすくなります。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-number">3</div>
+                <h3>STEP 3: 中骨・小骨を書く</h3>
+                <p>各大骨から、さらに細かい要因を中骨として書き出します。そして中骨からさらに詳細な要因を小骨として追加します。</p>
+                <p><strong>深堀りの方法：</strong></p>
+                <ul>
+                    <li>大骨「人材」→ 中骨「スキル不足」→ 小骨「新人教育期間の短縮」</li>
+                    <li>大骨「機械」→ 中骨「設備の精度低下」→ 小骨「定期メンテナンスの延期」</li>
+                </ul>
+                <p><strong>注意点：</strong>「要因」と「対策」を混同しないこと。あくまで「なぜそうなったか」を書きます。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-number">4</div>
+                <h3>STEP 4: 原因を絞り込む</h3>
+                <p>書き出した要因の中から、最も影響の大きい主要因を特定します。</p>
+                <p><strong>絞り込みの方法：</strong></p>
+                <ul>
+                    <li>データがある場合：過去の数値と比較</li>
+                    <li>データがない場合：チームで話し合い、経験から判断</li>
+                    <li>影響度×発生頻度で優先順位を決める</li>
+                </ul>
+                <p>特定した主要因に印をつけて、改善の対象とします。</p>
+            </div>
+        </section>
+
+        <!-- 実習の流れ -->
+        <section>
+            <div class="section-number">03</div>
+            <div class="section-label">Workshop Flow</div>
+            <h2>本日の実習スケジュール（45分）</h2>
+
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-number">1</div>
+                    <div class="phase-title">導入説明（5分）</div>
+                    <p>フィッシュボーン分析の概要と本日の課題を理解します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">2</div>
+                    <div class="phase-title">問題の定義（5分）</div>
+                    <p>取り組む問題を具体的に定義し、測定可能な形で文章化します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">3</div>
+                    <div class="phase-title">要因の洗い出し（10分）</div>
+                    <p>4Mの枠組みを使って、考えられる要因をブレインストーミングします。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">4</div>
+                    <div class="phase-title">フィッシュボーン図作成（10分）</div>
+                    <p>洗い出した要因を整理して、実際にフィッシュボーン図を描きます。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">5</div>
+                    <div class="phase-title">原因の深堀り（10分）</div>
+                    <p>「なぜ？」を繰り返して根本原因を探り、主要因を特定します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">6</div>
+                    <div class="phase-title">改善案の検討・発表（5分）</div>
+                    <p>特定した原因への改善案を考え、グループで共有します。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ケーススタディ -->
+        <section>
+            <div class="section-number">04</div>
+            <div class="section-label">Case Study</div>
+            <h2>ケーススタディ：山田製作所の品質問題</h2>
+
+            <div class="card">
+                <h3>状況説明</h3>
+                <p>山田製作所では、主力製品である精密部品の不良率が先月から急激に上昇しています。顧客からのクレームも増加し、早急な対策が必要です。</p>
+                
+                <div class="time-box">
+                    <strong>問題：</strong>精密部品の不良率が3%から8%に上昇（寸法精度不良が主要因）
+                </div>
+
+                <h3>初期調査で判明した事実</h3>
+                <ul>
+                    <li>不良品の70%が寸法精度不良</li>
+                    <li>特定の製造ラインで不良率が高い</li>
+                    <li>午後の時間帯に不良が集中</li>
+                    <li>新人作業員が配属された時期と重なる</li>
+                    <li>最近、材料の仕入先を変更した</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>フィッシュボーン分析の実施例</h3>
+                <p>このケースに対して、6M分析を実施した結果を見てみましょう：</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>カテゴリー</th>
+                            <th>特定された要因</th>
+                            <th>深堀り結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Man（人）</strong></td>
+                            <td>新人の技能不足</td>
+                            <td>教育期間が1週間→2日に短縮されていた</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Machine（設備）</strong></td>
+                            <td>加工機の精度低下</td>
+                            <td>定期メンテナンスが延期されていた</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Material（材料）</strong></td>
+                            <td>材料の品質ばらつき</td>
+                            <td>新仕入先の品質管理体制が不明確</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Method（方法）</strong></td>
+                            <td>作業手順書の不備</td>
+                            <td>最新版への更新が3ヶ月遅れ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Measurement（測定）</strong></td>
+                            <td>測定器の校正不良</td>
+                            <td>午後の温度上昇で測定値がずれる</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Environment（環境）</strong></td>
+                            <td>午後の室温上昇</td>
+                            <td>エアコン故障で温度管理ができない</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- AI活用のポイント -->
+        <section>
+            <div class="section-number">05</div>
+            <div class="section-label">AI Integration</div>
+            <h2>AIを活用したフィッシュボーン分析</h2>
+            
+            <div style="background: #f0f9ff; border-left: 4px solid #00F0FF; padding: 1rem 1.5rem; margin-bottom: 2rem;">
+                <p style="margin: 0; color: var(--text-primary);">
+                    <strong>💡 AIASレベル2-3での活用方法</strong><br>
+                    レベル2では要因の洗い出しにAIを使い、レベル3では分析結果の整理や改善案の具体化にAIを活用します。
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>ChatGPT/Claudeを使った要因の洗い出し</h3>
+                <p>AIは膨大な知識を持っているため、見落としがちな要因を提案してくれます。</p>
+                
+                <div class="code-block">
+                    <pre>プロンプト例：
+「製造業において、製品の寸法精度不良が発生する原因を、
+6M（Man, Machine, Material, Method, Measurement, Environment）
+のフレームワークで分析してください。
+各カテゴリーで5つずつ具体的な要因を挙げてください。」</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>根本原因の深堀りサポート</h3>
+                <p>「なぜなぜ分析」との組み合わせで、より深い原因を探れます。</p>
+                
+                <div class="code-block">
+                    <pre>プロンプト例：
+「測定器の校正不良」という要因に対して、
+5回の「なぜ？」を使って根本原因を探ってください。
+製造現場の実情を考慮した現実的な分析をお願いします。」</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 演習課題 -->
+        <section>
+            <div class="section-number">06</div>
+            <div class="section-label">Exercise</div>
+            <h2>演習：スマホケース工場の品質問題を解決しよう</h2>
+            
+            <div style="background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%); color: white; padding: 1rem; margin-bottom: 2rem; border-radius: 4px; display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 2rem;">🟢</div>
+                <div>
+                    <h4 style="margin: 0; color: white;">AIASレベル2: AI for Brainstorming</h4>
+                    <p style="margin: 0; font-size: 0.9rem;">この演習ではAIを使って要因の洗い出しやアイデア出しを行います。最終的な分析と判断は自分で行いましょう。</p>
+                </div>
+            </div>
+
+            <div class="card exercise-card">
+                <h3>【状況説明】株式会社テックケース 品質管理部からの報告書</h3>
+                
+                <div style="background: #f8f8f8; padding: 1.5rem; margin: 1rem 0; border-left: 4px solid var(--coral);">
+                    <p style="margin-bottom: 1rem;"><strong>日付：</strong>2025年1月15日<br>
+                    <strong>報告者：</strong>品質管理課 田中課長<br>
+                    <strong>件名：</strong>クリアハードケース不良率急上昇に関する緊急報告</p>
+                </div>
+
+                <p>当社は、スマートフォンケースの製造を行う中堅メーカーで、特に人気アニメとのコラボレーション商品が好評を博しています。月間生産量は約10万個で、そのうち4割が主力商品である「クリアハードケース」です。</p>
+
+                <p>しかし、12月から深刻な問題が発生しています。クリアハードケースの不良率が、通常の2%から7%へと急激に上昇したのです。12月26日には、大口顧客である家電量販店チェーンから正式にクレームが届きました。「このような品質では、来月の契約更新は見送らざるを得ない」という厳しい内容でした。</p>
+
+                <p>品質管理課では直ちに調査を開始しました。12月の不良品500個をサンプリングして分析した結果、以下の内訳が判明しました：</p>
+                <ul style="margin: 1rem 0;">
+                    <li>表面の傷・汚れ：300個（60%）</li>
+                    <li>寸法不良（スマホにフィットしない）：150個（30%）</li>
+                    <li>印刷ズレ（ロゴ位置のずれ）：50個（10%）</li>
+                </ul>
+
+                <p>さらに詳しく調査を進めると、興味深いパターンが見つかりました。不良品の発生を曜日別に集計したところ、月曜日と金曜日に集中していたのです。月曜日は全体の35%、金曜日は30%を占め、他の曜日は平均して10%前後でした。</p>
+
+                <p>時系列で振り返ると、11月下旬から12月にかけて、工場では以下の変更がありました：</p>
+
+                <p><strong>11月20日：</strong>コスト削減のため、ポリカーボネート樹脂の仕入先を、これまでの国内メーカーから海外メーカーに変更しました。単価は15%削減できましたが、納品時の品質検査体制については詳細が不明です。</p>
+
+                <p><strong>11月25日：</strong>年末の繁忙期対策として、新人アルバイトを5名採用しました。教育期間は通常2週間ですが、人手不足のため3日間の研修後、すぐに現場に配置しました。シフトは月・水・金の週3日勤務が3名、火・木・土の週3日勤務が2名です。</p>
+
+                <p><strong>12月1日：</strong>生産能力向上のため、新型の成形機を1台導入しました。旧型より30%高速で動作しますが、操作方法が大きく変わったため、作業員は使い方に戸惑っている様子です。マニュアルは英語版しかなく、日本語版の作成が遅れています。</p>
+
+                <p><strong>12月5日：</strong>工場内の温度管理用エアコンが故障しました。修理業者の手配が遅れ、現在も完全には修理されていません。特に午後になると室温が28度を超え、樹脂の成形条件に影響が出ている可能性があります。</p>
+
+                <p>製造部の山田部長からは「新しい成形機の導入で生産性は上がったが、品質管理が追いついていない」とのコメントがあり、一方で人事部からは「アルバイトの定着率が低く、せっかく教育してもすぐに辞めてしまう」という報告も上がっています。</p>
+
+                <div class="time-box">
+                    <strong>緊急対策会議の決定事項</strong>
+                    本日の経営会議で、社長から「1週間以内に原因を特定し、改善案を提出すること」との指示がありました。
+                    品質管理部として、フィッシュボーン分析を使って根本原因を明らかにする必要があります。
+                </div>
+            </div>
+
+            <div class="card exercise-card">
+                <h3>【演習課題】あなたは品質管理部の実習生として分析を担当します</h3>
+                
+                <p>上記の報告書を読んで、以下の手順でフィッシュボーン分析を実施してください：</p>
+                
+                <ol style="padding-left: 2rem; margin: 1.5rem 0;">
+                    <li style="list-style-type: decimal; margin-bottom: 1rem;">
+                        <strong>特性（問題）の定義</strong><br>
+                        「クリアハードケースの不良率が2%→7%に上昇」を起点に、より具体的な問題文を作成する
+                    </li>
+                    <li style="list-style-type: decimal; margin-bottom: 1rem;">
+                        <strong>4Mで要因を整理</strong><br>
+                        報告書から読み取れる情報を、Man（人材）、Machine（機械・設備）、Material（材料）、Method（方法）に分類する
+                    </li>
+                    <li style="list-style-type: decimal; margin-bottom: 1rem;">
+                        <strong>フィッシュボーン図の作成</strong><br>
+                        整理した要因を使って、実際にフィッシュボーン図を描く
+                    </li>
+                    <li style="list-style-type: decimal; margin-bottom: 1rem;">
+                        <strong>根本原因の特定</strong><br>
+                        「なぜ月曜日と金曜日に不良が多いのか？」を手がかりに、最も影響の大きい原因を絞り込む
+                    </li>
+                    <li style="list-style-type: decimal;">
+                        <strong>改善案の提案</strong><br>
+                        実現可能で効果的な改善案を3つ考える（コスト・期間・効果を考慮）
+                    </li>
+                </ol>
+                
+                <div style="background: var(--electric); color: var(--ink); padding: 1rem; margin-top: 2rem;">
+                    <strong>💡 分析のヒント</strong><br>
+                    ・曜日による不良率の偏りは、何を示唆しているでしょうか？<br>
+                    ・複数の要因が同時期に発生していますが、相互にどう影響し合っているでしょうか？<br>
+                    ・「傷・汚れ」が60%を占める原因は、4Mのどこに潜んでいるでしょうか？
+                </div>
+            </div>
+        </section>
+
+        <!-- 評価基準 -->
+        <section>
+            <div class="section-number">07</div>
+            <div class="section-label">Evaluation</div>
+            <h2>評価基準</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>評価項目</th>
+                        <th>配点</th>
+                        <th>評価ポイント</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>問題の定義</td>
+                        <td>20点</td>
+                        <td>具体的で測定可能な問題文になっているか</td>
+                    </tr>
+                    <tr>
+                        <td>要因の網羅性</td>
+                        <td>25点</td>
+                        <td>6Mすべてのカテゴリーで適切な要因を挙げているか</td>
+                    </tr>
+                    <tr>
+                        <td>分析の深さ</td>
+                        <td>25点</td>
+                        <td>表面的でなく、根本原因まで掘り下げているか</td>
+                    </tr>
+                    <tr>
+                        <td>図の完成度</td>
+                        <td>15点</td>
+                        <td>フィッシュボーン図が論理的で見やすいか</td>
+                    </tr>
+                    <tr>
+                        <td>改善案の実現性</td>
+                        <td>15点</td>
+                        <td>提案した改善案が具体的で実行可能か</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- まとめ -->
+        <section>
+            <div class="section-number">08</div>
+            <div class="section-label">Summary</div>
+            <h2>本日のまとめ</h2>
+
+            <div class="card">
+                <h3>フィッシュボーン分析のポイント</h3>
+                <ul>
+                    <li>問題を明確に定義することが第一歩</li>
+                    <li>6Mフレームワークで漏れなく要因を洗い出す</li>
+                    <li>「なぜ？」を繰り返して根本原因を探る</li>
+                    <li>優先順位を付けて効果的な改善を実施</li>
+                    <li>チームで実施することで多様な視点を得る</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>次回予告：Lesson 4</h3>
+                <p><strong>「パレート図で改善の優先順位を決める」</strong></p>
+                <p>フィッシュボーン分析で特定した問題に対して、パレート図を使って「重要な少数」を見つけ出し、効率的な改善活動を計画する方法を学びます。</p>
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer style="margin-top: 100px; padding: 40px 0; border-top: 2px solid var(--ink); text-align: center;">
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                &copy; 2025 Industrial AI Hackathon - Lesson 3: Fishbone Analysis<br>
+                工業高校生のための実践的問題解決カリキュラム
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

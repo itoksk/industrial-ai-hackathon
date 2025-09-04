@@ -49,13 +49,24 @@ hackathon/
 │   ├── *.md                    # 各種ドキュメント
 │   └── industrial-cyberpunk-template/  # 工業系デザインテンプレート
 │
-└── lesson2/                     # 第2回：発展編（文学的アプローチ）
-    ├── README.md               # Lesson 2の詳細説明
-    ├── index.html              # Lesson 2メインページ
-    ├── worksheet.md            # ハンズオンワークシート
-    ├── *.md                    # 各種ドキュメント
-    ├── literary-editorial-template/  # 文学系デザインテンプレート
-    └── *.png                   # サンプル画像素材
+├── lesson2/                     # 第2回：発展編（文学的アプローチ）
+│   ├── README.md               # Lesson 2の詳細説明
+│   ├── index.html              # Lesson 2メインページ
+│   ├── worksheet.md            # ハンズオンワークシート
+│   ├── *.md                    # 各種ドキュメント
+│   ├── literary-editorial-template/  # 文学系デザインテンプレート
+│   └── *.png                   # サンプル画像素材
+│
+├── lesson3/                     # 第3回：フィッシュボーン分析編
+│   ├── README.md               # Lesson 3の詳細説明
+│   ├── index.html              # Lesson 3メインページ（45分版対応）
+│   └── worksheet.md            # フィッシュボーン分析ワークシート
+│
+└── lesson4/                     # 第4回：パレート図分析編
+    ├── README.md               # Lesson 4の詳細説明
+    ├── index.html              # Lesson 4メインページ（45分版対応）
+    ├── worksheet.md            # パレート図作成ワークシート
+    └── sample-data.csv         # 演習用サンプルデータ
 ```
 
 ## 🎓 AIAS（AI活用評価スケール）
@@ -87,6 +98,7 @@ hackathon/
 - **重点**: 機能性と実用性
 - **成果物**: 実際に動く業務改善アプリ
 - **詳細**: [Lesson1/README.md](Lesson1/README.md)
+- **AIASレベル**: 4（AI for Task Completion）
 
 #### 主要コンテンツ
 - 山田製作所のケーススタディ
@@ -94,21 +106,53 @@ hackathon/
 - AIプロンプトエンジニアリング基礎
 - チーム開発とピッチング
 
-### 📖 Lesson 2: 人間中心イノベーション編
+### 📖 Lesson 2: 人間中心イノベーション編（45-90分版）
 **「文学的視点で工場の物語を紡ぎ、技術で解決策を実装せよ！」**
 
 - **アプローチ**: デザイン思考＋ナラティブ
 - **重点**: ユーザー体験と感情的価値
 - **成果物**: ストーリー性のある革新的ソリューション
 - **詳細**: [lesson2/README.md](lesson2/README.md)
-- **ワークシート**: [lesson2/worksheet.md](lesson2/worksheet.md) （45分版）
+- **ワークシート**: [lesson2/worksheet.md](lesson2/worksheet.md)
+- **AIASレベル**: 0、1、4を使い分け
 
 #### 主要コンテンツ
 - ペルソナとエモーショナルジャーニー
 - Literary Editorialテンプレート
 - 高度なWeb技術（PWA、画像認識等）
 - ストーリーテリング型プレゼンテーション
-- AIASレベルに基づくAI活用演習（レベル0、1、4を使用）
+
+### 🐟 Lesson 3: フィッシュボーン分析編（45分版）
+**「問題の根本原因を魚の骨で見つけ出せ！」**
+
+- **アプローチ**: 構造化分析思考
+- **重点**: 原因の体系的な整理と深堀り
+- **成果物**: フィッシュボーン図と改善提案
+- **詳細**: [lesson3/README.md](lesson3/README.md)
+- **ワークシート**: [lesson3/worksheet.md](lesson3/worksheet.md)
+- **AIASレベル**: 2-3（Brainstorming〜Editing）
+
+#### 主要コンテンツ
+- 4M（Man, Machine, Material, Method）分析
+- スマホケース工場のケーススタディ
+- 5なぜ分析との組み合わせ
+- 根本原因の特定と優先順位付け
+
+### 📊 Lesson 4: パレート図分析編（45分版）
+**「データで見つける『重要な少数』の改善ポイント」**
+
+- **アプローチ**: データドリブン意思決定
+- **重点**: 80:20の法則による優先順位付け
+- **成果物**: パレート図と改善計画
+- **詳細**: [lesson4/README.md](lesson4/README.md)
+- **ワークシート**: [lesson4/worksheet.md](lesson4/worksheet.md)
+- **AIASレベル**: 1-3（Research〜Editing）
+
+#### 主要コンテンツ
+- スプレッドシートでのデータ分析
+- 累積比率の計算と可視化
+- Chart.jsによるインタラクティブデモ
+- 自動車部品工場の不良分析演習
 
 ## 🎓 導入実績と効果
 
@@ -140,19 +184,28 @@ cd hackathon
 
 #### 2. 授業の選択
 ```bash
-# Lesson 1を実施する場合
+# Lesson 1を実施する場合（90分）
 cd Lesson1
-open index.html  # またはブラウザで開く
+open index.html
 
-# Lesson 2を実施する場合
+# Lesson 2を実施する場合（45-90分）
 cd lesson2
-open index.html  # またはブラウザで開く
+open index.html
+
+# Lesson 3を実施する場合（45分）
+cd lesson3
+open index.html
+
+# Lesson 4を実施する場合（45分）
+cd lesson4
+open index.html
 ```
 
 #### 3. 授業進行
 - 各Lessonのindex.htmlに沿って進行
 - README.mdを参照しながら指導
-- 生徒の進捗に応じて柔軟に対応
+- ワークシート（worksheet.md）を活用
+- AIASレベルに応じたAI活用を指導
 
 ### 授業実施のコツ
 
@@ -197,17 +250,20 @@ open index.html  # またはブラウザで開く
 ### 1. AI駆動型学習
 - プロンプトエンジニアリングの実践
 - AIとの協働作業の体験
+- AIASレベルに基づく段階的活用
 - 効率的な問題解決手法の習得
 
 ### 2. プロジェクトベースラーニング
 - 実際の工場シナリオを題材
 - チーム開発の経験
 - 成果物の即座のフィードバック
+- 実践的なケーススタディ
 
 ### 3. 段階的スキルアップ
-- Lesson 1: 基礎的な実装力
-- Lesson 2: 高度な設計力
-- 継続的な成長パス提供
+- Lesson 1: 基礎的な実装力（Webアプリ開発）
+- Lesson 2: 高度な設計力（UX/ナラティブ）
+- Lesson 3: 分析力（フィッシュボーン）
+- Lesson 4: データ活用力（パレート図）
 
 ## 🎮 サンプルプロジェクト
 
@@ -346,6 +402,13 @@ A: ゲーミフィケーション要素と即座の成果物が高いモチベ�
 5. Pull Requestを作成
 
 ## 📅 更新履歴
+
+### Version 3.0.0 (2025-09-04)
+- Lesson 3（フィッシュボーン分析）追加
+- Lesson 4（パレート図分析）追加
+- 45分版授業フォーマット対応
+- 全レッスンにAIASレベル表記を統合
+- スプレッドシート実習コンテンツ追加
 
 ### Version 2.2.0 (2025-09-01)
 - AIAS（AI活用評価スケール）資料追加

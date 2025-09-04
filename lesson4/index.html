@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 4: パレート図で優先順位を決める | 工業現場AI解決ハッカソン</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for Pareto Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Design System Variables */
+        :root {
+            --ink: #0A0E27;
+            --paper: #FEFEF8;
+            --electric: #00F0FF;
+            --coral: #FF6B6B;
+            --violet: #7C3AED;
+            --text-primary: #0A0E27;
+            --text-secondary: #4A5568;
+            --font-primary: 'Zen Kaku Gothic New', sans-serif;
+            --font-accent: 'Space Grotesk', monospace;
+            --font-display: 'Bebas Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background: var(--paper);
+            line-height: 1.8;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Paper Texture Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(10, 14, 39, 0.01) 2px,
+                rgba(10, 14, 39, 0.01) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(254, 254, 248, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(10, 14, 39, 0.05);
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: var(--font-accent);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-lesson {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--violet);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero-label {
+            background: var(--violet);
+            color: var(--paper);
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            transform: rotate(-1deg);
+            font-family: var(--font-accent);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-accent);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--violet);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        /* Section Styling */
+        section {
+            margin: 80px 0;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: var(--font-accent);
+            font-size: 8rem;
+            font-weight: 900;
+            opacity: 0.08;
+            position: absolute;
+            top: -3rem;
+            left: -2rem;
+            z-index: -1;
+        }
+
+        .section-label {
+            font-family: var(--font-accent);
+            font-size: 0.875rem;
+            letter-spacing: 3px;
+            color: var(--violet);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        /* Card Styling */
+        .card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 2rem;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: var(--ink);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translate(-4px, -4px);
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .card:hover::before {
+            top: 8px;
+            left: 8px;
+            right: -8px;
+            bottom: -8px;
+        }
+
+        .card:hover .card-number {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .card:hover h3 {
+            color: var(--violet);
+        }
+
+        /* How to Create section cards without hover animation */
+        .howto-card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .howto-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: var(--ink);
+            z-index: -1;
+        }
+
+        .howto-card h3 {
+            color: var(--ink);
+        }
+
+        .howto-card .card-number {
+            width: 40px;
+            height: 40px;
+            background: var(--violet);
+            color: var(--paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-number {
+            width: 40px;
+            height: 40px;
+            background: var(--violet);
+            color: var(--paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* List Styling */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            border-bottom: 1px dotted rgba(10, 14, 39, 0.1);
+        }
+
+        li:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--violet);
+            font-weight: bold;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 2rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+            font-family: var(--font-accent);
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Time Box */
+        .time-box {
+            background: var(--violet);
+            color: white;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .time-box::before {
+            content: '📊';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 2rem;
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .phase-card {
+            padding: 2rem;
+            position: relative;
+            border-bottom: 2px dotted var(--ink);
+        }
+
+        .phase-number {
+            font-family: var(--font-accent);
+            font-size: 6rem;
+            font-weight: 900;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            right: 1rem;
+        }
+
+        .phase-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--ink);
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .button-secondary {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .button-secondary:hover {
+            background: var(--violet);
+            border-color: var(--violet);
+            color: var(--paper);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        th {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid rgba(10, 14, 39, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        /* Keep table text readable on hover */
+        .card:hover table th {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .card:hover table td {
+            border-bottom: 1px solid rgba(254, 254, 248, 0.2);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: white;
+            border: 2px solid var(--ink);
+        }
+
+        /* Spreadsheet Style */
+        .spreadsheet-preview {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 1rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .spreadsheet-table {
+            font-family: var(--font-accent);
+            font-size: 0.9rem;
+            width: 100%;
+            min-width: 600px;
+        }
+
+        .spreadsheet-table th {
+            background: #f0f0f0;
+            color: var(--ink);
+            padding: 0.5rem;
+            border: 1px solid #d0d0d0;
+            text-align: center;
+        }
+
+        .spreadsheet-table td {
+            padding: 0.5rem;
+            border: 1px solid #d0d0d0;
+            text-align: right;
+        }
+
+        .spreadsheet-table td:first-child {
+            text-align: left;
+        }
+
+        /* Formula Box */
+        .formula-box {
+            background: #f8f8f8;
+            border: 1px solid #d0d0d0;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-accent);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 1rem 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-number {
+                font-size: 4rem;
+            }
+        }
+
+        /* Special Effects */
+        .highlight {
+            background: linear-gradient(120deg, var(--violet) 0%, var(--violet) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            transition: background-size 0.3s ease;
+        }
+
+        .highlight:hover {
+            background-size: 100% 100%;
+        }
+
+        /* Interactive Demo */
+        .demo-container {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        input[type="number"], input[type="text"], select {
+            padding: 0.5rem;
+            border: 2px solid var(--ink);
+            font-family: var(--font-accent);
+            margin: 0.5rem;
+            background: var(--paper);
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--violet);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="nav-title">工業現場AI解決ハッカソン</div>
+            <div class="nav-lesson">LESSON 04</div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-label">DATA ANALYSIS</div>
+            <h1>パレート図で<br>「重要な少数」を見つける</h1>
+            <p class="hero-subtitle">80:20の法則を使って、最も効果的な改善ポイントを特定する</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">45</div>
+                    <div class="stat-label">分間の実習</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">80:20</div>
+                    <div class="stat-label">の法則</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">の改善効果</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 今日の学習目標 -->
+        <section>
+            <div class="section-number">01</div>
+            <div class="section-label">Today's Goals</div>
+            <h2>今日の学習目標</h2>
+            
+            <div style="background: linear-gradient(135deg, #7C3AED 0%, #FF6B6B 100%); color: white; padding: 1.5rem; margin-bottom: 2rem; border-radius: 4px;">
+                <h3 style="margin: 0 0 0.5rem 0; color: white;">🤖 AIASレベル: 3-4</h3>
+                <p style="margin: 0; font-size: 0.95rem;">
+                    <strong>レベル3（AI for Editing）〜 レベル4（AI for Task Completion）</strong><br>
+                    AIを活用してデータ処理を自動化し、分析結果から改善案を生成します。
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-number">1</div>
+                <h3>パレート図とは？</h3>
+                <p>イタリアの経済学者ヴィルフレド・パレートが発見した「80:20の法則」を視覚化したグラフです。棒グラフと累積比率の折れ線グラフを組み合わせて、問題の優先順位を明確にします。</p>
+                <p><strong>重要な特徴：</strong></p>
+                <ul>
+                    <li>要因を大きい順に並べた棒グラフ</li>
+                    <li>累積比率を示す折れ線グラフ</li>
+                    <li>重要な少数と些細な多数を区別</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-number">2</div>
+                <h3>なぜパレート図が必要？</h3>
+                <ul>
+                    <li>限られたリソースを効果的に配分できる</li>
+                    <li>最大の効果が得られる改善点が明確になる</li>
+                    <li>データに基づいた客観的な判断ができる</li>
+                    <li>チーム全体で優先順位を共有できる</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-number">3</div>
+                <h3>今日できるようになること</h3>
+                <ul>
+                    <li>スプレッドシートでデータを整理できる</li>
+                    <li>パレート図を作成・解釈できる</li>
+                    <li>80:20の法則を実践で活用できる</li>
+                    <li>データドリブンな意思決定ができる</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- パレート図の作り方 -->
+        <section>
+            <div class="section-number">02</div>
+            <div class="section-label">How to Create</div>
+            <h2>スプレッドシートでパレート図を作る</h2>
+            
+            <div style="background: linear-gradient(135deg, #4169e1 0%, #6495ed 100%); color: white; padding: 1rem; margin-bottom: 2rem; border-radius: 4px; display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 2rem;">🔵</div>
+                <div>
+                    <h4 style="margin: 0; color: white;">AIASレベル1: AI for Research</h4>
+                    <p style="margin: 0; font-size: 0.9rem;">グラフ作成は自分で行います。AIは操作方法の確認や関数の調べ物に活用しましょう。</p>
+                </div>
+            </div>
+            
+            <div class="howto-card">
+                <h3>STEP 1: データの準備</h3>
+                <p>まず、分析したい問題のデータを収集し、表形式で整理します。</p>
+                
+                <div class="spreadsheet-preview">
+                    <div class="formula-box">セルC2 = B2 （最初の累積値）</div>
+                    <div class="formula-box">セルC3 = C2 + B3 （2番目以降の累積値）</div>
+                    <table class="spreadsheet-table">
+                        <thead>
+                            <tr>
+                                <th>A</th>
+                                <th>B</th>
+                                <th>C</th>
+                                <th>D</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>不良要因</td>
+                                <td>件数</td>
+                                <td>累積件数</td>
+                                <td>累積比率(%)</td>
+                            </tr>
+                            <tr>
+                                <td>寸法不良</td>
+                                <td>45</td>
+                                <td>=B2</td>
+                                <td>=C2/$C$7*100</td>
+                            </tr>
+                            <tr>
+                                <td>傷・汚れ</td>
+                                <td>32</td>
+                                <td>=C2+B3</td>
+                                <td>=C3/$C$7*100</td>
+                            </tr>
+                            <tr>
+                                <td>変形</td>
+                                <td>15</td>
+                                <td>=C3+B4</td>
+                                <td>=C4/$C$7*100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="howto-card">
+                <h3>STEP 2: データの並べ替え</h3>
+                <p>件数の多い順（降順）にデータを並べ替えます。これがパレート図の基本です。</p>
+                <ul>
+                    <li>Google スプレッドシート：データ → 範囲を並べ替え</li>
+                    <li>Excel：データ → 並べ替え</li>
+                    <li>重要：大きい値から小さい値へ（降順）</li>
+                </ul>
+            </div>
+
+            <div class="howto-card">
+                <h3>STEP 3: 累積値の計算</h3>
+                <p>累積件数と累積比率を計算します。</p>
+                <div class="code-block">
+                    <pre>累積件数の計算式：
+1行目: = B2 （そのまま）
+2行目以降: = C2 + B3 （前の累積値 + 今の値）
+
+累積比率の計算式：
+= C2 / $C$最終行 * 100
+（$マークで絶対参照にすることがポイント）</pre>
+                </div>
+            </div>
+
+            <div class="howto-card">
+                <h3>STEP 4: グラフの作成</h3>
+                <p>複合グラフ（棒グラフ + 折れ線グラフ）を作成します。</p>
+                <ol style="padding-left: 2rem;">
+                    <li style="list-style-type: decimal;">データ範囲を選択</li>
+                    <li style="list-style-type: decimal;">挿入 → グラフ</li>
+                    <li style="list-style-type: decimal;">グラフの種類：複合グラフを選択</li>
+                    <li style="list-style-type: decimal;">件数：棒グラフ（主軸）</li>
+                    <li style="list-style-type: decimal;">累積比率：折れ線グラフ（第2軸）</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- インタラクティブデモ -->
+        <section>
+            <div class="section-number">03</div>
+            <div class="section-label">Interactive Demo</div>
+            <h2>パレート図を体験してみよう</h2>
+
+            <div class="demo-container">
+                <h3>製造ラインの不良データ分析</h3>
+                <p>以下のデータを元に、実際のパレート図を確認してみましょう。</p>
+                
+                <div class="chart-container">
+                    <canvas id="paretoChart"></canvas>
+                </div>
+                
+                <div class="button-group">
+                    <button class="button" onclick="updateChart('defects')">不良要因分析</button>
+                    <button class="button button-secondary" onclick="updateChart('delays')">納期遅延分析</button>
+                    <button class="button button-secondary" onclick="updateChart('costs')">コスト分析</button>
+                </div>
+
+                <div class="time-box" style="margin-top: 2rem;">
+                    <strong>分析結果：</strong>
+                    <span id="analysisResult">上位2項目（寸法不良、傷・汚れ）で全体の77%を占めています。この2つを改善すれば、不良の大部分が解決できます。</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 実習の流れ -->
+        <section>
+            <div class="section-number">04</div>
+            <div class="section-label">Workshop Flow</div>
+            <h2>本日の実習スケジュール（45分）</h2>
+
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-number">1</div>
+                    <div class="phase-title">導入説明（5分）</div>
+                    <p>パレート図の概要と本日の課題を理解します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">2</div>
+                    <div class="phase-title">データ整理（10分）</div>
+                    <p>データを降順に並べ替え、累積値と累積比率を計算します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">3</div>
+                    <div class="phase-title">グラフ作成（15分）</div>
+                    <p>複合グラフを作成し、見やすく調整します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">4</div>
+                    <div class="phase-title">分析と考察（10分）</div>
+                    <p>80:20の法則を適用し、重要な少数を特定します。</p>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-number">5</div>
+                    <div class="phase-title">改善提案の作成（5分）</div>
+                    <p>優先順位に基づいた改善案を考えます。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ケーススタディ -->
+        <section>
+            <div class="section-number">05</div>
+            <div class="section-label">Case Study</div>
+            <h2>ケーススタディ：電子部品工場の品質改善</h2>
+
+            <div class="card">
+                <h3>背景</h3>
+                <p>電子部品を製造するタナカ電子工業では、月間の不良品が1000個を超え、大きな損失が発生しています。品質管理部門は、限られた予算で最大の効果を上げる必要があります。</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>不良要因</th>
+                            <th>件数</th>
+                            <th>累積件数</th>
+                            <th>累積比率</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>はんだ不良</td>
+                            <td>420</td>
+                            <td>420</td>
+                            <td>35.9%</td>
+                        </tr>
+                        <tr>
+                            <td>部品欠品</td>
+                            <td>380</td>
+                            <td>800</td>
+                            <td>68.4%</td>
+                        </tr>
+                        <tr>
+                            <td>基板の傷</td>
+                            <td>150</td>
+                            <td>950</td>
+                            <td>81.2%</td>
+                        </tr>
+                        <tr>
+                            <td>配線ミス</td>
+                            <td>100</td>
+                            <td>1050</td>
+                            <td>89.7%</td>
+                        </tr>
+                        <tr>
+                            <td>その他</td>
+                            <td>120</td>
+                            <td>1170</td>
+                            <td>100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>パレート分析の結果</h3>
+                <ul>
+                    <li><strong>重要な少数：</strong>「はんだ不良」と「部品欠品」の2項目で全体の68.4%</li>
+                    <li><strong>80%ライン：</strong>上位3項目で81.2%をカバー</li>
+                    <li><strong>改善の優先順位：</strong>はんだ工程と部品管理を最優先で改善</li>
+                </ul>
+                
+                <div class="time-box">
+                    <strong>改善効果の予測：</strong>
+                    上位2項目を50%改善できれば、月間400個の不良品削減が可能。
+                    年間コスト削減額：約480万円
+                </div>
+            </div>
+        </section>
+
+        <!-- AI活用のポイント -->
+        <section>
+            <div class="section-number">06</div>
+            <div class="section-label">AI Integration</div>
+            <h2>AIを活用したデータ分析</h2>
+            
+            <div style="background: #fdf4ff; border-left: 4px solid #7C3AED; padding: 1rem 1.5rem; margin-bottom: 2rem;">
+                <p style="margin: 0; color: var(--text-primary);">
+                    <strong>💡 AIASレベル3-4での活用方法</strong><br>
+                    レベル3ではスプレッドシート関数の生成にAIを使い、レベル4ではデータ分析から改善案の提案まで一連のタスクをAIと協働で完成させます。
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>データの前処理と分析</h3>
+                <p>AIを使ってデータの整理や分析を効率化できます。</p>
+                
+                <div class="code-block">
+                    <pre>プロンプト例：
+「以下のCSVデータをパレート分析用に整理してください。
+1. 降順にソート
+2. 累積値と累積比率を計算
+3. 80%ラインを超える項目を特定
+
+[CSVデータをペースト]」</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>改善案の自動生成</h3>
+                <p>分析結果から具体的な改善案を提案してもらえます。</p>
+                
+                <div class="code-block">
+                    <pre>プロンプト例：
+「パレート分析の結果、『はんだ不良』が35.9%を占めています。
+製造業のベストプラクティスに基づいて、
+具体的な改善案を5つ提案してください。」</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>スプレッドシート関数の生成</h3>
+                <p>複雑な計算式もAIが教えてくれます。</p>
+                
+                <div class="code-block">
+                    <pre>プロンプト例：
+「Google スプレッドシートで、
+B列の値を降順にソートして、
+C列に累積値、D列に累積比率を
+自動計算する関数を教えてください。」</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 演習課題 -->
+        <section>
+            <div class="section-number">07</div>
+            <div class="section-label">Exercise</div>
+            <h2>演習：実際のデータでパレート図を作ろう</h2>
+
+            <div class="card">
+                <h3>課題：自動車部品工場の不良分析</h3>
+                <p>あなたは自動車部品工場の品質管理担当者です。Google Classroomで配布されたデータを分析し、改善の優先順位を決定してください。</p>
+                
+                <h4>分析のポイント</h4>
+                <ul>
+                    <li>どの不良要因が全体の80%を占めているか？</li>
+                    <li>改善の投資効果が最も高いのはどれか？</li>
+                    <li>すぐに実施できる対策と長期的な対策を分ける</li>
+                    <li>コストと効果のバランスを考える</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>提出物</h3>
+                <ol style="padding-left: 2rem;">
+                    <li style="list-style-type: decimal;">作成したパレート図（スプレッドシートまたは画像）</li>
+                    <li style="list-style-type: decimal;">分析結果のレポート（ワークシート）</li>
+                    <li style="list-style-type: decimal;">改善提案書（優先順位付き）</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 評価基準 -->
+        <section>
+            <div class="section-number">08</div>
+            <div class="section-label">Evaluation</div>
+            <h2>評価基準</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>評価項目</th>
+                        <th>配点</th>
+                        <th>評価ポイント</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>データの正確性</td>
+                        <td>20点</td>
+                        <td>計算式が正しく、数値に誤りがないか</td>
+                    </tr>
+                    <tr>
+                        <td>グラフの完成度</td>
+                        <td>25点</td>
+                        <td>見やすく、正しいパレート図になっているか</td>
+                    </tr>
+                    <tr>
+                        <td>分析の深さ</td>
+                        <td>25点</td>
+                        <td>80:20の法則を正しく理解し適用しているか</td>
+                    </tr>
+                    <tr>
+                        <td>改善提案の質</td>
+                        <td>20点</td>
+                        <td>データに基づいた実現可能な提案か</td>
+                    </tr>
+                    <tr>
+                        <td>プレゼンテーション</td>
+                        <td>10点</td>
+                        <td>分かりやすく論理的に説明できているか</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- まとめ -->
+        <section>
+            <div class="section-number">09</div>
+            <div class="section-label">Summary</div>
+            <h2>本日のまとめ</h2>
+
+            <div class="card">
+                <h3>パレート図のポイント</h3>
+                <ul>
+                    <li>80:20の法則で「重要な少数」を見つける</li>
+                    <li>データを降順に並べることが基本</li>
+                    <li>累積比率で全体への影響度を把握</li>
+                    <li>限られたリソースを効果的に配分</li>
+                    <li>客観的なデータに基づく意思決定</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>学習の振り返り</h3>
+                <p>Lesson 3のフィッシュボーン分析で原因を特定し、Lesson 4のパレート図で優先順位を決める。この2つの手法を組み合わせることで、効果的な問題解決が可能になります。</p>
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer style="margin-top: 100px; padding: 40px 0; border-top: 2px solid var(--ink); text-align: center;">
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                &copy; 2025 Industrial AI Hackathon - Lesson 4: Pareto Analysis<br>
+                工業高校生のための実践的データ分析カリキュラム
+            </p>
+        </footer>
+    </div>
+
+    <!-- Chart.js Script -->
+    <script>
+        // パレート図のデータセット
+        const datasets = {
+            defects: {
+                labels: ['寸法不良', '傷・汚れ', '変形', '色ムラ', 'その他'],
+                values: [45, 32, 15, 12, 8],
+                result: '上位2項目（寸法不良、傷・汚れ）で全体の77件（68.8%）を占めています。この2つを改善すれば、不良の大部分が解決できます。'
+            },
+            delays: {
+                labels: ['材料調達', '設備故障', '人員不足', '検査待ち', 'その他'],
+                values: [52, 28, 18, 15, 10],
+                result: '材料調達の遅延が全体の42.3%を占めています。サプライチェーンの見直しが最優先事項です。'
+            },
+            costs: {
+                labels: ['人件費', '材料費', '設備費', '電力費', 'その他'],
+                values: [380, 290, 150, 120, 80],
+                result: '人件費と材料費で全体の65.7%を占めています。生産性向上と材料の効率的利用が重要です。'
+            }
+        };
+
+        let currentChart = null;
+
+        function updateChart(type) {
+            const data = datasets[type];
+            const total = data.values.reduce((a, b) => a + b, 0);
+            
+            // 累積値と累積比率の計算
+            let cumulative = 0;
+            const cumulativeValues = [];
+            const cumulativePercentages = [];
+            
+            data.values.forEach(value => {
+                cumulative += value;
+                cumulativeValues.push(cumulative);
+                cumulativePercentages.push((cumulative / total * 100).toFixed(1));
+            });
+
+            // グラフの更新または作成
+            const ctx = document.getElementById('paretoChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: '件数',
+                        data: data.values,
+                        backgroundColor: '#7C3AED',
+                        borderColor: '#0A0E27',
+                        borderWidth: 2,
+                        yAxisID: 'y-axis-1',
+                    }, {
+                        label: '累積比率(%)',
+                        data: cumulativePercentages,
+                        type: 'line',
+                        borderColor: '#FF6B6B',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 3,
+                        yAxisID: 'y-axis-2',
+                        pointBackgroundColor: '#FF6B6B',
+                        pointBorderColor: '#0A0E27',
+                        pointRadius: 5,
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: 'Space Grotesk',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataset.label === '件数') {
+                                        return `件数: ${context.parsed.y}`;
+                                    } else {
+                                        return `累積比率: ${context.parsed.y}%`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        'y-axis-1': {
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {
+                                font: {
+                                    family: 'Space Grotesk'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '件数',
+                                font: {
+                                    family: 'Zen Kaku Gothic New',
+                                    size: 14
+                                }
+                            }
+                        },
+                        'y-axis-2': {
+                            type: 'linear',
+                            position: 'right',
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                font: {
+                                    family: 'Space Grotesk'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '累積比率 (%)',
+                                font: {
+                                    family: 'Zen Kaku Gothic New',
+                                    size: 14
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Zen Kaku Gothic New',
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 分析結果の更新
+            document.getElementById('analysisResult').textContent = data.result;
+        }
+
+        // 初期表示
+        window.onload = function() {
+            updateChart('defects');
+        };
+    </script>
+</body>
+</html>
