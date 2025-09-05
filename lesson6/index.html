@@ -750,18 +750,31 @@
                         </ul>
                     </div>
 
-                    <p style="margin-top: 2rem;">
-                        <strong>【背景情報】</strong><br>
-                        未来電子工業は、次世代電気自動車（EV）向けの革新的なバッテリー制御チップを製造している。
-                        このチップは、EVの航続距離を30%延長する画期的な技術として世界中から注目されている。
-                    </p>
+                    <div style="background: rgba(255, 0, 0, 0.05); border-left: 4px solid var(--warning-red); padding: 1.5rem; margin: 2rem 0;">
+                        <h4 style="color: var(--warning-red); margin-bottom: 1rem;">🚨 緊急通信：社内乱飛情報</h4>
+                        <p style="font-style: italic; margin-bottom: 1rem;">
+                            「ライン3がまた止まった！」<br>
+                            「品管部は何やってるんだ！」<br>
+                            「昭和からの検査装置、もう限界です」<br>
+                            「ベテランが辞めたら誰もWire Bonding工程わからない」<br>
+                            「昨日のデータと今日のデータ、数字が合わない！」<br>
+                        </p>
+                    </div>
 
-                    <p style="margin-top: 1.5rem;">
-                        しかし、<span class="story-highlight">8月中旬から原因不明の品質問題が発生</span>。
-                        当初は軽微な問題と思われたが、9月に入って事態は急速に悪化した。
-                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--primary-cyan); padding: 1.5rem; margin: 2rem 0;">
+                        <h4 style="color: var(--primary-cyan); margin-bottom: 1rem;">📋 非公式現場メモ（判読困難）</h4>
+                        <p style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.8;">
+                            8/15 - ライン3、また変な音。湿度管理もダメみたい<br>
+                            8/18 - 誰か設定変えた？ 昨日までと違う<br>
+                            8/20 - 材料B-2025-08、色がちょっと変？気のせい？<br>
+                            8/25 - 夜勤の新人、手順書見てないのでは...<br>
+                            8/30 - 山田さん退職。引き継ぎなし。どうする？<br>
+                            9/02 - データ入力ミス多すぎ。Excelとシステムが合わない<br>
+                            9/05 - Die Attachの温度記録、半分くらいない？
+                        </p>
+                    </div>
 
-                    <h3 style="color: var(--primary-yellow); margin: 2rem 0;">📊 収集されたデータ（ただし、一部矛盾あり）</h3>
+                    <h3 style="color: var(--primary-yellow); margin: 2rem 0;">📊 各部門から集めたデータ（バラバラな形式）</h3>
                     
                     <table>
                         <thead>
@@ -816,31 +829,52 @@
                         <strong>⚠️ 注意：</strong>データの合計が110%になっているが、複数不良を持つ製品の重複カウントか、記録ミスの可能性あり
                     </div>
 
-                    <h3 style="color: var(--primary-yellow); margin: 2rem 0;">🔍 調査で判明した事実（現場からの断片的情報）</h3>
+                    <h3 style="color: var(--primary-yellow); margin: 2rem 0;">🔍 各部署の主張（誰も責任を取りたくない）</h3>
                     
-                    <ul style="padding-left: 1.5rem; line-height: 2;">
-                        <li><strong>時間帯による変動：</strong>夜勤（22:00-6:00）の不良率が日勤の<span class="story-highlight">2.5倍</span>
-                            <br>→ ただし、夜勤の生産数が日勤の40%であることに注意</li>
-                        <li><strong>製造ライン差：</strong>新設のライン3の不良率が他ラインの<span class="story-highlight">3倍</span>
-                            <br>→ ライン3は最新設備だが、オペレータの習熟度に差あり</li>
-                        <li><strong>材料ロット：</strong>特定の材料ロット（B-2025-08）使用時に不良多発
-                            <br>→ 同じサプライヤーの他ロット（B-2025-07, B-2025-09）は問題なし？</li>
-                        <li><strong>環境要因：</strong>クリーンルームの<span class="story-highlight">湿度管理システムが8月20日から不調</span>
-                            <br>→ しかし、問題発生は8月中旬から（時系列が合わない？）</li>
-                        <li><strong>人的要因：</strong>ベテラン技術者3名が<span class="story-highlight">8月末に退職</span>、新人比率70%に
-                            <br>→ 退職者が担当していた工程は？引き継ぎは適切だったか？</li>
-                        <li><strong>設備要因：</strong>検査装置の<span class="story-highlight">キャリブレーション3ヶ月未実施</span>
-                            <br>→ 他の装置のメンテナンス状況は？</li>
-                        <li><strong>追加情報：</strong>Wire Bonding工程での不良率が<span class="story-highlight">特に高い</span>
-                            <br>→ しかしDie Attach工程の温度管理も疑わしいデータあり</li>
-                    </ul>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div style="background: rgba(0, 255, 255, 0.05); padding: 1rem; border: 1px solid var(--primary-cyan);">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 0.5rem;">🏭 製造部の主張</h4>
+                            <ul style="font-size: 0.9rem; line-height: 1.6;">
+                                <li>「新しいライン3は最新設備だから問題ない！」</li>
+                                <li>「夜勤の不良率が高い？生産数が少ないから目立つだけ」</li>
+                                <li>「手順書通りやってる！（多分）」</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(255, 20, 147, 0.05); padding: 1rem; border: 1px solid var(--hot-pink);">
+                            <h4 style="color: var(--hot-pink); margin-bottom: 0.5rem;">🔬 品質管理部の主張</h4>
+                            <ul style="font-size: 0.9rem; line-height: 1.6;">
+                                <li>「検査装置は古いけど正常動作してる」</li>
+                                <li>「データは正確！（入力ミスはあるけど）」</li>
+                                <li>「キャリブレーション？予算がないから…」</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(57, 255, 20, 0.05); padding: 1rem; border: 1px solid var(--neon-green);">
+                            <h4 style="color: var(--neon-green); margin-bottom: 0.5rem;">📦 資材部の主張</h4>
+                            <ul style="font-size: 0.9rem; line-height: 1.6;">
+                                <li>「サプライヤーは同じ！材料に問題はない」</li>
+                                <li>「B-2025-08？他のロットと同じでしょ？」</li>
+                                <li>「在庫管理は完璧です（Excelで）」</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(255, 255, 0, 0.05); padding: 1rem; border: 1px solid var(--primary-yellow);">
+                            <h4 style="color: var(--primary-yellow); margin-bottom: 0.5rem;">👥 人事部の主張</h4>
+                            <ul style="font-size: 0.9rem; line-height: 1.6;">
+                                <li>「新人研修はちゃんとやった！（2日間）」</li>
+                                <li>「退職者の引き継ぎ？知らない」</li>
+                                <li>「人手不足は現場の問題」</li>
+                            </ul>
+                        </div>
+                    </div>
                     
-                    <div style="background: rgba(255, 255, 0, 0.1); border: 2px solid var(--primary-yellow); padding: 1rem; margin: 1rem 0;">
-                        <strong>🤔 困惑ポイント：</strong>
-                        <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
-                            <li>複数の要因が同時期に発生しているが、因果関係が不明確</li>
-                            <li>データの一部に矛盾や欠損がある</li>
-                            <li>現場からの報告が主観的で、客観的データが不足</li>
+                    <div style="background: linear-gradient(45deg, rgba(255, 0, 0, 0.1), rgba(255, 255, 0, 0.1)); border: 2px solid var(--warning-red); padding: 1.5rem; margin: 2rem 0;">
+                        <h4 style="color: var(--warning-red); margin-bottom: 1rem;">⚠️ カオス状態のポイント</h4>
+                        <ul style="padding-left: 1.5rem; line-height: 2;">
+                            <li><strong>🔴 データが信用できない：</strong>部署ごとに数字が違う、合計が110%</li>
+                            <li><strong>🔴 誰も全体像が見えてない：</strong>各部署が自分の情報しか持ってない</li>
+                            <li><strong>🔴 時系列がおかしい：</strong>問題発生日と原因発生日が合わない</li>
+                            <li><strong>🔴 人の記憶があいまい：</strong>「多分」「おそらく」「気がする」</li>
+                            <li><strong>🔴 責任のなすりつけ合い：</strong>全部署が「うちのせいじゃない」</li>
+                            <li><strong>🔴 前提が間違ってるかも：</strong>「新設備が一番良い」って本当？</li>
                         </ul>
                     </div>
 
@@ -875,11 +909,24 @@
                         </ul>
                     </div>
 
-                    <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--primary-cyan);">
-                        <strong>あなたたちのミッション：</strong><br>
-                        この危機的状況を打開するため、品質問題の根本原因を特定し、
-                        Google Apps Scriptを使った革新的な品質管理システムを開発せよ！
-                    </p>
+                    <div style="background: linear-gradient(135deg, var(--electric-blue) 0%, var(--primary-magenta) 100%); padding: 2rem; margin: 2rem 0; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); transform: rotate(45deg);"></div>
+                        <h3 class="glitch" data-text="MISSION IMPOSSIBLE" style="color: white; margin-bottom: 1rem; font-size: 2rem;">
+                            MISSION: IMPOSSIBLE?
+                        </h3>
+                        <p style="font-size: 1.2rem; color: white; margin-bottom: 1rem;">
+                            <strong>🎯 あなたたちの任務：</strong>
+                        </p>
+                        <ol style="color: white; padding-left: 2rem; line-height: 2;">
+                            <li>カオスなデータから真実を見つける</li>
+                            <li>誰も把握してない根本原因を特定</li>
+                            <li>GASで「今すぐ使える」システムを構築</li>
+                            <li>全部署を納得させる解決策を提示</li>
+                        </ol>
+                        <p style="color: var(--primary-yellow); margin-top: 1.5rem; font-weight: bold; text-align: center; font-size: 1.3rem;">
+                            ⌚ タイムリミット：90分
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>

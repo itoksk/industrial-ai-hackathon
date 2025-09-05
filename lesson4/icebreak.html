@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アイスブレイク: Gemで遊ぼう</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Design System Variables */
+        :root {
+            /* Modern Tech Colors */
+            --primary-blue: #2196F3;
+            --primary-purple: #9C27B0;
+            --accent-pink: #FF4081;
+            --accent-cyan: #00BCD4;
+            --success-green: #4CAF50;
+            --warning-orange: #FF9800;
+            
+            /* Background Colors */
+            --bg-dark: #0A0A0A;
+            --bg-card: #1A1A1A;
+            --bg-hover: #252525;
+            
+            /* Text Colors */
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --text-accent: #64B5F6;
+            
+            /* Gradients */
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-gem: linear-gradient(135deg, #4285F4 0%, #DB4437 50%, #F4B400 100%);
+            --gradient-fun: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(66, 133, 244, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(219, 68, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(244, 180, 0, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-20px, -20px) rotate(1deg); }
+            66% { transform: translate(20px, -10px) rotate(-1deg); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-gem);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .gem-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: var(--gradient-gem);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: morph 8s ease-in-out infinite;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+        }
+
+        .gem-logo span {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.8));
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--primary-blue), transparent);
+            transform: translateX(-50%);
+        }
+
+        /* Session Cards */
+        .session {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+
+        .session::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: var(--gradient-fun);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .session:hover::before {
+            opacity: 1;
+        }
+
+        .session:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .session-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .session-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gem);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .session-time {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .session-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .session-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Activity Steps */
+        .activity-steps {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .activity-steps h3 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            background: var(--primary-blue);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Theme Grid */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .theme-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--primary-blue);
+        }
+
+        .theme-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .theme-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .theme-examples {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Fun Elements */
+        .fun-fact {
+            background: var(--gradient-fun);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fun-fact::before {
+            content: '💡';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        .fun-fact h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Prompt Examples */
+        .prompt-box {
+            background: #1a1a1a;
+            border: 2px solid var(--primary-purple);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            position: relative;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .prompt-box::before {
+            content: 'PROMPT';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--bg-dark);
+            padding: 0 10px;
+            color: var(--primary-purple);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-purple);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: var(--accent-pink);
+            transform: scale(1.05);
+        }
+
+        /* Interactive Elements */
+        .interactive-demo {
+            background: rgba(66, 133, 244, 0.1);
+            border: 2px dashed var(--primary-blue);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-demo:hover {
+            background: rgba(66, 133, 244, 0.2);
+            border-style: solid;
+        }
+
+        .demo-button {
+            background: var(--gradient-gem);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(66, 133, 244, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Final CTA */
+        .cta-section {
+            text-align: center;
+            padding: 3rem;
+            margin-top: 4rem;
+            background: var(--gradient-hero);
+            border-radius: 20px;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="gem-logo">
+                <span>💎</span>
+            </div>
+            <h1 class="hero-title">アイスブレイク: Gemで遊ぼう</h1>
+            <p class="hero-subtitle">Google Geminiを使って、楽しくAIと友達になろう！</p>
+        </div>
+
+        <!-- Session 1: Gem作成入門 -->
+        <div class="session">
+            <div class="session-header">
+                <div class="session-number">02</div>
+                <div>
+                    <div class="session-time">3-15分</div>
+                    <h2 class="session-title">Gem作成入門</h2>
+                </div>
+            </div>
+            
+            <p class="session-description">
+                みんなで「理想の幼馴染」Gemを作って、実際に会話してみよう！<br>
+                どんな性格がいい？どんな話し方をする？クラス全員でアイデアを出し合おう。
+            </p>
+
+            <div class="activity-steps">
+                <h3>🎮 アクティビティの流れ</h3>
+                
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>みんなでキャラ設定（3分）</strong>
+                        「理想の幼馴染」ってどんな人？性格、口調、趣味などを黒板に書き出そう
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>Gem作成デモ（5分）</strong>
+                        先生が画面共有でGemを作成。みんなのアイデアを実際に設定していく
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>会話体験（5分）</strong>
+                        完成した幼馴染Gemと実際に会話！「おはよう」から始めてみよう
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>リアクションタイム（2分）</strong>
+                        面白い返事は？予想外の反応は？みんなで共有しよう
+                    </div>
+                </div>
+            </div>
+
+            <div class="prompt-box">
+                <button class="copy-button">📋 コピー</button>
+# 理想の幼馴染AI設定
+
+あなたは高校生の幼馴染です。
+以下の性格と特徴を持っています：
+
+## 基本設定
+- 名前：[クラスで決めた名前]
+- 性格：[明るい/クール/天然など]
+- 口調：[タメ口/丁寧語/関西弁など]
+- 趣味：[ゲーム/スポーツ/音楽など]
+
+## 会話のルール
+1. 相手を「おまえ」「きみ」など親しみやすく呼ぶ
+2. 学校の話題（宿題、テスト、部活）によく触れる
+3. たまに冗談を言って雰囲気を和ませる
+4. 相談には真剣に乗ってくれる
+
+## 口癖
+「[決めた口癖を入れる]」をよく使います
+
+初対面の相手には「久しぶり！」から始めてください。
+            </div>
+
+            <div class="fun-fact">
+                <h3>🎉 Fun Fact</h3>
+                <p>Gemは「宝石」という意味！あなただけの特別なAIを磨いて輝かせよう</p>
+            </div>
+        </div>
+
+        <!-- Session 2: 自分だけのGem -->
+        <div class="session">
+            <div class="session-header">
+                <div class="session-number">05</div>
+                <div>
+                    <div class="session-time">28-38分</div>
+                    <h2 class="session-title">自分だけのGem</h2>
+                </div>
+            </div>
+            
+            <p class="session-description">
+                教科や探究テーマに合わせた「専門家Gem」を作ろう！<br>
+                以下のテーマから選んで、資料作成を手伝ってくれるGemを作ってみよう。
+            </p>
+
+            <div class="theme-grid">
+                <div class="theme-card">
+                    <span class="theme-icon">🔬</span>
+                    <div class="theme-title">理系科目の達人</div>
+                    <div class="theme-examples">
+                        数学の解法マスター<br>
+                        物理実験アドバイザー<br>
+                        化学反応エキスパート
+                    </div>
+                </div>
+
+                <div class="theme-card">
+                    <span class="theme-icon">📚</span>
+                    <div class="theme-title">文系科目の専門家</div>
+                    <div class="theme-examples">
+                        歴史ストーリーテラー<br>
+                        国語文章添削の達人<br>
+                        英会話練習パートナー
+                    </div>
+                </div>
+
+                <div class="theme-card">
+                    <span class="theme-icon">💻</span>
+                    <div class="theme-title">プログラミング学習</div>
+                    <div class="theme-examples">
+                        Python先生<br>
+                        Web開発メンター<br>
+                        エラー解決の専門家
+                    </div>
+                </div>
+
+                <div class="theme-card">
+                    <span class="theme-icon">🏭</span>
+                    <div class="theme-title">工業・製造系</div>
+                    <div class="theme-examples">
+                        品質管理アドバイザー<br>
+                        なぜなぜ分析の先生<br>
+                        パレート図作成ヘルパー
+                    </div>
+                </div>
+
+                <div class="theme-card">
+                    <span class="theme-icon">🎨</span>
+                    <div class="theme-title">資料作成アシスタント</div>
+                    <div class="theme-examples">
+                        プレゼン構成アドバイザー<br>
+                        データ可視化サポーター<br>
+                        デザイン提案マスター
+                    </div>
+                </div>
+
+                <div class="theme-card">
+                    <span class="theme-icon">🌟</span>
+                    <div class="theme-title">探究活動メンター</div>
+                    <div class="theme-examples">
+                        仮説立案サポーター<br>
+                        データ分析ガイド<br>
+                        発表ストーリー構築
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-steps">
+                <h3>🚀 実践ワークショップ</h3>
+                
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>テーマ選択（2分）</strong>
+                        上のカードから興味のある分野を選ぶか、自分で考えよう
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>キャラクター設計（3分）</strong>
+                        どんな専門家？性格は？教え方の特徴は？ワークシートに記入
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Gem作成（5分）</strong>
+                        Google Geminiにアクセスして、実際にGemを作成
+                    </div>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>グループで試用（10分）</strong>
+                        3-4人のグループで、お互いのGemを試してフィードバック
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">📝 専門テーマ例（lesson2の学習内容より）</h3>
+            
+            <div class="theme-grid">
+                <div class="theme-card" data-theme="qc-analysis">
+                    <div class="theme-icon">📊</div>
+                    <h4>QC検定・品質管理</h4>
+                    <p>なぜなぜ分析、特性要因図、パレート図の作成支援</p>
+                </div>
+                <div class="theme-card" data-theme="presentation">
+                    <div class="theme-icon">🎨</div>
+                    <h4>プレゼンテーション作成</h4>
+                    <p>Vibeコーディング、ストーリー構成、デザイン指示</p>
+                </div>
+                <div class="theme-card" data-theme="factory">
+                    <div class="theme-icon">🏭</div>
+                    <h4>工場改善アドバイザー</h4>
+                    <p>4M分析（人・機械・材料・方法）、現場の問題解決</p>
+                </div>
+                <div class="theme-card" data-theme="brainstorm">
+                    <div class="theme-icon">💡</div>
+                    <h4>ブレインストーミング</h4>
+                    <p>アイデア出し、批判禁止の創造的思考サポート</p>
+                </div>
+            </div>
+            
+            <div class="prompt-box">
+                <button class="copy-button">📋 コピー</button>
+# 課題発見×AI プレゼン作成アシスタント
+
+あなたは工業高校生のプレゼンテーション作成を支援する
+対話型AIアシスタントです。
+
+Lesson 2で学んだ「問題と課題の違い」「QC手法」を活用します。
+
+## 基本的な振る舞い
+プレゼンテーション作成の依頼を受けたら、
+まず要件を対話形式で確認してから作成します。
+
+## 対話フロー
+### STEP 1: 初回の挨拶と確認
+「こんにちは！プレゼンテーション作成をお手伝いします。
+まず、いくつか確認させてください。」
+
+### STEP 2: 要件の確認（以下を順番に質問）
+1. 📋 **テーマの確認**
+   「どんな課題・問題について発表しますか？
+   （例：不良品削減、作業効率改善など）」
+
+2. 👥 **対象者の確認**
+   「誰に向けて発表しますか？
+   （例：工場管理者、現場作業員、クラスメート等）」
+
+3. ⏱️ **時間の確認**
+   「発表時間は何分ですか？
+   （推奨：5分/スライド10枚程度）」
+
+4. 📊 **データの確認**
+   「使いたい数値データはありますか？
+   あれば教えてください。」
+
+5. 🎯 **ゴールの確認**
+   「このプレゼンで一番伝えたいことは何ですか？」
+
+## QC手法の活用
+- なぜなぜ分析（5 Whys）で根本原因を探る
+- 特性要因図（フィッシュボーン）で要因を整理
+- パレート図で優先順位をつける
+- ブレインストーミングでアイデアを広げる
+
+## デザインシステム（Literary Editorial Style）
+- 紙の質感を活かしたレイアウト
+- タイポグラフィを重視したデザイン
+- 番号付きカードで情報を整理
+- 黒枠線と影を使った立体的な表現
+
+初回は「問題と課題の違いを理解していますか？
+まず現状の問題を教えてください」から始めてください。
+            </div>
+
+            <div class="interactive-demo">
+                <h3>💬 試してみよう！</h3>
+                <p style="margin-bottom: 1.5rem;">
+                    例えば、こんな質問をしてみよう：<br>
+                    「なぜなぜ分析の資料を作りたい」「パレート図の見せ方を教えて」<br>
+                    「品質管理の発表資料の構成は？」「データを視覚化したい」
+                </p>
+                <button class="demo-button">
+                    <span>🚀</span>
+                    <span>Geminiを開く</span>
+                </button>
+            </div>
+
+            <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">🎨 デザインシステムを活用しよう</h3>
+            
+            <div class="prompt-box">
+                <button class="copy-button">📋 コピー</button>
+# Literary Editorial Design System
+# 文芸誌スタイル エディトリアルデザインシステム
+
+## デザインコンセプト
+紙の質感と印刷物の温かみを感じさせる、
+文芸誌のようなエディトリアルデザイン
+
+## カラーパレット
+primary:
+  ink: "#0A0E27"        # 濃紺インク色
+  paper: "#FEFEF8"      # オフホワイト紙色
+accent:
+  electric: "#00F0FF"   # 電気的な水色
+  coral: "#FF6B6B"      # コーラルピンク
+  violet: "#7C3AED"     # 紫
+
+## タイポグラフィ
+fonts:
+  primary: "'Zen Kaku Gothic New', sans-serif"  # 日本語
+  accent: "'Space Grotesk', monospace"          # 英数字
+  display: "'Bebas Neue', sans-serif"           # 見出し
+
+## カードコンポーネント
+structure:
+  - 白背景
+  - 黒枠線 (2px solid)
+  - 黒い影カード (::before疑似要素)
+numbering:
+  style: 四角形内の数字
+  background: 電気的な水色
+hover_effect:
+  - 白黒反転 (背景: 黒, 文字: 白)
+  - 左上への移動 (translate(-4px, -4px))
+  - 影の拡大
+
+## 特殊エフェクト
+paper_texture:
+  紙の質感を演出する縦線パターン
+shadow_cards:
+  カード背景に黒い影を配置
+hover_inversion:
+  ホバー時の白黒反転効果
+            </div>
+
+            <div class="fun-fact">
+                <h3>💡 もっとデザインを探そう！</h3>
+                <p>
+                    他のデザインシステムも使いたい？<br>
+                    <a href="https://github.com/itoksk/design" target="_blank" style="color: var(--accent-cyan); text-decoration: underline;">
+                        📚 GitHub デザインリポジトリ
+                    </a>
+                    から好きなデザインを見つけて、YAMLファイルをGemに設定しよう！
+                </p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">🎊 Gemマスターへの第一歩！</h2>
+            <p class="cta-text">
+                今日作ったGemは、これからの学習の強力なパートナー<br>
+                どんどん会話して、自分だけの最強AIに育てていこう！
+            </p>
+            <button class="demo-button">
+                <span>💎</span>
+                <span>もっとGemを作ってみる</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Copy button functionality
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const promptBox = this.parentElement;
+                const text = promptBox.textContent.replace('📋 コピー', '').trim();
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = '✅ コピー完了！';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+
+        // Demo button
+        document.querySelectorAll('.demo-button').forEach(button => {
+            button.addEventListener('click', () => {
+                window.open('https://gemini.google.com', '_blank');
+            });
+        });
+
+        // Theme card interaction
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
