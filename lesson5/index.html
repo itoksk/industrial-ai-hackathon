@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 5: 品質管理の総復習とGoogle Apps Script入門 | 工業現場AI解決ハッカソン</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Design System Variables - Literary Editorial Style */
+        :root {
+            --ink: #0A0E27;
+            --paper: #FEFEF8;
+            --electric: #00F0FF;
+            --coral: #FF6B6B;
+            --violet: #7C3AED;
+            --emerald: #10B981;
+            --amber: #F59E0B;
+            --text-primary: #0A0E27;
+            --text-secondary: #4A5568;
+            --font-primary: 'Zen Kaku Gothic New', sans-serif;
+            --font-accent: 'Space Grotesk', monospace;
+            --font-display: 'Bebas Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background: var(--paper);
+            line-height: 1.8;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Paper Texture Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(10, 14, 39, 0.01) 2px,
+                rgba(10, 14, 39, 0.01) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(254, 254, 248, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(10, 14, 39, 0.05);
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: var(--font-accent);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-lesson {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--emerald);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero-label {
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--electric) 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            transform: rotate(-1deg);
+            font-family: var(--font-accent);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-accent);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--emerald);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        /* Section Styling */
+        section {
+            margin: 80px 0;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: var(--font-accent);
+            font-size: 8rem;
+            font-weight: 900;
+            opacity: 0.08;
+            position: absolute;
+            top: -3rem;
+            left: -2rem;
+            z-index: -1;
+        }
+
+        .section-label {
+            font-family: var(--font-accent);
+            font-size: 0.875rem;
+            letter-spacing: 3px;
+            color: var(--emerald);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+        }
+
+        /* Card Styling */
+        .card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 2rem;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: var(--ink);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translate(-4px, -4px);
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .card:hover::before {
+            top: 8px;
+            left: 8px;
+            right: -8px;
+            bottom: -8px;
+        }
+
+        .card:hover .card-number {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .card:hover h3 {
+            color: var(--emerald);
+        }
+
+        .card-number {
+            width: 40px;
+            height: 40px;
+            background: var(--emerald);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Review Cards */
+        .review-card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 2rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: -4px;
+            bottom: -4px;
+            background: var(--ink);
+            z-index: -1;
+        }
+
+        /* List Styling */
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            border-bottom: 1px dotted rgba(10, 14, 39, 0.1);
+        }
+
+        li:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--emerald);
+            font-weight: bold;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 2rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+            font-family: var(--font-accent);
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .phase-card {
+            padding: 2rem;
+            position: relative;
+            border-bottom: 2px dotted var(--ink);
+        }
+
+        .phase-number {
+            font-family: var(--font-accent);
+            font-size: 6rem;
+            font-weight: 900;
+            opacity: 0.1;
+            position: absolute;
+            top: 0;
+            right: 1rem;
+        }
+
+        .phase-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            background: var(--ink);
+            color: var(--paper);
+            text-decoration: none;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--ink);
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .button-secondary {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .button-secondary:hover {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: white;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        th {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid rgba(10, 14, 39, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        /* Keep table text readable on hover */
+        .card:hover table th {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .card:hover table td {
+            border-bottom: 1px solid rgba(254, 254, 248, 0.2);
+        }
+
+        /* QC Method Cards */
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .method-card {
+            background: white;
+            border: 2px solid var(--ink);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: -3px;
+            bottom: -3px;
+            background: var(--ink);
+            z-index: -1;
+        }
+
+        .method-card:hover {
+            transform: translate(-3px, -3px);
+            background: var(--emerald);
+            color: white;
+            border-color: var(--emerald);
+        }
+
+        .method-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-name {
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-lesson {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* GAS Section */
+        .gas-feature {
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .gas-feature h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        /* AIAS Badge */
+        .aias-badge {
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--electric) 100%);
+            color: white;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .aias-badge h4 {
+            margin: 0;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 1rem 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-number {
+                font-size: 4rem;
+            }
+        }
+
+        /* Special Effects */
+        .highlight {
+            background: linear-gradient(120deg, var(--emerald) 0%, var(--emerald) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            transition: background-size 0.3s ease;
+            padding: 0 4px;
+        }
+
+        .highlight:hover {
+            background-size: 100% 100%;
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .timeline-time {
+            font-family: var(--font-accent);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--emerald);
+            min-width: 80px;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 1rem;
+            background: white;
+            border-left: 3px solid var(--emerald);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="nav-title">工業現場AI解決ハッカソン</div>
+            <div class="nav-lesson">LESSON 05</div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-label">REVIEW & DEPLOY</div>
+            <h1>品質管理の総復習と<br>Google Apps Script入門</h1>
+            <p class="hero-subtitle">これまでの学びを統合し、実装力を身につける準備講座</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">90</div>
+                    <div class="stat-label">分間の実習</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">つの手法復習</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">GAS</div>
+                    <div class="stat-label">デプロイ準備</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 今日の学習目標 -->
+        <section>
+            <div class="section-number">01</div>
+            <div class="section-label">Today's Goals</div>
+            <h2>今日の学習目標</h2>
+            
+            <div class="aias-badge">
+                <div style="font-size: 2rem;">🎯</div>
+                <div>
+                    <h4>AIASレベル: 復習パート レベル2 / 開発パート レベル3</h4>
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        前半は既習内容の復習（AI for Brainstorming）、後半はGAS開発（AI for Editing）
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-number">1</div>
+                <h3>品質管理手法の総復習</h3>
+                <p>これまでに学んだ4つの手法を体系的に整理し、実際の品質管理検定（QC検定）に即した形で復習します。</p>
+                <ul>
+                    <li>なぜなぜ分析（Lesson 2）</li>
+                    <li>フィッシュボーン分析（Lesson 3）</li>
+                    <li>パレート図分析（Lesson 4）</li>
+                    <li>各手法の使い分けと組み合わせ</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-number">2</div>
+                <h3>Google Apps Script（GAS）入門</h3>
+                <p>次回のハッカソンに向けて、Webアプリケーションのデプロイ方法を学びます。</p>
+                <ul>
+                    <li>GASの基本概念と特徴</li>
+                    <li>スプレッドシートとの連携</li>
+                    <li>簡単なWebアプリの作成</li>
+                    <li>デプロイとURL共有</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-number">3</div>
+                <h3>実装スキルの準備</h3>
+                <p>Lesson 6の第2回ハッカソンに向けた技術的な準備を行います。</p>
+            </div>
+        </section>
+
+        <!-- Part 1: QC手法の超高速復習 -->
+        <section>
+            <div class="section-number">02</div>
+            <div class="section-label">Part 1: Quick Review</div>
+            <h2>品質管理手法の超高速復習（12分）</h2>
+            
+            <div class="aias-badge" style="background: linear-gradient(135deg, #0099ff 0%, #00d4ff 100%);">
+                <div style="font-size: 2rem;">🟢</div>
+                <div>
+                    <h4>AIASレベル2: AI for Brainstorming</h4>
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        復習パートではAIを使って理解を深めます
+                    </p>
+                </div>
+            </div>
+
+            <h3>📊 QC七つ道具とこれまでの学習</h3>
+            
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-icon">📈</div>
+                    <div class="method-name">パレート図</div>
+                    <div class="method-lesson">Lesson 4で学習</div>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">🐟</div>
+                    <div class="method-name">特性要因図</div>
+                    <div class="method-lesson">Lesson 3で学習</div>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">📊</div>
+                    <div class="method-name">ヒストグラム</div>
+                    <div class="method-lesson">未学習</div>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">📉</div>
+                    <div class="method-name">散布図</div>
+                    <div class="method-lesson">未学習</div>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">📋</div>
+                    <div class="method-name">チェックシート</div>
+                    <div class="method-lesson">部分的に実施</div>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">📈</div>
+                    <div class="method-name">管理図</div>
+                    <div class="method-lesson">未学習</div>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">🔄</div>
+                    <div class="method-name">層別</div>
+                    <div class="method-lesson">各分析で活用</div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <h3>問題解決のフローチャート</h3>
+                <div class="phase-grid">
+                    <div class="phase-card">
+                        <div class="phase-number">1</div>
+                        <div class="phase-title">問題の発見</div>
+                        <p><strong>使用手法：</strong>データ収集、チェックシート</p>
+                        <p><strong>目的：</strong>異常や課題を見つける</p>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">2</div>
+                        <div class="phase-title">問題の明確化</div>
+                        <p><strong>使用手法：</strong>なぜなぜ分析（Lesson 2）</p>
+                        <p><strong>目的：</strong>真の問題を特定する</p>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">3</div>
+                        <div class="phase-title">原因の分析</div>
+                        <p><strong>使用手法：</strong>フィッシュボーン分析（Lesson 3）</p>
+                        <p><strong>目的：</strong>要因を体系的に整理</p>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">4</div>
+                        <div class="phase-title">優先順位決定</div>
+                        <p><strong>使用手法：</strong>パレート図（Lesson 4）</p>
+                        <p><strong>目的：</strong>重要な少数を特定</p>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">5</div>
+                        <div class="phase-title">対策の実施</div>
+                        <p><strong>使用手法：</strong>PDCA、標準化</p>
+                        <p><strong>目的：</strong>改善の実行</p>
+                    </div>
+                    
+                    <div class="phase-card">
+                        <div class="phase-number">6</div>
+                        <div class="phase-title">効果の確認</div>
+                        <p><strong>使用手法：</strong>管理図、統計分析</p>
+                        <p><strong>目的：</strong>改善効果の検証</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <h3>🎯 ミニ演習：統合的な問題解決</h3>
+                <p><strong>シナリオ：</strong>ある工場で「製品の納期遅延が月5件から月15件に増加」という問題が発生しています。</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ステップ</th>
+                            <th>使用する手法</th>
+                            <th>実施内容</th>
+                            <th>期待される成果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. 問題の深堀り</td>
+                            <td>なぜなぜ分析</td>
+                            <td>「なぜ納期が遅れるのか？」を5回繰り返す</td>
+                            <td>根本的な問題の特定</td>
+                        </tr>
+                        <tr>
+                            <td>2. 要因の整理</td>
+                            <td>フィッシュボーン</td>
+                            <td>4M（人・機械・材料・方法）で要因分類</td>
+                            <td>体系的な要因マップ</td>
+                        </tr>
+                        <tr>
+                            <td>3. 重点化</td>
+                            <td>パレート図</td>
+                            <td>遅延原因別の件数を分析</td>
+                            <td>優先対策項目の決定</td>
+                        </tr>
+                        <tr>
+                            <td>4. 対策立案</td>
+                            <td>ブレインストーミング</td>
+                            <td>AIを活用して改善案を生成</td>
+                            <td>実行可能な改善計画</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Part 2: Google Apps Script入門 -->
+        <section>
+            <div class="section-number">03</div>
+            <div class="section-label">Part 2: GAS Introduction</div>
+            <h2>Google Apps Script入門（45分）</h2>
+            
+            <div class="aias-badge" style="background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);">
+                <div style="font-size: 2rem;">🟡</div>
+                <div>
+                    <h4>AIASレベル3: AI for Editing</h4>
+                    <p style="margin: 0; font-size: 0.9rem;">
+                        GAS開発ではAIを使ってコードを生成・編集します
+                    </p>
+                </div>
+            </div>
+
+            <div class="gas-feature">
+                <h3>🚀 Google Apps Scriptとは？</h3>
+                <p>GoogleのサービスをJavaScriptで自動化・拡張できるクラウドベースのプラットフォームです。</p>
+                <ul style="color: white;">
+                    <li>無料で使える（Googleアカウントがあれば）</li>
+                    <li>サーバー不要（Googleのインフラで動作）</li>
+                    <li>スプレッドシート、ドキュメント、フォームと連携</li>
+                    <li>Webアプリとして公開可能</li>
+                    <li>定期実行（トリガー）設定可能</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>📝 STEP 1: 最初のGASプロジェクト</h3>
+                <ol style="padding-left: 2rem;">
+                    <li style="list-style-type: decimal;">Google Driveを開く</li>
+                    <li style="list-style-type: decimal;">新規 → その他 → Google Apps Script</li>
+                    <li style="list-style-type: decimal;">プロジェクト名を「品質管理アプリ」に変更</li>
+                    <li style="list-style-type: decimal;">以下のコードを入力：</li>
+                </ol>
+                
+                <div class="code-block">
+                    <pre>// 基本的なWebアプリケーション
+function doGet() {
+  const html = HtmlService.createHtmlOutputFromFile('index')
+      .setTitle('品質管理ダッシュボード')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  return html;
+}
+
+// データを返すAPI
+function getData() {
+  return {
+    message: "工場の品質データ",
+    不良率: 3.5,
+    生産数: 1000,
+    更新日時: new Date().toLocaleString('ja-JP')
+  };
+}</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎨 STEP 2: HTMLインターフェースの作成</h3>
+                <p>ファイル → 新規作成 → HTML で「index」という名前のHTMLファイルを作成：</p>
+                
+                <div class="code-block">
+                    <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;base target="_top"&gt;
+    &lt;style&gt;
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .data-box {
+            background: #f7f7f7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .metric {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .metric-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;🏭 品質管理ダッシュボード&lt;/h1&gt;
+        &lt;div class="data-box" id="dataDisplay"&gt;
+            &lt;p&gt;データを読み込み中...&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;button onclick="loadData()"&gt;データを更新&lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;script&gt;
+        // ページ読み込み時にデータを取得
+        window.onload = function() {
+            loadData();
+        };
+        
+        // サーバーからデータを取得
+        function loadData() {
+            google.script.run
+                .withSuccessHandler(showData)
+                .withFailureHandler(showError)
+                .getData();
+        }
+        
+        // データを表示
+        function showData(data) {
+            const html = `
+                &lt;div class="metric"&gt;
+                    &lt;div class="metric-value"&gt;${data.不良率}%&lt;/div&gt;
+                    &lt;div class="metric-label"&gt;不良率&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="metric"&gt;
+                    &lt;div class="metric-value"&gt;${data.生産数}&lt;/div&gt;
+                    &lt;div class="metric-label"&gt;本日の生産数&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div style="margin-top: 20px; color: #666;"&gt;
+                    最終更新: ${data.更新日時}
+                &lt;/div&gt;
+            `;
+            document.getElementById('dataDisplay').innerHTML = html;
+        }
+        
+        // エラー表示
+        function showError(error) {
+            document.getElementById('dataDisplay').innerHTML = 
+                '&lt;p style="color: red;"&gt;エラー: ' + error + '&lt;/p&gt;';
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🌐 STEP 3: デプロイと公開</h3>
+                
+                <ol style="padding-left: 2rem;">
+                    <li style="list-style-type: decimal;">
+                        <strong>デプロイボタンをクリック</strong><br>
+                        右上の「デプロイ」→「新しいデプロイ」
+                    </li>
+                    <li style="list-style-type: decimal;">
+                        <strong>種類の選択</strong><br>
+                        歯車アイコン → 「ウェブアプリ」を選択
+                    </li>
+                    <li style="list-style-type: decimal;">
+                        <strong>設定</strong><br>
+                        - 説明: 品質管理ダッシュボード v1<br>
+                        - 実行ユーザー: 自分<br>
+                        - アクセス: 全員
+                    </li>
+                    <li style="list-style-type: decimal;">
+                        <strong>デプロイ実行</strong><br>
+                        「デプロイ」ボタンをクリック → URLをコピー
+                    </li>
+                </ol>
+
+                <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 1rem; margin-top: 1rem;">
+                    <strong>⚠️ 重要：</strong>初回は権限の承認が必要です。「詳細」→「安全でない...」→「許可」の順にクリック。
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔗 STEP 4: スプレッドシートとの連携</h3>
+                <p>実際のデータをスプレッドシートから読み込む方法：</p>
+                
+                <div class="code-block">
+                    <pre>// スプレッドシートからデータを取得
+function getSheetData() {
+  // スプレッドシートのIDを指定
+  const spreadsheetId = 'YOUR_SPREADSHEET_ID';
+  const sheet = SpreadsheetApp.openById(spreadsheetId).getActiveSheet();
+  
+  // データ範囲を取得
+  const dataRange = sheet.getRange(2, 1, sheet.getLastRow() - 1, 4);
+  const data = dataRange.getValues();
+  
+  // パレート分析用にデータを整形
+  const paretoData = data.map(row => ({
+    要因: row[0],
+    件数: row[1],
+    累積: row[2],
+    累積比率: row[3]
+  }));
+  
+  return paretoData;
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 実習スケジュール -->
+        <section>
+            <div class="section-number">04</div>
+            <div class="section-label">Time Schedule</div>
+            <h2>本日のタイムスケジュール</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">0:00</div>
+                    <div class="timeline-content">
+                        <strong>オープニング</strong>
+                        <p>本日の目標確認、前回までの振り返り</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">0:05</div>
+                    <div class="timeline-content">
+                        <strong>Part 1: QC手法の復習（35分）</strong>
+                        <p>なぜなぜ分析 → フィッシュボーン → パレート図の流れを確認</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">0:40</div>
+                    <div class="timeline-content">
+                        <strong>ミニ演習（10分）</strong>
+                        <p>統合的な問題解決シナリオ</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">0:50</div>
+                    <div class="timeline-content">
+                        <strong>Part 2: GAS入門（35分）</strong>
+                        <p>環境構築 → コード作成 → デプロイ</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">1:25</div>
+                    <div class="timeline-content">
+                        <strong>次回予告とQ&A（5分）</strong>
+                        <p>Lesson 6（第2回ハッカソン）の説明</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI活用のポイント -->
+        <section>
+            <div class="section-number">05</div>
+            <div class="section-label">AI Integration</div>
+            <h2>AI活用のポイント</h2>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>復習パートでのAI活用（レベル2）</h3>
+                <div class="code-block">
+                    <pre>プロンプト例：
+「製造業における納期遅延の問題に対して、
+なぜなぜ分析、フィッシュボーン分析、パレート図を
+順番に適用する場合の分析例を示してください。」
+
+「QC七つ道具の中で、まだ学んでいない
+ヒストグラム、散布図、管理図について、
+簡単に説明してください。」</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-number">AI</div>
+                <h3>GAS開発でのAI活用（レベル3）</h3>
+                <div class="code-block">
+                    <pre>プロンプト例：
+「Google Apps Scriptで、スプレッドシートから
+不良要因データを読み込んで、
+Webページにグラフ表示するコードを生成してください。
+Chart.jsを使用したいです。」
+
+「GASでフォームの回答を自動集計して、
+パレート図用のデータを作成する関数を書いてください。」</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 次回予告 -->
+        <section>
+            <div class="section-number">06</div>
+            <div class="section-label">Next Lesson</div>
+            <h2>次回予告：第2回ハッカソン</h2>
+
+            <div class="card">
+                <h3>Lesson 6: テクノロジーで工場を変革せよ！</h3>
+                <p><strong>形式：</strong>90分の集中開発ハッカソン</p>
+                <p><strong>プラットフォーム：</strong>Google Apps Script限定</p>
+                <p><strong>課題：</strong>新しい工場ストーリーに基づく問題解決</p>
+                
+                <h4>準備しておくこと：</h4>
+                <ul>
+                    <li>Googleアカウントの確認</li>
+                    <li>本日学んだGASの基本操作の復習</li>
+                    <li>QC手法の選択基準の理解</li>
+                    <li>チーム編成（3-4名）</li>
+                </ul>
+
+                <h4>評価ポイント：</h4>
+                <ul>
+                    <li>問題分析の適切性（どの手法を使ったか）</li>
+                    <li>技術的な実装（GASの活用度）</li>
+                    <li>プレゼンテーション（ストーリーテリング）</li>
+                    <li>チームワーク</li>
+                </ul>
+            </div>
+
+            <div class="button-group">
+                <a href="worksheet.md" class="button">ワークシートを開く</a>
+                <a href="https://script.google.com" target="_blank" class="button button-secondary">Google Apps Scriptを開く</a>
+            </div>
+        </section>
+
+        <!-- まとめ -->
+        <section>
+            <div class="section-number">07</div>
+            <div class="section-label">Summary</div>
+            <h2>本日のまとめ</h2>
+
+            <div class="card">
+                <h3>学んだこと</h3>
+                <ul>
+                    <li>品質管理手法の体系的な使い方</li>
+                    <li>問題解決のための手法選択基準</li>
+                    <li>Google Apps Scriptの基本</li>
+                    <li>Webアプリのデプロイ方法</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>重要ポイント</h3>
+                <ul>
+                    <li><span class="highlight">問題発見 → 分析 → 優先順位 → 実装</span>の流れ</li>
+                    <li>各手法には適切な使用タイミングがある</li>
+                    <li>GASは無料で強力な開発プラットフォーム</li>
+                    <li>AIを活用することで開発速度が向上</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer style="margin-top: 100px; padding: 40px 0; border-top: 2px solid var(--ink); text-align: center;">
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                &copy; 2025 Industrial AI Hackathon - Lesson 5: Review & Deploy<br>
+                品質管理とテクノロジーの融合
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

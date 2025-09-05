@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 6: 第2回工業現場AIハッカソン | テクノロジーで工場を変革せよ！</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Industrial Cyberpunk Design System */
+        :root {
+            --primary-cyan: #00FFFF;
+            --primary-magenta: #FF00FF;
+            --primary-yellow: #FFFF00;
+            --neon-green: #39FF14;
+            --electric-blue: #0080FF;
+            --hot-pink: #FF1493;
+            --deep-purple: #4B0082;
+            --dark-bg: #0A0A0A;
+            --darker-bg: #050505;
+            --grid-color: rgba(0, 255, 255, 0.1);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --warning-red: #FF4444;
+            --success-green: #00FF88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Cyber Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-cyan);
+            box-shadow: 0 0 10px var(--primary-cyan);
+            animation: float-up 15s linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(90deg, 
+                rgba(0, 255, 255, 0.1) 0%, 
+                rgba(255, 0, 255, 0.1) 50%, 
+                rgba(0, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary-cyan);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: nav-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes nav-glow {
+            0%, 100% { box-shadow: 0 2px 20px rgba(0, 255, 255, 0.3); }
+            50% { box-shadow: 0 2px 30px rgba(255, 0, 255, 0.3); }
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-magenta));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-timer {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            padding: 3rem 0;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, 
+                rgba(0, 255, 255, 0.1) 0%, 
+                transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .hackathon-badge {
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            background: linear-gradient(90deg, var(--hot-pink), var(--electric-blue));
+            color: white;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+            animation: badge-flicker 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+
+        h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, 
+                var(--primary-cyan), 
+                var(--primary-magenta), 
+                var(--primary-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(30deg); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Section Styling */
+        .section {
+            margin: 4rem 0;
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-cyan);
+            margin-right: 1rem;
+            text-shadow: 0 0 20px var(--primary-cyan);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Card System */
+        .card {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 255, 0.1) 0%, 
+                rgba(255, 0, 255, 0.05) 100%);
+            border: 2px solid var(--primary-cyan);
+            border-radius: 0;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+            border-color: var(--primary-magenta);
+        }
+
+        /* Story Section */
+        .story-container {
+            background: linear-gradient(135deg,
+                rgba(75, 0, 130, 0.2) 0%,
+                rgba(0, 128, 255, 0.1) 100%);
+            border: 2px solid var(--electric-blue);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .story-container::before {
+            content: 'CLASSIFIED DOCUMENT';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--warning-red);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .story-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            color: var(--primary-yellow);
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px var(--primary-yellow);
+        }
+
+        .story-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .story-highlight {
+            color: var(--neon-green);
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .crisis-box {
+            background: rgba(255, 68, 68, 0.1);
+            border: 2px solid var(--warning-red);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+            animation: crisis-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes crisis-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 68, 68, 0.5); }
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-time {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--primary-cyan);
+            min-width: 100px;
+            text-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 1rem;
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 3px solid var(--primary-cyan);
+        }
+
+        /* Rules Section */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .rule-card {
+            background: rgba(255, 0, 255, 0.1);
+            border: 2px solid var(--primary-magenta);
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .rule-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+
+        .rule-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .rule-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            color: var(--primary-magenta);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-badge {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(90deg, 
+                rgba(0, 255, 255, 0.2), 
+                rgba(255, 0, 255, 0.2));
+            border: 1px solid var(--primary-cyan);
+            font-family: 'Roboto Mono', monospace;
+            color: var(--primary-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: var(--primary-cyan);
+            color: var(--dark-bg);
+            transform: scale(1.1);
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .cyber-button {
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--electric-blue), var(--primary-cyan));
+            color: var(--dark-bg);
+            text-decoration: none;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+
+        .cyber-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cyber-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+        }
+
+        /* AIAS Badge */
+        .aias-level {
+            background: linear-gradient(135deg, var(--hot-pink) 0%, var(--electric-blue) 100%);
+            color: white;
+            padding: 1rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 2px solid var(--primary-magenta);
+        }
+
+        .aias-icon {
+            font-size: 2rem;
+        }
+
+        /* Evaluation Grid */
+        .eval-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .eval-item {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--success-green);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .eval-score {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            color: var(--success-green);
+            text-shadow: 0 0 20px var(--success-green);
+        }
+
+        .eval-label {
+            margin-top: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            border: 2px solid var(--primary-cyan);
+        }
+
+        th {
+            background: linear-gradient(90deg, 
+                rgba(0, 255, 255, 0.2), 
+                rgba(255, 0, 255, 0.2));
+            padding: 1rem;
+            text-align: left;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--primary-cyan);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            color: var(--primary-cyan);
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.3s infinite;
+            color: var(--primary-magenta);
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.3s infinite;
+            color: var(--primary-yellow);
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% {
+                clip: rect(0, 900px, 0, 0);
+                transform: translate(0);
+            }
+            20% {
+                clip: rect(20px, 900px, 40px, 0);
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                clip: rect(40px, 900px, 60px, 0);
+                transform: translate(2px, -2px);
+            }
+            60% {
+                clip: rect(60px, 900px, 80px, 0);
+                transform: translate(-2px, 0);
+            }
+            80% {
+                clip: rect(80px, 900px, 100px, 0);
+                transform: translate(2px, 0);
+            }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% {
+                clip: rect(0, 900px, 0, 0);
+                transform: translate(0);
+            }
+            20% {
+                clip: rect(10px, 900px, 30px, 0);
+                transform: translate(2px, -2px);
+            }
+            40% {
+                clip: rect(30px, 900px, 50px, 0);
+                transform: translate(-2px, 2px);
+            }
+            60% {
+                clip: rect(50px, 900px, 70px, 0);
+                transform: translate(2px, 0);
+            }
+            80% {
+                clip: rect(70px, 900px, 90px, 0);
+                transform: translate(-2px, 0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 1rem 2rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 100px;
+            padding: 40px 0;
+            border-top: 2px solid var(--primary-cyan);
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(0, 255, 255, 0.1));
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyber Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="nav-title">Industrial AI Hackathon</div>
+            <div class="nav-timer" id="timer">90:00</div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hackathon-badge">Round 2</div>
+            <h1 class="glitch" data-text="テクノロジーで工場を変革せよ">テクノロジーで工場を変革せよ</h1>
+            <p class="hero-subtitle">Google Apps Scriptで実現する次世代の品質管理システム</p>
+        </section>
+
+        <!-- Mission Briefing -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Mission Briefing</h2>
+            </div>
+
+            <div class="aias-level">
+                <div class="aias-icon">🟡</div>
+                <div>
+                    <h4>AIASレベル3: AI for Editing</h4>
+                    <p>AIを活用してコードを生成・編集し、実装スピードを最大化せよ</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 本日のミッション</h3>
+                <p>新たな工場の危機的状況を分析し、これまでに学んだ品質管理手法とGoogle Apps Scriptを駆使して、革新的なソリューションを90分で開発・実装せよ。</p>
+                <ul style="margin-top: 1rem; padding-left: 2rem;">
+                    <li>問題分析：適切なQC手法の選択と適用</li>
+                    <li>技術実装：Google Apps Scriptでのシステム開発</li>
+                    <li>プレゼンテーション：ストーリーテリングによる発表</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- The Story -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Factory Crisis Story</h2>
+            </div>
+
+            <div class="story-container">
+                <h2 class="story-title">緊急事態：未来電子工業の危機</h2>
+                
+                <div class="story-content">
+                    <p>
+                        <span class="story-highlight">2025年9月5日 午前6時</span><br>
+                        未来電子工業株式会社 第3工場
+                    </p>
+
+                    <p style="margin-top: 1.5rem;">
+                        薄暗い工場の管理室で、品質管理部長の<strong>高橋さん</strong>は頭を抱えていた。
+                        モニターには真っ赤な警告表示が点滅している。
+                    </p>
+
+                    <div class="crisis-box">
+                        <h4 style="color: var(--warning-red); margin-bottom: 1rem;">⚠️ 緊急アラート</h4>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>次世代EV用バッテリー制御チップの<strong>歩留まりが65%に急落</strong>（通常95%）</li>
+                            <li>海外大手自動車メーカーへの<strong>納期まであと2週間</strong></li>
+                            <li>このままでは<strong>契約違反で10億円の損害賠償</strong>の可能性</li>
+                        </ul>
+                    </div>
+
+                    <p style="margin-top: 2rem;">
+                        <strong>【背景情報】</strong><br>
+                        未来電子工業は、次世代電気自動車（EV）向けの革新的なバッテリー制御チップを製造している。
+                        このチップは、EVの航続距離を30%延長する画期的な技術として世界中から注目されている。
+                    </p>
+
+                    <p style="margin-top: 1.5rem;">
+                        しかし、<span class="story-highlight">8月中旬から原因不明の品質問題が発生</span>。
+                        当初は軽微な問題と思われたが、9月に入って事態は急速に悪化した。
+                    </p>
+
+                    <h3 style="color: var(--primary-yellow); margin: 2rem 0;">📊 収集されたデータ（ただし、一部矛盾あり）</h3>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>観察された現象</th>
+                                <th>頻度・データ</th>
+                                <th>影響度</th>
+                                <th>備考</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>チップの電圧不安定</td>
+                                <td>全不良品の45%（推定）</td>
+                                <td>致命的</td>
+                                <td>月曜日のデータ欠損</td>
+                            </tr>
+                            <tr>
+                                <td>放熱性能の低下</td>
+                                <td>全不良品の25%</td>
+                                <td>重大</td>
+                                <td>測定方法にバラツキ</td>
+                            </tr>
+                            <tr>
+                                <td>接続端子の接触不良</td>
+                                <td>全不良品の15%</td>
+                                <td>中程度</td>
+                                <td>検査基準変更後</td>
+                            </tr>
+                            <tr>
+                                <td>外観の微細なキズ</td>
+                                <td>全不良品の10%</td>
+                                <td>軽微</td>
+                                <td>顧客クレームなし</td>
+                            </tr>
+                            <tr>
+                                <td>機能検査不合格</td>
+                                <td>全不良品の8%</td>
+                                <td>致命的</td>
+                                <td>新記録方法で追加</td>
+                            </tr>
+                            <tr>
+                                <td>その他・不明</td>
+                                <td>全不良品の12%</td>
+                                <td>不明</td>
+                                <td>分類不能</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div style="background: rgba(255, 20, 147, 0.1); border: 2px solid var(--hot-pink); padding: 1rem; margin: 1rem 0;">
+                        <strong>⚠️ 注意：</strong>データの合計が110%になっているが、複数不良を持つ製品の重複カウントか、記録ミスの可能性あり
+                    </div>
+
+                    <h3 style="color: var(--primary-yellow); margin: 2rem 0;">🔍 調査で判明した事実（現場からの断片的情報）</h3>
+                    
+                    <ul style="padding-left: 1.5rem; line-height: 2;">
+                        <li><strong>時間帯による変動：</strong>夜勤（22:00-6:00）の不良率が日勤の<span class="story-highlight">2.5倍</span>
+                            <br>→ ただし、夜勤の生産数が日勤の40%であることに注意</li>
+                        <li><strong>製造ライン差：</strong>新設のライン3の不良率が他ラインの<span class="story-highlight">3倍</span>
+                            <br>→ ライン3は最新設備だが、オペレータの習熟度に差あり</li>
+                        <li><strong>材料ロット：</strong>特定の材料ロット（B-2025-08）使用時に不良多発
+                            <br>→ 同じサプライヤーの他ロット（B-2025-07, B-2025-09）は問題なし？</li>
+                        <li><strong>環境要因：</strong>クリーンルームの<span class="story-highlight">湿度管理システムが8月20日から不調</span>
+                            <br>→ しかし、問題発生は8月中旬から（時系列が合わない？）</li>
+                        <li><strong>人的要因：</strong>ベテラン技術者3名が<span class="story-highlight">8月末に退職</span>、新人比率70%に
+                            <br>→ 退職者が担当していた工程は？引き継ぎは適切だったか？</li>
+                        <li><strong>設備要因：</strong>検査装置の<span class="story-highlight">キャリブレーション3ヶ月未実施</span>
+                            <br>→ 他の装置のメンテナンス状況は？</li>
+                        <li><strong>追加情報：</strong>Wire Bonding工程での不良率が<span class="story-highlight">特に高い</span>
+                            <br>→ しかしDie Attach工程の温度管理も疑わしいデータあり</li>
+                    </ul>
+                    
+                    <div style="background: rgba(255, 255, 0, 0.1); border: 2px solid var(--primary-yellow); padding: 1rem; margin: 1rem 0;">
+                        <strong>🤔 困惑ポイント：</strong>
+                        <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>複数の要因が同時期に発生しているが、因果関係が不明確</li>
+                            <li>データの一部に矛盾や欠損がある</li>
+                            <li>現場からの報告が主観的で、客観的データが不足</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(57, 255, 20, 0.1); border: 2px solid var(--neon-green); padding: 1.5rem; margin: 2rem 0;">
+                        <h4 style="color: var(--neon-green); margin-bottom: 1rem;">💡 利用可能なリソース</h4>
+                        <ul style="padding-left: 1.5rem;">
+                            <li>工場にはGoogle Workspace環境が整備済み</li>
+                            <li>全作業員がタブレット端末を所持</li>
+                            <li>リアルタイムデータはスプレッドシートで管理中
+                                <ul style="margin-top: 0.5rem;">
+                                    <li>ただし、データ形式は部門ごとにバラバラ</li>
+                                    <li>一部のデータはPDFや紙のみ</li>
+                                </ul>
+                            </li>
+                            <li>過去3ヶ月分の製造ログが利用可能
+                                <ul style="margin-top: 0.5rem;">
+                                    <li>ログ形式：CSV、JSON、独自フォーマット混在</li>
+                                    <li>一部欠損あり（約一週間分）</li>
+                                </ul>
+                            </li>
+                            <li>品質管理部の協力を得られる（但し多忙）</li>
+                            <li>過去の改善事例データベース（検索性悪い）</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(255, 0, 0, 0.1); border: 2px solid var(--warning-red); padding: 1rem; margin: 1rem 0;">
+                        <strong>⚠️ 制約事項：</strong>
+                        <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>顧客情報は秘密保持契約により一部アクセス制限</li>
+                            <li>製造ラインの一時停止は1日1時間まで</li>
+                            <li>新しい設備導入の予算はなし</li>
+                        </ul>
+                    </div>
+
+                    <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--primary-cyan);">
+                        <strong>あなたたちのミッション：</strong><br>
+                        この危機的状況を打開するため、品質問題の根本原因を特定し、
+                        Google Apps Scriptを使った革新的な品質管理システムを開発せよ！
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hackathon Rules -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Hackathon Rules</h2>
+            </div>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-icon">⏱️</div>
+                    <h3 class="rule-title">制限時間</h3>
+                    <p>90分間の集中開発</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">👥</div>
+                    <h3 class="rule-title">チーム編成</h3>
+                    <p>3-4名でチームを構成</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">🛠️</div>
+                    <h3 class="rule-title">開発環境</h3>
+                    <p>Google Apps Script限定</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">📊</div>
+                    <h3 class="rule-title">分析手法</h3>
+                    <p>学習したQC手法を活用</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">🤖</div>
+                    <h3 class="rule-title">AI活用</h3>
+                    <p>AIASレベル3で開発加速</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-icon">🎤</div>
+                    <h3 class="rule-title">発表</h3>
+                    <p>3分間のピッチ</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Requirements -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Technical Stack</h2>
+            </div>
+
+            <div class="card">
+                <h3>🔧 必須要件</h3>
+                <div class="tech-stack">
+                    <span class="tech-badge">Google Apps Script</span>
+                    <span class="tech-badge">HTML Service</span>
+                    <span class="tech-badge">Spreadsheet API</span>
+                    <span class="tech-badge">Web App Deployment</span>
+                </div>
+                
+                <h3 style="margin-top: 2rem;">📈 実装すべき機能（最低1つ）</h3>
+                <ul style="padding-left: 2rem; margin-top: 1rem;">
+                    <li>リアルタイム品質データダッシュボード</li>
+                    <li>自動アラート通知システム</li>
+                    <li>パレート図自動生成ツール</li>
+                    <li>不良要因分析レポート生成</li>
+                    <li>作業指示書自動配信システム</li>
+                    <li>品質予測AIモデル連携</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Time Schedule -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">05</span>
+                <h2 class="section-title">Time Schedule</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">0:00</div>
+                    <div class="timeline-content">
+                        <strong>キックオフ</strong>
+                        <p>ミッション説明、チーム編成</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">0:10</div>
+                    <div class="timeline-content">
+                        <strong>Phase 1: 問題分析</strong>
+                        <p>QC手法を使った原因特定（なぜなぜ、フィッシュボーン、パレート）</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">0:30</div>
+                    <div class="timeline-content">
+                        <strong>Phase 2: ソリューション設計</strong>
+                        <p>GASアプリケーションの設計</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">0:40</div>
+                    <div class="timeline-content">
+                        <strong>Phase 3: 実装</strong>
+                        <p>Google Apps Scriptでの開発</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">1:10</div>
+                    <div class="timeline-content">
+                        <strong>Phase 4: デプロイ&テスト</strong>
+                        <p>Webアプリとして公開、動作確認</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">1:20</div>
+                    <div class="timeline-content">
+                        <strong>Phase 5: プレゼン準備</strong>
+                        <p>発表資料の作成</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">1:30</div>
+                    <div class="timeline-content">
+                        <strong>発表タイム</strong>
+                        <p>各チーム3分間のピッチ</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluation Criteria -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">06</span>
+                <h2 class="section-title">Evaluation Matrix</h2>
+            </div>
+
+            <div class="eval-grid">
+                <div class="eval-item">
+                    <div class="eval-score">25</div>
+                    <div class="eval-label">問題分析力</div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-score">25</div>
+                    <div class="eval-label">技術実装力</div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-score">20</div>
+                    <div class="eval-label">創造性</div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-score">20</div>
+                    <div class="eval-label">プレゼン力</div>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-score">10</div>
+                    <div class="eval-label">チームワーク</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">07</span>
+                <h2 class="section-title">Resources & Support</h2>
+            </div>
+
+            <div class="card">
+                <h3>📚 利用可能なリソース</h3>
+                <ul style="padding-left: 2rem; margin-top: 1rem;">
+                    <li>Lesson 5で作成したGASテンプレート</li>
+                    <li>品質データのサンプルスプレッドシート</li>
+                    <li>過去のレッスン資料（Lesson 2-5）</li>
+                    <li>AIツール（ChatGPT/Claude）</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">🆘 サポート</h3>
+                <p>技術的な問題が発生した場合は、挙手して講師に質問してください。</p>
+            </div>
+
+            <div class="button-group">
+                <a href="worksheet.md" class="cyber-button">ワークシートを開く</a>
+                <a href="https://script.google.com" target="_blank" class="cyber-button">Google Apps Script</a>
+                <a href="https://docs.google.com/spreadsheets" target="_blank" class="cyber-button">サンプルデータ</a>
+            </div>
+        </section>
+
+        <!-- Final Message -->
+        <section class="section">
+            <div class="card" style="text-align: center; padding: 3rem;">
+                <h2 style="font-family: 'Orbitron', monospace; font-size: 2rem; color: var(--neon-green); margin-bottom: 1rem;">
+                    INITIATE PROTOCOL
+                </h2>
+                <p style="font-size: 1.2rem; color: var(--primary-cyan);">
+                    未来電子工業の運命は、あなたたちの手にかかっている。<br>
+                    テクノロジーとチームワークで、この危機を乗り越えろ！
+                </p>
+                <div style="margin-top: 2rem;">
+                    <span class="glitch" data-text="GOOD LUCK, ENGINEERS">GOOD LUCK, ENGINEERS</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            &copy; 2025 Industrial AI Hackathon Round 2<br>
+            <span style="color: var(--primary-cyan);">Powered by Human Creativity & Artificial Intelligence</span>
+        </p>
+    </footer>
+
+    <!-- JavaScript for Effects -->
+    <script>
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Timer functionality
+        let timeLeft = 90 * 60; // 90 minutes in seconds
+        const timerElement = document.getElementById('timer');
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 600) { // Last 10 minutes
+                timerElement.style.color = 'var(--warning-red)';
+                timerElement.style.textShadow = '0 0 20px var(--warning-red)';
+            }
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                timerElement.textContent = 'TIME UP!';
+                timerElement.style.animation = 'blink 0.5s ease-in-out infinite';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            // Uncomment the next line to activate the countdown timer
+            // setInterval(updateTimer, 1000);
+        });
+    </script>
+</body>
+</html>
