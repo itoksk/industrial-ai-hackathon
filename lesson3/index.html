@@ -234,6 +234,17 @@
             color: var(--electric);
         }
 
+        .card:not(.exercise-card):hover p,
+        .card:not(.exercise-card):hover li,
+        .card:not(.exercise-card):hover strong,
+        .card:not(.exercise-card):hover h4 {
+            color: var(--paper);
+        }
+
+        .card:not(.exercise-card):hover li:before {
+            color: var(--electric);
+        }
+
         /* Exercise cards without hover animation */
         .exercise-card {
             background: white;
@@ -438,13 +449,18 @@
         }
 
         /* Keep table text readable on hover */
-        .card:hover table th {
+        .card:not(.exercise-card):hover table th {
             background: var(--paper);
             color: var(--ink);
         }
 
-        .card:hover table td {
+        .card:not(.exercise-card):hover table td {
+            color: var(--paper);
             border-bottom: 1px solid rgba(254, 254, 248, 0.2);
+        }
+
+        .card:not(.exercise-card):hover table td strong {
+            color: var(--paper);
         }
 
         /* Responsive */
