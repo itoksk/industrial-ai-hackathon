@@ -541,6 +541,50 @@
             color: white;
         }
 
+        /* Copy Button for Prompts */
+        .prompt-container {
+            position: relative;
+            background: #f5f5f5;
+            border: 2px solid var(--ink);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--emerald);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: var(--ink);
+            transform: translateY(-2px);
+        }
+
+        .copy-button.copied {
+            background: var(--violet);
+        }
+
+        .prompt-text {
+            font-family: var(--font-accent);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin: 0;
+            padding-right: 100px;
+        }
+
         /* Timeline */
         .timeline {
             position: relative;
@@ -569,6 +613,76 @@
             border-left: 3px solid var(--emerald);
         }
     </style>
+    <script>
+        // コピー機能
+        function copyPrompt(button, promptId) {
+            const promptText = document.getElementById(promptId).textContent;
+            
+            // クリップボードにコピー
+            navigator.clipboard.writeText(promptText).then(function() {
+                // ボタンのテキストを変更
+                const originalText = button.textContent;
+                button.textContent = 'コピー済み！';
+                button.classList.add('copied');
+                
+                // 2秒後に元に戻す
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                // フォールバック（古いブラウザ対応）
+                const textArea = document.createElement("textarea");
+                textArea.value = promptText;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    button.textContent = 'コピー済み！';
+                    button.classList.add('copied');
+                    setTimeout(function() {
+                        button.textContent = 'コピー';
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    alert('コピーに失敗しました。手動でコピーしてください。');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // Googleサイト埋め込み対応
+        if (window.parent !== window) {
+            // iframe内で実行されている場合
+            document.addEventListener('DOMContentLoaded', function() {
+                // スタイルの調整
+                document.body.style.margin = '0';
+                document.body.style.padding = '0';
+                
+                // 高さを親フレームに通知
+                function sendHeight() {
+                    const height = document.documentElement.scrollHeight;
+                    window.parent.postMessage({ height: height }, '*');
+                }
+                
+                // 初回送信
+                sendHeight();
+                
+                // リサイズ時にも送信
+                window.addEventListener('resize', sendHeight);
+                
+                // 画像読み込み完了時にも送信
+                const images = document.querySelectorAll('img');
+                images.forEach(img => {
+                    img.addEventListener('load', sendHeight);
+                });
+            });
+        }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -706,6 +820,192 @@
                 </div>
             </div>
 
+            <div class="review-card" style="margin-top: 3rem;">
+                <h3>📚 未学習のQC手法を学ぼう</h3>
+                
+                <div style="border: 2px solid var(--emerald); padding: 2rem; margin: 2rem 0; border-radius: 8px;">
+                    <h4 style="color: var(--emerald); margin-bottom: 1rem;">📊 ヒストグラム（度数分布図）</h4>
+                    
+                    <p><strong>ヒストグラムとは？</strong><br>
+                    データの分布状態を視覚的に表現する棒グラフです。横軸にデータの範囲（階級）、縦軸に度数（データの個数）を取ります。</p>
+                    
+                    <p><strong>作成手順：</strong></p>
+                    <ol style="padding-left: 2rem; list-style-type: decimal;">
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">データを収集する（最低30個以上が望ましい）</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">データの最大値と最小値を確認する</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">階級数を決める（√データ数 または 5～20程度）</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">階級幅を計算する：(最大値-最小値)÷階級数</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">各階級に含まれるデータ数を数える</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">棒グラフを作成する（隙間なく並べる）</li>
+                    </ol>
+                    
+                    <p><strong>何がわかるか：</strong></p>
+                    <ul>
+                        <li><strong>中心傾向：</strong>データが集中している値（平均値付近）</li>
+                        <li><strong>ばらつき：</strong>データの散らばり具合（標準偏差の視覚化）</li>
+                        <li><strong>分布の形：</strong>正規分布、偏り（歪度）、二山分布など</li>
+                        <li><strong>異常値：</strong>離れた位置にある外れ値の存在</li>
+                        <li><strong>工程能力：</strong>規格値との比較で品質管理状態を判断</li>
+                    </ul>
+                    
+                    <div style="background: #E0F2FE; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                        <strong>💡 活用例：</strong>製品の寸法測定値100個をヒストグラムにすると、平均10.0mm、標準偏差0.1mmの正規分布が見られた。規格値9.8～10.2mmに対して工程能力は十分と判断。
+                    </div>
+                </div>
+
+                <div style="border: 2px solid var(--emerald); padding: 2rem; margin: 2rem 0; border-radius: 8px;">
+                    <h4 style="color: var(--emerald); margin-bottom: 1rem;">📉 散布図（相関図）</h4>
+                    
+                    <p><strong>散布図とは？</strong><br>
+                    2つの変数の関係性を点の分布で表現するグラフです。横軸と縦軸にそれぞれ異なる変数を取り、対応するデータを点でプロットします。</p>
+                    
+                    <p><strong>作成手順：</strong></p>
+                    <ol style="padding-left: 2rem; list-style-type: decimal;">
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">2つの変数のペアデータを収集する（30組以上推奨）</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">横軸（原因系）と縦軸（結果系）の変数を決める</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">各軸の目盛りを設定する</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">データを1つずつ点でプロットする</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">必要に応じて回帰直線を引く</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">相関係数を計算する（-1～+1の値）</li>
+                    </ol>
+                    
+                    <p><strong>何がわかるか：</strong></p>
+                    <ul>
+                        <li><strong>正の相関：</strong>右上がりの傾向（例：温度↑→反応速度↑）</li>
+                        <li><strong>負の相関：</strong>右下がりの傾向（例：価格↑→販売数↓）</li>
+                        <li><strong>無相関：</strong>ランダムな分布（変数間に関係なし）</li>
+                        <li><strong>相関の強さ：</strong>点の集まり具合（|r|>0.7で強い相関）</li>
+                        <li><strong>外れ値：</strong>傾向から外れた異常データの発見</li>
+                        <li><strong>非線形関係：</strong>曲線的な関係性の存在</li>
+                    </ul>
+                    
+                    <div style="background: #E0F2FE; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                        <strong>💡 活用例：</strong>加工時間と不良率の散布図を作成したところ、相関係数r=0.85の強い正の相関を発見。加工時間を短縮すると不良率が下がることが判明。
+                    </div>
+                </div>
+
+                <div style="border: 2px solid var(--emerald); padding: 2rem; margin: 2rem 0; border-radius: 8px;">
+                    <h4 style="color: var(--emerald); margin-bottom: 1rem;">📈 管理図（Control Chart）</h4>
+                    
+                    <p><strong>管理図とは？</strong><br>
+                    時系列でデータをプロットし、工程が統計的管理状態にあるかを判断するグラフです。中心線（CL）と管理限界線（UCL/LCL）を設定します。</p>
+                    
+                    <p><strong>作成手順：</strong></p>
+                    <ol style="padding-left: 2rem; list-style-type: decimal;">
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">管理する特性値を決める（寸法、重量、不良率など）</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">サンプリング方法を決める（頻度、個数）</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">20～25群のデータを収集する</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">平均値（中心線CL）を計算する</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">標準偏差を求め、管理限界線を設定する<br>
+                            　UCL（上方管理限界）= 平均 + 3σ<br>
+                            　LCL（下方管理限界）= 平均 - 3σ</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">時系列でデータをプロットする</li>
+                        <li style="list-style-type: decimal; padding: 0.5rem 0;">異常パターンをチェックする</li>
+                    </ol>
+                    
+                    <p><strong>何がわかるか：</strong></p>
+                    <ul>
+                        <li><strong>工程の安定性：</strong>管理限界内にデータが収まっているか</li>
+                        <li><strong>異常の検出：</strong>管理限界を超えるデータの発生</li>
+                        <li><strong>傾向の把握：</strong>連続上昇/下降などのトレンド</li>
+                        <li><strong>周期性：</strong>規則的な変動パターンの存在</li>
+                        <li><strong>工程能力：</strong>規格値に対する余裕度（Cp, Cpk）</li>
+                        <li><strong>改善効果：</strong>対策前後での変化の確認</li>
+                    </ul>
+                    
+                    <p><strong>異常判定ルール（シューハート管理図）：</strong></p>
+                    <ul>
+                        <li>管理限界線を超える点がある</li>
+                        <li>9点が連続して中心線の同じ側にある</li>
+                        <li>6点が連続して増加または減少している</li>
+                        <li>14点が交互に上下している</li>
+                    </ul>
+                    
+                    <div style="background: #E0F2FE; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                        <strong>💡 活用例：</strong>製品重量の管理図で、25日目から3点連続でUCLを超えた。調査の結果、材料供給装置の故障が判明し、即座に修理対応。
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%); color: white; padding: 2rem; border-radius: 8px; margin-top: 2rem;">
+                    <h4 style="color: white; margin-bottom: 1rem;">🤖 AIASレベル3：AIを使ってグラフを作成しよう</h4>
+                    <p>Google Geminiを使って、これらのQC手法のグラフを自動生成できます。以下のプロンプトをコピーして使ってください。</p>
+                </div>
+
+                <div class="prompt-container">
+                    <button class="copy-button" onclick="copyPrompt(this, 'prompt1')">コピー</button>
+                    <pre class="prompt-text" id="prompt1">以下のデータでヒストグラムを作成してください。Google Apps ScriptとChart.jsを使用したHTMLコードを生成してください。
+
+データ：製品の重量測定値（100個）
+10.1, 9.9, 10.0, 10.2, 9.8, 10.1, 10.0, 9.9, 10.3, 10.0,
+9.8, 10.1, 10.2, 9.9, 10.0, 10.1, 9.7, 10.0, 10.2, 9.9,
+[残りのデータは実際の測定値を入力]
+
+要件：
+1. 階級数は10個
+2. 規格値9.8～10.2mmを赤線で表示
+3. 平均値と標準偏差を計算して表示
+4. 正規分布曲線を重ねて表示
+5. GASのdoGet()関数とHTMLテンプレートを含む完全なコード</pre>
+                </div>
+
+                <div class="prompt-container">
+                    <button class="copy-button" onclick="copyPrompt(this, 'prompt2')">コピー</button>
+                    <pre class="prompt-text" id="prompt2">散布図を作成するGoogle Apps Scriptのコードを生成してください。
+
+データの関係：加工温度（℃）と不良率（%）の相関分析
+サンプルデータ30組を自動生成し、以下の要件を満たしてください：
+
+要件：
+1. 正の相関（r=0.7～0.9程度）を持つデータセット
+2. Chart.jsを使用した散布図の描画
+3. 回帰直線の表示
+4. 相関係数の計算と表示
+5. 決定係数（R²）の表示
+6. 外れ値を1～2個含める
+7. データポイントにホバーで詳細表示</pre>
+                </div>
+
+                <div class="prompt-container">
+                    <button class="copy-button" onclick="copyPrompt(this, 'prompt3')">コピー</button>
+                    <pre class="prompt-text" id="prompt3">X̄-R管理図（平均値-範囲管理図）を作成するGoogle Apps Scriptを生成してください。
+
+シナリオ：製造ラインで1時間ごとに5個のサンプルを測定（25群のデータ）
+
+要件：
+1. スプレッドシートからデータを読み込む関数
+2. 各群の平均値（X̄）と範囲（R）を計算
+3. 中心線（CL）、上方管理限界（UCL）、下方管理限界（LCL）を計算
+4. Chart.jsで2つのグラフ（X̄管理図とR管理図）を上下に配置
+5. 異常パターンの自動検出機能：
+   - 管理限界外の点を赤色で強調
+   - 連続9点が中心線の同じ側にある場合に警告
+6. GASのWebアプリとして公開可能な完全なコード</pre>
+                </div>
+
+                <div class="prompt-container">
+                    <button class="copy-button" onclick="copyPrompt(this, 'prompt4')">コピー</button>
+                    <pre class="prompt-text" id="prompt4">品質管理ダッシュボードを作成してください。以下の4つのQC手法を1つの画面に表示：
+
+1. パレート図（不良要因分析）
+2. ヒストグラム（寸法分布）
+3. 散布図（温度と歩留まりの相関）
+4. 管理図（日次不良率の推移）
+
+技術要件：
+- Google Apps Script使用
+- レスポンシブデザイン（スマホ対応）
+- Chart.jsでグラフ描画
+- スプレッドシートとのリアルタイム連携
+- 自動更新機能（5分ごと）
+- データのエクスポート機能（CSV形式）
+
+UIデザイン：
+- Material Design風のモダンなUI
+- ダークモード対応
+- グラフの拡大表示機能</pre>
+                </div>
+            </div>
+
             <div class="review-card">
                 <h3>問題解決のフローチャート</h3>
                 <div class="phase-grid">
@@ -793,6 +1093,131 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="review-card">
+                <h3>📝 ワークシート例：納期遅延問題の分析</h3>
+                
+                <h4>1. なぜなぜ分析の記入例</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>レベル</th>
+                            <th>質問</th>
+                            <th>回答例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>なぜ1</td>
+                            <td>なぜ納期が遅れるのか？</td>
+                            <td>生産が予定より遅れているから</td>
+                        </tr>
+                        <tr>
+                            <td>なぜ2</td>
+                            <td>なぜ生産が遅れるのか？</td>
+                            <td>機械の故障が頻発しているから</td>
+                        </tr>
+                        <tr>
+                            <td>なぜ3</td>
+                            <td>なぜ機械が故障するのか？</td>
+                            <td>定期メンテナンスが実施されていないから</td>
+                        </tr>
+                        <tr>
+                            <td>なぜ4</td>
+                            <td>なぜメンテナンスが実施されないのか？</td>
+                            <td>メンテナンス計画が作成されていないから</td>
+                        </tr>
+                        <tr>
+                            <td>なぜ5</td>
+                            <td>なぜ計画が作成されないのか？</td>
+                            <td>担当者が明確でなく、責任の所在が曖昧だから</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>2. フィッシュボーン分析の要因整理例</h4>
+                <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                    <p><strong>【人 - Man】</strong></p>
+                    <ul>
+                        <li>作業員の熟練度不足</li>
+                        <li>シフト交代時の引継ぎ不備</li>
+                        <li>メンテナンス担当者の不在</li>
+                    </ul>
+                    
+                    <p><strong>【機械 - Machine】</strong></p>
+                    <ul>
+                        <li>老朽化による故障頻発</li>
+                        <li>予備部品の在庫不足</li>
+                        <li>定期点検の未実施</li>
+                    </ul>
+                    
+                    <p><strong>【材料 - Material】</strong></p>
+                    <ul>
+                        <li>原材料の納入遅延</li>
+                        <li>品質不良による再加工</li>
+                        <li>在庫管理の不備</li>
+                    </ul>
+                    
+                    <p><strong>【方法 - Method】</strong></p>
+                    <ul>
+                        <li>生産計画の精度不足</li>
+                        <li>作業手順書の更新遅れ</li>
+                        <li>緊急対応マニュアルの不備</li>
+                    </ul>
+                </div>
+
+                <h4>3. パレート図用データ集計例</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>遅延原因</th>
+                            <th>発生件数</th>
+                            <th>累積件数</th>
+                            <th>累積比率</th>
+                            <th>対策優先度</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>機械故障</td>
+                            <td>6件</td>
+                            <td>6件</td>
+                            <td>40%</td>
+                            <td>★★★</td>
+                        </tr>
+                        <tr>
+                            <td>材料不足</td>
+                            <td>4件</td>
+                            <td>10件</td>
+                            <td>67%</td>
+                            <td>★★★</td>
+                        </tr>
+                        <tr>
+                            <td>作業ミス</td>
+                            <td>3件</td>
+                            <td>13件</td>
+                            <td>87%</td>
+                            <td>★★</td>
+                        </tr>
+                        <tr>
+                            <td>その他</td>
+                            <td>2件</td>
+                            <td>15件</td>
+                            <td>100%</td>
+                            <td>★</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 1rem; margin-top: 1.5rem;">
+                    <strong>💡 分析のポイント：</strong>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>上位2項目（機械故障・材料不足）で全体の67%を占める</li>
+                        <li>これらに集中的に対策を打つことで効率的な改善が可能</li>
+                        <li>根本原因は「メンテナンス計画の不備」に集約される</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -1147,8 +1572,7 @@ Chart.jsを使用したいです。」
             </div>
 
             <div class="button-group">
-                <a href="worksheet.md" class="button">ワークシートを開く</a>
-                <a href="https://script.google.com" target="_blank" class="button button-secondary">Google Apps Scriptを開く</a>
+                <a href="https://script.google.com" target="_blank" class="button">Google Apps Scriptを開く</a>
             </div>
         </section>
 

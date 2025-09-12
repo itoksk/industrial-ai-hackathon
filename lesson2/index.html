@@ -428,11 +428,87 @@
         .prompt-box {
             background: rgba(254, 254, 248, 0.1);
             border: 1px solid var(--electric-blue);
-            padding: 1.5rem;
             margin: 1.5rem 0;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 240, 255, 0.1);
+            border-bottom: 1px solid var(--electric-blue);
+        }
+
+        .prompt-title {
             font-family: 'Space Grotesk', monospace;
-            white-space: pre-wrap;
+            font-weight: 700;
+            color: var(--electric-blue);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .copy-button {
+            background: var(--electric-blue);
+            color: var(--ink-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 500;
+            font-size: 0.85rem;
             border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button:hover {
+            background: var(--paper-color);
+            color: var(--ink-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 240, 255, 0.3);
+        }
+
+        .copy-button.copied {
+            background: var(--coral-pink);
+            color: var(--paper-color);
+        }
+
+        .copy-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .prompt-content {
+            padding: 1.5rem;
+            font-family: 'Space Grotesk', monospace;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .prompt-content pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .prompt-content code {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+
+        .prompt-markdown {
+            font-family: 'Space Grotesk', monospace;
+            line-height: 1.8;
+            color: var(--paper-color);
+            white-space: pre-wrap;
         }
 
         .prompt-category {
@@ -528,8 +604,8 @@
                 <tbody>
                     <tr>
                         <td><strong>定義</strong></td>
+                        <td>問題を解決するために取り組むべきこと<br>「やるべきこと</td>
                         <td>現状と理想のギャップ<br>「困っている状態」</td>
-                        <td>問題を解決するために取り組むべきこと<br>「やるべきこと」</td>
                     </tr>
                     <tr>
                         <td><strong>例：工場の場合</strong></td>
@@ -655,7 +731,7 @@
                 <h3 class="method-title">特性要因図（フィッシュボーン図）</h3>
                 <p>問題の要因を体系的に整理する図。魚の骨のような形で、4M（Man, Machine, Material, Method）の観点から分析します。</p>
                 
-                <img src="https://drive.google.com/thumbnail?id=1fHd6r9hB9jw3DjoijdP9ItwtOtBLQlgt&sz=w1000" 
+                <img src="https://drive.google.com/thumbnail?id=1DS_9L0CDPUq5uJeXEaz5TzlDtckzMS57&sz=w1000" 
                      alt="特性要因図の例" 
                      class="method-image">
                 
@@ -780,8 +856,19 @@
 
                 <div class="prompt-category">📊 課題分析用プロンプト</div>
                 
-                <div class="prompt-box">【なぜなぜ分析の補助】
-あなたは品質管理の専門家です。以下の問題について、なぜなぜ分析を手伝ってください。
+                <div class="prompt-box">
+                    <div class="prompt-header">
+                        <span class="prompt-title">【なぜなぜ分析の補助】</span>
+                        <button class="copy-button" onclick="copyPrompt(this)">
+                            <svg class="copy-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                            <span>コピー</span>
+                        </button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-markdown">あなたは品質管理の専門家です。以下の問題について、なぜなぜ分析を手伝ってください。
 
 問題：[ここに問題を記入]
 
@@ -789,20 +876,46 @@
 
 この回答に対して、さらに深堀りするための質問や、
 見落としている可能性のある観点を3つ提案してください。</div>
+                    </div>
+                </div>
 
-                <div class="prompt-box">【特性要因図の要因出し】
-以下の問題について、特性要因図を作成したいです。
+                <div class="prompt-box">
+                    <div class="prompt-header">
+                        <span class="prompt-title">【特性要因図の要因出し】</span>
+                        <button class="copy-button" onclick="copyPrompt(this)">
+                            <svg class="copy-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                            <span>コピー</span>
+                        </button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-markdown">以下の問題について、特性要因図を作成したいです。
 4M（Man, Machine, Material, Method）の観点から、
 考えられる要因を各カテゴリー5つずつ提案してください。
 
 問題：[ここに問題を記入]
 業界：工業・製造業
 対象：[具体的な製品や工程]</div>
+                    </div>
+                </div>
 
                 <div class="prompt-category">🎨 プレゼンテーション作成用プロンプト</div>
 
-                <div class="prompt-box">【Vibeコーディング】
-以下の要件でプレゼンテーションのデザイン指示を作成してください：
+                <div class="prompt-box">
+                    <div class="prompt-header">
+                        <span class="prompt-title">【Vibeコーディング】</span>
+                        <button class="copy-button" onclick="copyPrompt(this)">
+                            <svg class="copy-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                            <span>コピー</span>
+                        </button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-markdown">以下の要件でプレゼンテーションのデザイン指示を作成してください：
 
 テーマ：[課題解決の内容]
 対象者：工場の管理者と現場作業員
@@ -811,9 +924,22 @@
 
 上記を満たす「Vibeコード」を生成してください。
 色、フォント、レイアウト、アニメーションの観点で具体的に。</div>
+                    </div>
+                </div>
 
-                <div class="prompt-box">【ストーリー構成】
-以下の課題解決提案を、5分間のプレゼンテーション構成に変換してください：
+                <div class="prompt-box">
+                    <div class="prompt-header">
+                        <span class="prompt-title">【ストーリー構成】</span>
+                        <button class="copy-button" onclick="copyPrompt(this)">
+                            <svg class="copy-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                            <span>コピー</span>
+                        </button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-markdown">以下の課題解決提案を、5分間のプレゼンテーション構成に変換してください：
 
 課題：[特定した課題]
 原因：[なぜなぜ分析の結果]
@@ -821,33 +947,51 @@
 
 起承転結の流れで、各スライドのタイトルと
 話すべきポイント（各30秒程度）を提案してください。</div>
+                    </div>
+                </div>
 
                 <div class="prompt-category">💎 Gemカスタム指示用プロンプト（これをGemに設定）</div>
 
-                <div class="prompt-box">【工業高校生向け対話型プレゼンアシスタント】
-あなたは工業高校生のプレゼンテーション作成を支援する対話型AIアシスタントです。
+                <div class="prompt-box">
+                    <div class="prompt-header">
+                        <span class="prompt-title">【工業高校生向け対話型プレゼンアシスタント】</span>
+                        <button class="copy-button" onclick="copyPrompt(this)">
+                            <svg class="copy-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                            <span>コピー</span>
+                        </button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-markdown">あなたは工業高校生のプレゼンテーション作成を支援する対話型AIアシスタントです。
 
 # 基本的な振る舞い
 プレゼンテーション作成の依頼を受けたら、まず要件を対話形式で確認してから作成します。
 
 # 対話フロー
 ## STEP 1: 初回の挨拶と確認
-「こんにちは！プレゼンテーション作成をお手伝いします。まず、いくつか確認させてください。」
+「こんにちは！プレゼンテーション作成をお手伝いします。
+まず、いくつか確認させてください。」
 
 ## STEP 2: 要件の確認（以下を順番に質問）
-1. 📋 **テーマの確認**
-   「どんな課題・問題について発表しますか？（例：不良品削減、作業効率改善など）」
+1. 📋 テーマの確認
+   「どんな課題・問題について発表しますか？
+   （例：不良品削減、作業効率改善など）」
 
-2. 👥 **対象者の確認**
-   「誰に向けて発表しますか？（例：工場管理者、現場作業員、クラスメート等）」
+2. 👥 対象者の確認
+   「誰に向けて発表しますか？
+   （例：工場管理者、現場作業員、クラスメート等）」
 
-3. ⏱️ **時間の確認**
-   「発表時間は何分ですか？（推奨：5分/スライド10枚程度）」
+3. ⏱️ 時間の確認
+   「発表時間は何分ですか？
+   （推奨：5分/スライド10枚程度）」
 
-4. 📊 **データの確認**
-   「使いたい数値データはありますか？あれば教えてください。」
+4. 📊 データの確認
+   「使いたい数値データはありますか？
+   あれば教えてください。」
 
-5. 🎯 **ゴールの確認**
+5. 🎯 ゴールの確認
    「このプレゼンで一番伝えたいことは何ですか？」
 
 ## STEP 3: 要件のまとめと確認
@@ -866,14 +1010,12 @@
 
 # デザインシステム（Literary Editorial Style）
 ## カラーパレット
-```css
 --ink-color: #0A0E27;        /* 濃紺インク色 */
 --paper-color: #FEFEF8;      /* オフホワイト紙色 */
 --electric-blue: #00F0FF;    /* 電気的な水色（アクセント） */
 --coral-pink: #FF6B6B;       /* コーラルピンク（強調） */
 --violet: #7C3AED;           /* 紫（特別な要素） */
 --text-secondary: #4A5568;   /* サブテキスト用グレー */
-```
 
 ## タイポグラフィ
 - メインフォント：'Zen Kaku Gothic New', sans-serif（日本語）
@@ -881,21 +1023,22 @@
 - 見出し（オプション）：'Bebas Neue', sans-serif
 
 ## レイアウト要素
-1. **ヒーローセクション**
-   - 回転したラベル（transform: rotate(-1deg)）
-   - 巨大タイトル（font-size: clamp(3rem, 8vw, 6rem)）
-   - サブタイトル（電気青色）
 
-2. **カード要素**
-   - 白背景＋黒枠線（2px solid）
-   - 黒い影カード（::before疑似要素で実装）
-   - ホバー時：白黒反転＋左上移動
-   - 番号：右上に四角形（背景：電気青）
+### 1. ヒーローセクション
+- 回転したラベル（transform: rotate(-1deg)）
+- 巨大タイトル（font-size: clamp(3rem, 8vw, 6rem)）
+- サブタイトル（電気青色）
 
-3. **セクション構造**
-   - 薄い巨大番号（01, 02, 03...）を背景に
-   - セクションタイトル下に点線
-   - カード間隔：2rem
+### 2. カード要素
+- 白背景＋黒枠線（2px solid）
+- 黒い影カード（::before疑似要素で実装）
+- ホバー時：白黒反転＋左上移動
+- 番号：右上に四角形（背景：電気青）
+
+### 3. セクション構造
+- 薄い巨大番号（01, 02, 03...）を背景に
+- セクションタイトル下に点線
+- カード間隔：2rem
 
 ## 特殊効果
 - 紙のテクスチャ（細かい縦線パターン）
@@ -903,40 +1046,38 @@
 - トランジション：all 0.3s ease
 
 # HTML出力テンプレート
-```html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>[タイトル]</title>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;[タイトル]&lt;/title&gt;
     [上記のスタイルをstyleタグ内に記述]
-</head>
-<body>
-    <!-- ヒーローセクション -->
-    <section class="hero">
-        <div class="hero-label">[ラベル]</div>
-        <h1 class="hero-title">[メインタイトル]</h1>
-        <p class="hero-subtitle">[サブタイトル]</p>
-    </section>
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- ヒーローセクション --&gt;
+    &lt;section class="hero"&gt;
+        &lt;div class="hero-label"&gt;[ラベル]&lt;/div&gt;
+        &lt;h1 class="hero-title"&gt;[メインタイトル]&lt;/h1&gt;
+        &lt;p class="hero-subtitle"&gt;[サブタイトル]&lt;/p&gt;
+    &lt;/section&gt;
 
-    <!-- 番号付きセクション -->
-    <section class="content-section">
-        <div class="section-number">01</div>
-        <h2 class="section-title">[セクションタイトル]</h2>
+    &lt;!-- 番号付きセクション --&gt;
+    &lt;section class="content-section"&gt;
+        &lt;div class="section-number"&gt;01&lt;/div&gt;
+        &lt;h2 class="section-title"&gt;[セクションタイトル]&lt;/h2&gt;
         
-        <!-- カード型コンテンツ -->
-        <div class="card">
-            <div class="card-number">1</div>
-            <div class="card-content">
+        &lt;!-- カード型コンテンツ --&gt;
+        &lt;div class="card"&gt;
+            &lt;div class="card-number"&gt;1&lt;/div&gt;
+            &lt;div class="card-content"&gt;
                 [コンテンツ]
-            </div>
-        </div>
-    </section>
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
     
     [以降、必要なセクションを追加]
-</body>
-</html>
-```
+&lt;/body&gt;
+&lt;/html&gt;
 
 # 生成時の注意事項
 - 5分で説明可能な分量（10スライド程度）
@@ -949,11 +1090,24 @@
 # エラー時の対応
 要件が不明確な場合は、必ず追加質問をしてから作成する。
 「その点についてもう少し詳しく教えてください」と聞き返す。</div>
+                    </div>
+                </div>
 
                 <div class="prompt-category">📝 実践演習用プロンプト</div>
 
-                <div class="prompt-box">【フィードバックから学ぶ】
-ハッカソンのフィードバックを分析して、改善点を抽出してください：
+                <div class="prompt-box">
+                    <div class="prompt-header">
+                        <span class="prompt-title">【フィードバックから学ぶ】</span>
+                        <button class="copy-button" onclick="copyPrompt(this)">
+                            <svg class="copy-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                            </svg>
+                            <span>コピー</span>
+                        </button>
+                    </div>
+                    <div class="prompt-content">
+                        <div class="prompt-markdown">ハッカソンのフィードバックを分析して、改善点を抽出してください：
 
 [フィードバック内容をペースト]
 
@@ -962,6 +1116,8 @@
 2. 根本原因の分析は十分だったか
 3. 解決策は実現可能だったか
 4. 次回改善すべき点は何か</div>
+                    </div>
+                </div>
 
                 <div class="highlight-box" style="margin-top: 3rem;">
                     <h3>⚠️ 重要な注意事項</h3>
@@ -1006,5 +1162,60 @@
             </div>
         </section>
     </main>
+
+    <script>
+        function copyPrompt(button) {
+            const promptBox = button.closest('.prompt-box');
+            const promptContent = promptBox.querySelector('.prompt-markdown').textContent;
+            
+            // テキストエリアを作成してコピー
+            const textArea = document.createElement('textarea');
+            textArea.value = promptContent;
+            textArea.style.position = 'absolute';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '0';
+            document.body.appendChild(textArea);
+            
+            // 選択してコピー
+            textArea.select();
+            textArea.setSelectionRange(0, 999999); // モバイル対応
+            
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                console.error('コピーエラー:', err);
+            }
+            
+            document.body.removeChild(textArea);
+            
+            // フィードバック表示
+            if (success) {
+                const originalText = button.querySelector('span').textContent;
+                button.classList.add('copied');
+                button.querySelector('span').textContent = 'コピーしました！';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.querySelector('span').textContent = originalText;
+                }, 2000);
+            } else {
+                // コピー失敗時はテキストを選択
+                const range = document.createRange();
+                const selection = window.getSelection();
+                range.selectNodeContents(promptBox.querySelector('.prompt-markdown'));
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                alert('コピーに失敗しました。選択されたテキストを手動でコピーしてください。');
+            }
+        }
+
+        // Google サイトの iframe 内での動作を考慮
+        if (window.parent !== window) {
+            document.body.style.margin = '0';
+            document.body.style.padding = '0';
+        }
+    </script>
 </body>
 </html>
