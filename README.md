@@ -67,6 +67,10 @@ hackathon/
     ├── index.html              # Lesson 4メインページ（45分版対応）
     ├── worksheet.md            # パレート図作成ワークシート
     └── sample-data.csv         # 演習用サンプルデータ
+
+├── lesson-extra/               # 番外編：Gemチャットボット量産ワーク
+│   ├── README.md               # 番外編ワークの概要と手順
+│   └── gem_workshop.html       # ワークショップ用プレゼン資料
 ```
 
 ## 🎓 AIAS（AI活用評価スケール）
@@ -153,6 +157,22 @@ hackathon/
 - 累積比率の計算と可視化
 - Chart.jsによるインタラクティブデモ
 - 自動車部品工場の不良分析演習
+
+### ⚡ Extra Workshop: Gemチャットボット量産スプリント（番外編）
+**「Gemを使って現場課題を解決する専用チャットボットを量産せよ！」**
+
+- **アプローチ**: プロンプトエンジニアリング＋共有運用
+- **重点**: ヒアリング設計、ナレッジ活用、共有設定
+- **成果物**: Gemリンク（分析支援・プレゼン支援などの専用ボット）
+- **詳細**: [lesson-extra/README.md](lesson-extra/README.md)
+- **資料**: [lesson-extra/gem_workshop.html](lesson-extra/gem_workshop.html)
+- **AIASレベル**: 2-5（Brainstorming〜Co-Creation）
+
+#### 主要コンテンツ
+- 共通Gem Navigatorによる設計支援フロー
+- テーマカタログ（分析・現場支援・プレゼン領域）
+- プロンプト設計テンプレートとナレッジ運用ルール
+- 共有時の権限チェックリストと改善ループ
 
 ## 🎓 導入実績と効果
 

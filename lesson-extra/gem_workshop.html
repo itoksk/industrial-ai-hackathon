@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEM CREATION SPRINT - 番外編チャットボットワーク</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0&family=Space+Mono:wght@400;700&family=Archivo+Black&family=Inter:wght@400;700;900&family=Bebas+Neue&family=Share+Tech+Mono&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            cursor: crosshair;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .heavy {
+            font-family: 'Archivo Black', 'Bebas Neue', sans-serif;
+            letter-spacing: 0.08em;
+        }
+
+        .tech {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .icon-symbol {
+            font-family: 'Material Symbols Outlined';
+            font-size: 2rem;
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'OPSZ' 40;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .icon-symbol.small {
+            font-size: 1.5rem;
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'OPSZ' 24;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image:
+                linear-gradient(rgba(255, 255, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 0, 0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(transparent 50%, rgba(255, 255, 0, 0.04) 50%);
+            background-size: 100% 6px;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 2;
+            animation: scan 6s linear infinite;
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.65) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        main {
+            position: relative;
+            z-index: 3;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+        }
+
+        header.hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .hero-kicker {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            color: #ff0;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .hero-title span {
+            display: block;
+        }
+
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 2px #ff0;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #ccc;
+            max-width: 700px;
+        }
+
+        .cta-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border: 2px solid #ff0;
+            background: rgba(10, 10, 10, 0.85);
+            box-shadow: 0 0 25px rgba(255, 255, 0, 0.15);
+        }
+
+        .cta-panel p {
+            flex: 1;
+            min-width: 240px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.8rem;
+            background: #ff0;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border: none;
+            transform: skewX(-10deg);
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .cta-button span {
+            transform: skewX(10deg);
+        }
+
+        .cta-button:hover {
+            background: #ff3333;
+            transform: skewX(-10deg) scale(1.04);
+        }
+
+        section.section {
+            margin: 4rem 0;
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.92), rgba(12, 12, 12, 0.92));
+            border: 1px solid rgba(255, 255, 0, 0.3);
+            position: relative;
+            padding: 2.8rem 2.4rem;
+        }
+
+        section.section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid #ff0;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            color: #ff0;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-transform: uppercase;
+        }
+
+        .section-title span {
+            color: #ff0;
+        }
+
+        .warning-line {
+            height: 6px;
+            background: repeating-linear-gradient(45deg, #ff0, #ff0 16px, transparent 16px, transparent 32px);
+            margin: 3rem 0;
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .timeline-card {
+            background: #0b0b0b;
+            border: 2px solid #ff0;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 0, 0.35);
+            pointer-events: none;
+        }
+
+        .timeline-slot {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: #ff0;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .timeline-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .timeline-card p {
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .timeline-card ul {
+            margin-top: 0.75rem;
+            padding-left: 1.1rem;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .cyber-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cyber-card {
+            background: #101010;
+            border: 1px solid rgba(255, 255, 0, 0.35);
+            padding: 1.6rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .cyber-card:hover {
+            transform: translate(-6px, -6px);
+            box-shadow: 8px 8px 0 rgba(255, 255, 0, 0.25);
+        }
+
+        .card-tag {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: #000;
+            background: #ff0;
+            padding: 0.3rem 0.7rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .cyber-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .cyber-card p,
+        .cyber-card ul {
+            color: #bdbdbd;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .cyber-card ul {
+            padding-left: 1rem;
+            margin-top: 0.6rem;
+        }
+
+        .callout {
+            border: 1px dashed rgba(255, 255, 0, 0.5);
+            padding: 1.8rem;
+            margin: 2rem 0;
+            background: rgba(20, 20, 20, 0.9);
+        }
+
+        .callout-title {
+            font-size: 1.2rem;
+            color: #ff0;
+            margin-bottom: 0.8rem;
+        }
+
+        .callout p,
+        .callout ul {
+            color: #c7c7c7;
+            line-height: 1.6;
+        }
+
+        .callout ul {
+            padding-left: 1.2rem;
+        }
+
+        .prompt-template {
+            background: #121212;
+            border: 1px solid rgba(0, 255, 255, 0.35);
+            padding: 1.6rem;
+            margin-top: 1.5rem;
+        }
+
+        .prompt-template h4 {
+            font-size: 1.1rem;
+            color: #00ffff;
+            margin-bottom: 0.75rem;
+        }
+
+        .prompt-template pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #d0f7ff;
+        }
+
+        .warning-box {
+            background: rgba(40, 0, 0, 0.85);
+            border: 3px solid #ff0000;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: 'SYSTEM ALERT';
+            position: absolute;
+            top: -18px;
+            left: 1.5rem;
+            background: #ff0000;
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            padding: 0.35rem 0.75rem;
+        }
+
+        .warning-box ul {
+            list-style: none;
+            display: grid;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .warning-box li {
+            background: rgba(0, 0, 0, 0.45);
+            padding: 1rem 1.2rem;
+            border-left: 4px solid #ff3333;
+        }
+
+        .warning-box strong {
+            display: block;
+            color: #ff6666;
+            margin-bottom: 0.4rem;
+        }
+
+        footer {
+            margin-top: 5rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 0, 0.3);
+            text-align: center;
+        }
+
+        footer .tagline {
+            font-size: 2.4rem;
+            margin-bottom: 1rem;
+        }
+
+        footer p {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            header.hero {
+                min-height: 50vh;
+            }
+
+            section.section {
+                padding: 2rem 1.5rem;
+            }
+
+            .cta-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cta-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <main>
+        <header class="hero">
+            <div class="hero-kicker mono">EXTRA WORKSHOP // QUALITY CONTROL AI HACKATHON</div>
+            <h1 class="hero-title heavy">
+                <span>GEM CREATION</span>
+                <span class="text-outline" style="color: transparent; -webkit-text-stroke: 2px #ff0;">SPRINT</span>
+                <span style="color: #ff0;">専用チャットボット開発番外編</span>
+            </h1>
+            <p class="hero-subtitle">
+                学習した品質改善メソッドとプロンプトエンジニアリングを活かし、Gemの共有機能を前提とした実用チャットボットを短時間で量産するワーク。分析支援からプレゼン資料作成まで、テーマを担当制で開発し、全員で試して改善します。
+            </p>
+
+            <div class="cta-panel">
+                <p>
+                    このワーク全体は、Gemに蓄積したGoogle / OpenAI / Anthropic向けプロンプト知識を搭載した「Gem Workshop Navigator」を使って進行します。最初に全員で下記リンクを開き、ヒアリングや構成案の作成をこのボットに手伝わせてください。
+                </p>
+                <a class="cta-button" href="https://gemini.google.com/gem/1NX_ddBOk5MDBBPpwixoqz5nJK9clOkgu?usp=sharing" target="_blank" rel="noopener noreferrer">
+                    <span>GEMを起動する</span>
+                    <span class="icon-symbol small">north_east</span>
+                </a>
+            </div>
+        </header>
+
+        <section class="section" id="overview">
+            <div class="section-header">
+                <div class="section-icon icon-symbol">tune</div>
+                <h2 class="section-title heavy">WORKFLOW <span>OVERVIEW</span></h2>
+            </div>
+            <p style="color:#bdbdbd; line-height:1.7;">
+                番外編の目的は「Gemを共有しながら、分析メソッドを即戦力にするチャットボットを短時間で量産する」ことです。時間配分とチェックポイントを意識し、チーム全員でクオリティラインを揃えていきましょう。
+            </p>
+
+            <div class="timeline-grid" style="margin-top:2.5rem;">
+                <div class="timeline-card">
+                    <div class="timeline-slot mono">00-10 MIN</div>
+                    <h3 class="heavy">テーマ選定ワーク</h3>
+                    <p>Gem Navigatorでアイデアを洗い出し、必要なボットをホワイトボードに列挙。優先度をつけ、担当を決めます。</p>
+                    <ul>
+                        <li>課題と利用シーンを30秒でピッチ</li>
+                        <li>ヒアリング項目の仮設を共有</li>
+                        <li>担当グループ（1-2人）を確定</li>
+                    </ul>
+                </div>
+                <div class="timeline-card">
+                    <div class="timeline-slot mono">10-35 MIN</div>
+                    <h3 class="heavy">Gem開発スプリント</h3>
+                    <p>ヒアリング→出力フォーマット→検証の順でGemを構築。Navigatorのプロンプトを参考に、独自指示をチューニング。</p>
+                    <ul>
+                        <li>最初の10分でヒアリング質問を決定</li>
+                        <li>15分時点で中間レビュー</li>
+                        <li>想定ユーザーのテスト質問を2つ以上用意</li>
+                    </ul>
+                </div>
+                <div class="timeline-card">
+                    <div class="timeline-slot mono">35-45 MIN</div>
+                    <h3 class="heavy">共有 & 相互テスト</h3>
+                    <p>Gemリンクを共有して実際に動かし、フィードバックを交換。改善点を1つだけ必ず反映させます。</p>
+                    <ul>
+                        <li>フィードバックは「良い点 / 次の改善」でセット</li>
+                        <li>設定変更はログにメモを残す</li>
+                        <li>調整後の最終リンクを共有フォルダへ保管</li>
+                    </ul>
+                </div>
+                <div class="timeline-card">
+                    <div class="timeline-slot mono">45-55 MIN</div>
+                    <h3 class="heavy">ライトニングショーケース</h3>
+                    <p>各チーム3分でデモ。課題・ヒアリング設計・出力デモ・今後の改善アイデアをテンポよく共有します。</p>
+                    <ul>
+                        <li>スライド不要（Navigatorで要点整理）</li>
+                        <li>評価基準：実用性 / 創造性 / 学習反映</li>
+                        <li>次のアップデート候補を1つ提示</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="themes">
+            <div class="section-header">
+                <div class="section-icon icon-symbol">psychology</div>
+                <h2 class="section-title heavy">BOT THEME <span>CATALOG</span></h2>
+            </div>
+            <p style="color:#bdbdbd; line-height:1.7;">
+                共通Gem Navigatorと組み合わせることで、各ボットは専門的なヒアリングと成果物生成を行うことができます。カテゴリごとに最低1本ずつ作成し、現場で即試せるラインナップを揃えましょう。
+            </p>
+
+            <div class="cyber-grid" style="margin-top:2.5rem;">
+                <div class="cyber-card">
+                    <span class="card-tag">ANALYTICS</span>
+                    <h3 class="heavy">なぜなぜ分析アシスタント</h3>
+                    <p>問題の定義と原因仮説を段階的にヒアリングし、5回の「なぜ」で根本原因を特定。対策案テンプレートも出力。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">ANALYTICS</span>
+                    <h3 class="heavy">パレート図ジェネレーター</h3>
+                    <p>データのカテゴリ分布を整理し、重要な20％を抽出するための問診項目とグラフ生成の指示をまとめます。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">ANALYTICS</span>
+                    <h3 class="heavy">特性要因図ファシリテーター</h3>
+                    <p>フィッシュボーン図の骨格を自動生成し、ヒト/モノ/方法/環境などの観点でアイデアを出し切るサポートを実施。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">FIELD SUPPORT</span>
+                    <h3 class="heavy">問題定義サポートボット</h3>
+                    <p>現場インタビューから課題を言語化し、要件を整理。必要なデータ収集チェックリストを自動提示します。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">FIELD SUPPORT</span>
+                    <h3 class="heavy">改善案ブレストパートナー</h3>
+                    <p>制約条件や期待効果を聞き出し、短期・中期・長期の改善策を提案。評価軸シートの雛形も出力。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">FIELD SUPPORT</span>
+                    <h3 class="heavy">効果測定アドバイザー</h3>
+                    <p>KPI・KGI・Leading指標をヒアリングし、測定設計とレポートテンプレートを提供。実行計画の穴をチェック。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">PRESENTATION</span>
+                    <h3 class="heavy">HTML資料ビルダー</h3>
+                    <p>ヒアリングで構成を決め、発表用のHTML資料を生成。色味やコンポーネント指定も行えるよう質問を設計。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">PRESENTATION</span>
+                    <h3 class="heavy">スライド構成アシスタント</h3>
+                    <p>時間・相手・メッセージを把握し、スライド順序と各スライドのトーキングポイントを整理して出力。</p>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">PRESENTATION</span>
+                    <h3 class="heavy">要点整理コンシェルジュ</h3>
+                    <p>長文メモから重要ポイントと質疑想定を抽出。まとめ→課題→次アクションの3段構成で要約を提供します。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="tips">
+            <div class="section-header">
+                <div class="section-icon icon-symbol">target</div>
+                <h2 class="section-title heavy">BUILDING <span>TIPS</span></h2>
+            </div>
+            <div class="callout">
+                <div class="callout-title mono">ヒアリング設計の鉄則</div>
+                <ul>
+                    <li><strong>段階的スコープアウト：</strong>「課題の大枠 → 利用シナリオ → 成果物形式」の3層で質問を設計。</li>
+                    <li><strong>回答支援：</strong>選択肢や回答例をセットで提示。Gem Navigatorの提案を引用してもOK。</li>
+                    <li><strong>確認ループ：</strong>理解した内容を要約し、ユーザーにYes/Noで確認させてから生成フェーズへ移行。</li>
+                    <li><strong>柔軟性の確保：</strong>「あとから編集する」「今回はスキップする」などの逃げ道を必ず入れる。</li>
+                </ul>
+            </div>
+
+            <div class="cyber-grid" style="margin-top:2rem;">
+                <div class="cyber-card">
+                    <span class="card-tag">PROMPT CORE</span>
+                    <h3 class="heavy">初回ヒアリングテンプレ</h3>
+                    <p>すべてのボットで共通化できる導入パターン。ユーザーに伝えるべき前提と推奨回答形式を明示します。</p>
+                    <div class="prompt-template">
+                        <h4>STEP 0 : オリエンテーション</h4>
+                        <pre>あなたは【役割】です。ユーザーが最短で成果物を得られるよう、以下の順番でヒアリングしてください。
+- 目的 / 期待する成果
+- 利用シチュエーションと対象者
+- 制約（時間・データ・トーンなど）
+
+回答例を2つ添えて入力のハードルを下げ、各回答のあとに理解内容を短く要約して確認してください。</pre>
+                    </div>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">PRESENTATION</span>
+                    <h3 class="heavy">HTML資料ボットの要件</h3>
+                    <ul>
+                        <li>完成HTMLの構成（セクション見出しとアウトライン）を事前確認</li>
+                        <li>色・雰囲気・強調したいメッセージをヒアリング</li>
+                        <li>コードと閲覧者用テキストのどちらも出力する</li>
+                        <li>必要ならアクセシビリティ配慮チェックリストを添付</li>
+                    </ul>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">FEEDBACK</span>
+                    <h3 class="heavy">チェックポイント</h3>
+                    <ul>
+                        <li>実用性 vs 創造性 vs 学習反映のバランス</li>
+                        <li>ヒアリングの抜け漏れがないか（デモで検証）</li>
+                        <li>プロンプトは「編集者」に触らせない想定か</li>
+                        <li>共有後すぐに使える手順が明記されているか</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="sharing">
+            <div class="section-header">
+                <div class="section-icon icon-symbol">warning</div>
+                <h2 class="section-title heavy">SHARING <span>PROTOCOL</span></h2>
+            </div>
+            <p style="color:#bdbdbd; line-height:1.7;">
+                Gemの共有が標準ワークになるからこそ、運用ルールと権限設定を外さないことが重要です。以下は参加者全員に必ず提示してください。
+            </p>
+
+            <div class="warning-box" style="margin-top:2.5rem;">
+                <ul>
+                    <li>
+                        <strong>共有された Gem はどこにあるの？</strong>
+                        共有された Gem は、Google ドライブで一元管理できます。ドライブ内に、青色の「Gemini Gems」フォルダが自動生成されます。作成した Gem はすべてこの中に！共有された Gem はドライブの「共有アイテム」からすぐにアクセス可能です。Geminiから「Gemを表示」の共有アイテムにも表示されます。
+                    </li>
+                    <li>
+                        <strong>「編集者」権限は慎重に！</strong>
+                        相手を「編集者」にすると、Gem の心臓部であるカスタム指示（プロンプト）を書き換えられてしまいます。共同開発者以外には、基本的に「閲覧者」での共有が安全です。
+                    </li>
+                    <li>
+                        <strong>チェックを外さないで！</strong>
+                        共有設定画面にある「ダウンロード、コピー、印刷できるユーザー」のチェックを外すと、相手は Gem を全く利用できません。必ずチェックを入れたままにしてください！
+                    </li>
+                    <li>
+                        <strong>「知識」のファイル権限も忘れずに！</strong>
+                        Gem にPDFやドキュメントを「知識」としてアップロードしている場合、そのファイル自体の共有設定も忘れずに行ってください。ファイル自体の権限を変更しないと、知識を参照できません！
+                    </li>
+                    <li>
+                        <strong>「コピーを作成」で知識も丸ごと複製！</strong>
+                        共有された側が Gem の「コピーを作成」すると、「知識」にアップロードされたファイルも一緒にコピーされます。ご注意ください！
+                    </li>
+                    <li>
+                        <strong>著作権への配慮を！</strong>
+                        「知識」としてアップロードする資料の著作権には、これまで以上に注意を払いましょう。自作の教材や著作権フリーの素材を活用し、クリーンな知の共有を心がけましょう。
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="builder">
+            <div class="section-header">
+                <div class="section-icon icon-symbol">science</div>
+                <h2 class="section-title heavy">BUILDER <span>PLAYBOOK</span></h2>
+            </div>
+
+            <div class="callout">
+                <div class="callout-title mono">プロンプトを設計する時のキホン</div>
+                <ul>
+                    <li><strong>役割・ゴール・出力形式をワンセットで定義：</strong>「あなたは○○の専門家」「目的は○○」「出力は△△形式」と1段で指示するとブレが減ります。</li>
+                    <li><strong>ヒアリングと生成フェーズを分ける：</strong>まず質問→理解の確認→成果物生成の順番を明記し、途中で「ヒアリングはこれで完了しますか？」を入れる。</li>
+                    <li><strong>Navigatorの回答を活用：</strong>迷ったらGem Navigatorに「このボットのヒアリング項目を5個考えて」と頼んでテンプレを取り込みましょう。</li>
+                </ul>
+            </div>
+
+            <div class="cyber-grid" style="margin-top:2rem;">
+                <div class="cyber-card">
+                    <span class="card-tag">PROMPT DESIGN</span>
+                    <h3 class="heavy">強いプロンプトの構成</h3>
+                    <ul>
+                        <li>冒頭：役割 + 目標 + 成果物の条件</li>
+                        <li>ヒアリング：質問リストと回答例、スキップ手段を明記</li>
+                        <li>処理ルール：回答を整形する手順（例：表にする、優先度順に並べる）</li>
+                        <li>出力テンプレ：見出し構成やJSONスキーマなどを指定</li>
+                    </ul>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">KNOWLEDGE</span>
+                    <h3 class="heavy">知識(ナレッジ)の使い分け</h3>
+                    <ul>
+                        <li>まずは知識ゼロで設計し、足りない情報だけをドキュメント化して追加</li>
+                        <li>知識に載せるのは「固定の手順」「社内ルール」「参考資料」など更新頻度が低いもの</li>
+                        <li>外部資料を載せる時は要約版を用意し、重要箇所にハイライトを入れるとGemが参照しやすい</li>
+                        <li>知識に頼りすぎず、プロンプト本文にも重要ルールを再掲すると安定性が上がる</li>
+                    </ul>
+                </div>
+                <div class="cyber-card">
+                    <span class="card-tag">TEST & ITERATE</span>
+                    <h3 class="heavy">テスト＆改善のコツ</h3>
+                    <ul>
+                        <li>最低3種類のテスト質問を準備（理想ケース／例外ケース／無茶振り）</li>
+                        <li>出力を読んで「ここが変だった」をNavigatorに相談し、改善案を取り入れる</li>
+                        <li>修正したら説明文に変更点と想定利用シーンをメモ</li>
+                        <li>共有前に「権限」「知識の共有可否」「説明文の更新」の3点をセルフチェック</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="prompt-template">
+                <h4>完成版プロンプトの雛形</h4>
+                <pre>あなたは【役割】として、ユーザーが【目標】を達成するためのサポートボットです。
+
+【ヒアリング手順】
+1. ○○について質問し、回答例 A/B を提示する
+2. ○○の背景・制約を確認する（選択肢と自由入力を用意）
+3. 受け取った内容を要約し、「この理解で作業を進めますか？」と確認する
+
+【知識の利用ルール】
+- 添付資料「○○.pdf」にあるチェックリストを参照し、必要な項目が抜けていたら質問する
+- 知識が参照できない場合は、その旨を伝えてヒアリングで補完する
+
+【生成ルール】
+- 出力は Markdown 見出しで構造化
+- 各セクションの冒頭に要約、末尾に Next Action を入れる
+- 必要なら表・リスト・コードブロックを使用
+
+【最終確認】
+出力後に「追加で調整しますか？ yes/no」を聞き、yes の場合は修正モードに入る</pre>
+            </div>
+        </section>
+
+        <footer>
+            <div class="tagline heavy">QUALITY × CONTROL × GEM</div>
+            <p class="mono">Power up your workshop with collaborative AI agents.<br>90 minutes, multiple bots, one shared knowledge base.</p>
+        </footer>
+    </main>
+</body>
+</html>
